@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h2 class="mb-2">{{ lesson.title }}</h2>
+  <div class="prose max-w-none">{{ lesson.content|safe }}</div>
+
+  <div class="mt-3 p-3 bg-green-50 rounded">
+    <strong>⭐ Earn {{ lesson.xp }} XP</strong>
+  </div>
+
+  {% if completed %}
+    <div class="alert alert-success mt-3">Already completed.</div>
+  {% else %}
+    <form method="post" class="mt-3">
+      {% csrf_token %}
+      <button class="btn btn-primary">Mark Complete</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

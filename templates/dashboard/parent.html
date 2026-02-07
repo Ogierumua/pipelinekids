@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Your Children</h2>
+  <a class="btn btn-success" href="{% url 'add_child' %}">Add child</a>
+</div>
+
+{% if children %}
+  <div class="list-group">
+    {% for c in children %}
+      <a class="list-group-item list-group-item-action" href="{% url 'child_overview' c.id %}">
+        {{ c.name }} ({{ c.age }})
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No child profiles yet.</p>
+{% endif %}
+{% endblock %}
