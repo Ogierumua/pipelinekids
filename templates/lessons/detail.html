@@ -1,20 +1,419 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-<div class="bg-white p-4 rounded shadow-sm">
-  <h2 class="mb-2">{{ lesson.title }}</h2>
-  <div class="prose max-w-none">{{ lesson.content|safe }}</div>
 
-  <div class="mt-3 p-3 bg-green-50 rounded">
-    <strong>⭐ Earn {{ lesson.xp }} XP</strong>
+
+
+
+
+
+{% if lesson.youtube_id %}
+  <div class="ratio ratio-16x9">
+    <iframe
+      src="https://www.youtube.com/embed/{{ lesson.youtube_id }}?rel=0&modestbranding=1"
+      title="Lesson video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+  </div>
+{% else %}
+  <div class="alert alert-warning">Invalid YouTube URL</div>
+{% endif %}
+
+
+
+
+
+<div class="container my-4">
+
+  <!-- TITLE + INSTRUCTIONS -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold">🎮 Make the Computers Talk!</h2>
+    <p class="fs-5 mb-0">
+      Computers follow instructions.<br>
+      Let’s help them talk to each other!
+    </p>
   </div>
 
-  {% if completed %}
-    <div class="alert alert-success mt-3">Already completed.</div>
-  {% else %}
-    <form method="post" class="mt-3">
-      {% csrf_token %}
-      <button class="btn btn-primary">Mark Complete</button>
-    </form>
-  {% endif %}
+  <div class="row g-4">
+
+    <!-- LEFT: INSTRUCTIONS -->
+    <div class="col-md-4">
+      <div class="p-3 bg-light rounded-4 shadow-sm h-100">
+        <h4 class="fw-bold text-center mb-3">🧩 Instructions</h4>
+
+        <div id="instructions">
+          <div class="instruction-card" draggable="true" data-id="type">🟨 Type message</div>
+          <div class="instruction-card" draggable="true" data-id="send">🟨 Click send</div>
+          <div class="instruction-card" draggable="true" data-id="show">🟨 Show on screen</div>
+        </div>
+
+        <p class="small text-muted text-center mt-3">
+          Drag the blocks into the box in the right order
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT: PLAYGROUND -->
+    <div class="col-md-8">
+      <div class="p-4 bg-white rounded-4 shadow-sm h-100">
+
+        <h4 class="fw-bold text-center mb-3">🖥️ Playground</h4>
+
+        <!-- DROP ZONE -->
+        <div id="dropZone" class="drop-zone mb-4">
+          <p class="drop-hint mb-0">Drop instruction blocks here 👇</p>
+        </div>
+
+        <!-- COMPUTER A -->
+        <div class="computer-box mb-4">
+          <div class="computer-title">🖥️ Computer A</div>
+
+          <div class="parts-row mb-2">
+            <span id="keyboardEl">⌨️ Keyboard</span>
+            <span id="mouseEl" class="ms-3">🖱️ Mouse</span>
+          </div>
+
+          <div id="screenA" class="computer-screen">Screen</div>
+          <div id="msgA" class="msg-bubble d-none">Hello 👋</div>
+        </div>
+
+        <!-- INTERNET -->
+        <div class="text-center my-3">
+          <div id="internetRoad" class="internet-road">
+            🌐 Internet
+            <div id="dataBubble" class="data-bubble d-none">📦</div>
+          </div>
+        </div>
+
+        <!-- COMPUTER B -->
+        <div class="computer-box mt-4">
+          <div class="computer-title">🖥️ Computer B</div>
+          <div id="screenB" class="computer-screen">Screen</div>
+          <div id="msgB" class="msg-bubble d-none">Hello 👋</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="d-flex justify-content-between align-items-center mt-4 p-3 bg-light rounded-4 shadow-sm">
+    <div>
+      <button id="runBtn" class="btn btn-primary me-2">▶ RUN</button>
+      <button id="resetBtn" class="btn btn-outline-secondary">🔄 RESET</button>
+    </div>
+
+    <div class="fw-bold">⭐ XP: {{ lesson.xp }}</div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div id="resultBox" class="text-center mt-3 fw-bold fs-4"></div>
+
+  <!-- NEXT BUTTON -->
+  <div class="text-center mt-3">
+    <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+  </div>
+
 </div>
+
+<!-- ✅ SOUND EFFECTS (local files) -->
+<!-- Put these mp3 files in: static/sounds/ -->
+<audio id="sfxPop" preload="auto">
+  <source src="{% static 'sounds/pop.mp3' %}" type="audio/mpeg">
+</audio>
+
+<audio id="sfxWin" preload="auto">
+  <source src="{% static 'sounds/success.mp3' %}" type="audio/mpeg">
+</audio>
+
+<style>
+  /* DROP ZONE */
+  .drop-zone{
+    border: 3px dashed #6c757d;
+    border-radius: 16px;
+    padding: 18px;
+    background:#f8f9fa;
+    min-height: 160px;
+  }
+  .drop-zone.drag-over{
+    border-color:#0d6efd;
+    background:#e7f1ff;
+  }
+  .drop-hint{
+    margin:0;
+    color:#6c757d;
+    font-weight:700;
+  }
+
+  /* INSTRUCTION CARDS */
+  .instruction-card{
+    background:#fff3cd;
+    border:2px solid #f7c948;
+    padding:14px 16px;
+    border-radius:14px;
+    font-weight:800;
+    cursor:grab;
+    margin-bottom:12px;
+    user-select:none;
+  }
+
+  /* COMPUTER BOX */
+  .computer-box{
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: #fff;
+  }
+  .computer-title{
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .computer-screen{
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 12px;
+    background:#f1f3f5;
+    border: 2px solid transparent;
+    display:inline-block;
+    min-width: 120px;
+    text-align:center;
+    font-weight:700;
+  }
+
+  /* HIGHLIGHTS */
+  .glow {
+    background: #e7f1ff;
+    border-radius: 10px;
+    padding: 4px 8px;
+    box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+    transition: 0.2s;
+  }
+  .mouse-click {
+    display: inline-block;
+    animation: mouseClick 0.35s ease-in-out 2;
+  }
+  @keyframes mouseClick {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(0.88); }
+    100% { transform: scale(1); }
+  }
+  .screen-on {
+    background: #d1e7dd !important;
+    border: 2px solid #198754 !important;
+    box-shadow: 0 0 18px rgba(25,135,84,.35);
+    transition: 0.25s;
+  }
+
+  /* INTERNET ROAD + BUBBLE */
+  .internet-road {
+    position: relative;
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 999px;
+    border: 2px dashed #0d6efd;
+    background: #f8f9fa;
+    font-weight: 800;
+  }
+  .road-on {
+    background: #e7f1ff;
+    border-style: solid;
+    box-shadow: 0 0 18px rgba(13,110,253,.25);
+  }
+  .data-bubble {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 22px;
+  }
+  .bubble-move {
+    display: block !important;
+    animation: bubbleMove 1.2s ease-in-out forwards;
+  }
+  @keyframes bubbleMove {
+    0%   { left: 8px; opacity: 1; }
+    100% { left: calc(100% - 34px); opacity: 1; }
+  }
+
+  /* MESSAGE BUBBLES */
+  .msg-bubble {
+    margin-top: 10px;
+    display: inline-block;
+    background: #fff3cd;
+    border: 2px solid #f7c948;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-weight: 800;
+  }
+
+  .d-none { display: none !important; }
+</style>
+
+<script>
+  // ✅ Correct order
+  const correctOrder = ["type", "send", "show"];
+
+  // Drag + Drop (move cards into drop zone)
+  let draggedCard = null;
+
+  document.querySelectorAll(".instruction-card").forEach(card => {
+    card.addEventListener("dragstart", (e) => {
+      draggedCard = card;
+      e.dataTransfer.setData("text/plain", card.dataset.id);
+      setTimeout(() => card.classList.add("opacity-50"), 0);
+    });
+    card.addEventListener("dragend", () => {
+      draggedCard = null;
+      card.classList.remove("opacity-50");
+    });
+  });
+
+  const dropZone = document.getElementById("dropZone");
+
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.classList.add("drag-over");
+  });
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("drag-over");
+  });
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("drag-over");
+
+    if (!draggedCard) return;
+
+    // remove hint on first drop
+    const hint = dropZone.querySelector(".drop-hint");
+    if (hint) hint.remove();
+
+    dropZone.appendChild(draggedCard);
+
+    // little pop sound
+    playSfx("sfxPop");
+  });
+
+  function getCurrentOrder() {
+    return Array.from(document.querySelectorAll("#dropZone .instruction-card"))
+      .map(el => el.dataset.id);
+  }
+
+  function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function resetAnimations() {
+    document.getElementById("keyboardEl")?.classList.remove("glow");
+    document.getElementById("mouseEl")?.classList.remove("mouse-click");
+    document.getElementById("screenA")?.classList.remove("screen-on");
+    document.getElementById("screenB")?.classList.remove("screen-on");
+    document.getElementById("internetRoad")?.classList.remove("road-on");
+
+    const bubble = document.getElementById("dataBubble");
+    if (bubble) {
+      bubble.classList.add("d-none");
+      bubble.classList.remove("bubble-move");
+      bubble.style.left = "8px";
+    }
+
+    document.getElementById("msgA")?.classList.add("d-none");
+    document.getElementById("msgB")?.classList.add("d-none");
+  }
+
+  async function playSuccessAnimation() {
+    resetAnimations();
+
+    // 1) TYPE -> keyboard glows + message appears on A
+    document.getElementById("keyboardEl")?.classList.add("glow");
+    document.getElementById("msgA")?.classList.remove("d-none");
+    await sleep(700);
+
+    // 2) SEND -> mouse click + internet road turns on
+    const mouse = document.getElementById("mouseEl");
+    mouse?.classList.add("mouse-click");
+    document.getElementById("internetRoad")?.classList.add("road-on");
+    await sleep(600);
+
+    // 3) SHOW -> Screen A glows
+    document.getElementById("screenA")?.classList.add("screen-on");
+    await sleep(500);
+
+    // 4) Data bubble moves across internet
+    const bubble = document.getElementById("dataBubble");
+    if (bubble) {
+      bubble.classList.remove("d-none");
+      bubble.classList.add("bubble-move");
+    }
+    await sleep(1300);
+
+    // 5) Screen B glows + message appears ✅
+    document.getElementById("screenB")?.classList.add("screen-on");
+    document.getElementById("msgB")?.classList.remove("d-none");
+
+    // 🎉 win sound
+    playSfx("sfxWin");
+  }
+
+  // Sound helper (safe)
+  function playSfx(id) {
+    const audio = document.getElementById(id);
+    if (!audio) return;
+    try {
+      audio.currentTime = 0;
+      audio.play();
+    } catch (e) {
+      // if browser blocks autoplay, it will still work after user clicks RUN
+    }
+  }
+
+  // ✅ RUN button
+  document.getElementById("runBtn").addEventListener("click", async () => {
+    const resultBox = document.getElementById("resultBox");
+    const userOrder = getCurrentOrder();
+
+    // must place all 3
+    if (userOrder.length !== correctOrder.length) {
+      resultBox.className = "text-center mt-3 fw-bold fs-4 text-warning";
+      resultBox.innerHTML = "👀 Drag all the blocks first!";
+      return;
+    }
+
+    const ok = JSON.stringify(userOrder) === JSON.stringify(correctOrder);
+
+    if (ok) {
+      resultBox.className = "text-center mt-3 fw-bold fs-4 text-success";
+      resultBox.innerHTML = "🎉 Great job! You made computers talk!";
+
+      await playSuccessAnimation(); // ✅ animations + sound
+      await markComplete();         // ✅ XP + unlock next
+    } else {
+      resultBox.className = "text-center mt-3 fw-bold fs-4 text-danger";
+      resultBox.innerHTML = "🤔 Almost there! Try changing the order.";
+    }
+  });
+
+  // ✅ RESET button
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    window.location.reload(); // simplest kid-proof reset
+  });
+
+  // ✅ completion endpoint
+  async function markComplete() {
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+      }
+    }
+  }
+</script>
+
 {% endblock %}

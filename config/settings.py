@@ -30,12 +30,12 @@ ALLOWED_HOSTS = [h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",") if
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6dqjo^v1o#auwyrq9-x5t2dyp5fq9dn0v2sqt90)h_2pr%%fqt'
+#SECRET_KEY = 'django-insecure-6dqjo^v1o#auwyrq9-x5t2dyp5fq9dn0v2sqt90)h_2pr%%fqt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -48,10 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.accounts',
-    "apps.courses",
+    "apps.courses.apps.CoursesConfig",
     "apps.progress",
     "apps.billing",
     "apps.certificates",
+    "embed_video",
     
 
 ]
@@ -156,13 +157,18 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = "parent_dashboard"   # where to go after login
+LOGOUT_REDIRECT_URL = "landing"           # where to go after logout
+
 
 
 # Stripe

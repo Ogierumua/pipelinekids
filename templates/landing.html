@@ -1,10 +1,253 @@
 {% extends "base.html" %}
+{% block title %}PipelineKids{% endblock %}
+
 {% block content %}
-<div class="p-4 bg-white rounded shadow-sm">
-  <h1 class="text-3xl font-bold">PipelineKids</h1>
-  <p class="mt-2 text-lg">Career pathways for kids: Data → Networks → Cloud.</p>
-  <div class="mt-3">
-    <a class="btn btn-primary" href="{% url 'signup' %}">Get started</a>
+
+<!-- HERO -->
+<section class="py-4 py-lg-5">
+  <div class="row g-4 align-items-stretch">
+    <div class="col-lg-7">
+      <div class="p-4 p-lg-5 bg-white rounded-4 shadow-sm border">
+        <span class="badge rounded-pill text-bg-primary-subtle text-primary px-3 py-2 mb-3">
+          <i class="bi bi-shield-check me-1"></i> Safe, structured tech learning — designed for parents and schools
+
+        </span>
+
+        <h1 class="display-5 fw-bold mb-3">
+          Build real tech skills through <span class="text-primary">missions</span>, not boring lessons.
+        </h1>
+
+        <p class="fs-5 text-secondary mb-4">
+          PipelineKids helps children build strong  foundations in <strong>Data</strong>, <strong>Networks</strong>, and
+          <strong>Cloud</strong> with guided projects, XP, badges, and progress tracking for parents.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <a class="btn btn-primary btn-lg" href="{% url 'signup' %}">
+            Start Free <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+          <a class="btn btn-outline-secondary btn-lg" href="#how">
+            How it works
+          </a>
+        </div>
+
+        <div class="d-flex flex-wrap gap-3 small text-muted">
+          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Parent accounts</span>
+          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Child profiles</span>
+          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Progress & XP</span>
+          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Certificates (coming)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="p-4 bg-white rounded-4 shadow-sm border h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="fw-semibold">
+            <i class="bi bi-bullseye me-2 text-danger"></i>Today’s Mission
+          </div>
+          <span class="badge text-bg-primary">Beginner</span>
+        </div>
+
+        <div class="border rounded-3 p-3 bg-light">
+          <div class="fw-semibold mb-1">Make your first “Data Pipeline”</div>
+          <div class="small text-muted mb-3">Collect → Clean → Store → Visualise</div>
+
+          <div class="progress mb-2" style="height: 10px;">
+            <div class="progress-bar" role="progressbar" style="width: 35%"></div>
+          </div>
+
+          <div class="d-flex justify-content-between small">
+            <span>XP earned: <strong>120</strong></span>
+            <span>Badge: <strong>Starter</strong></span>
+          </div>
+        </div>
+
+        <div class="row g-3 mt-3">
+          <div class="col-6">
+            <div class="border rounded-3 p-3 h-100">
+              <div class="fw-semibold mb-1">
+                <i class="bi bi-award-fill me-2 text-warning"></i>Badges
+              </div>
+              <div class="small text-muted">Earn rewards by completing missions.</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="border rounded-3 p-3 h-100">
+              <div class="fw-semibold mb-1">
+                <i class="bi bi-lightbulb-fill me-2 text-info"></i>Skills
+              </div>
+              <div class="small text-muted">Problem solving + real tech thinking.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="small text-muted mt-3">
+          For parents: clear dashboards and simple progress reports.
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
+
+<!-- TRACKS -->
+<section id="tracks" class="py-5">
+  <div class="d-flex justify-content-between align-items-end mb-3">
+    <div>
+      <h2 class="fw-bold mb-1">Choose a track</h2>
+      <p class="text-muted mb-0">Kids learn by building. Parents track progress.</p>
+    </div>
+    <a class="text-decoration-none" href="#how">How it works <i class="bi bi-arrow-right"></i></a>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="p-4 bg-white rounded-4 border shadow-sm h-100">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <i class="bi bi-database-fill text-primary fs-4"></i>
+          <h5 class="mb-0 fw-semibold">Data</h5>
+        </div>
+        <p class="text-muted mb-3">Collect, clean, and store data like real engineers.</p>
+        <ul class="small text-muted mb-0">
+          <li>CSV + APIs</li>
+          <li>Cleaning rules</li>
+          <li>Simple dashboards</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="p-4 bg-white rounded-4 border shadow-sm h-100">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <i class="bi bi-diagram-3-fill text-primary fs-4"></i>
+          <h5 class="mb-0 fw-semibold">Networks</h5>
+        </div>
+        <p class="text-muted mb-3">Understand how devices connect and data moves.</p>
+        <ul class="small text-muted mb-0">
+          <li>IP basics</li>
+          <li>Routing concepts</li>
+          <li>Safe simulations</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="p-4 bg-white rounded-4 border shadow-sm h-100">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <i class="bi bi-cloud-fill text-primary fs-4"></i>
+          <h5 class="mb-0 fw-semibold">Cloud</h5>
+        </div>
+        <p class="text-muted mb-3">Learn cloud thinking: storage, compute, security.</p>
+        <ul class="small text-muted mb-0">
+          <li>Cloud services explained</li>
+          <li>Permissions basics</li>
+          <li>Real-world examples</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS (separated clearly) -->
+<section id="how" class="py-5 bg-white rounded-4 border shadow-sm px-3 px-md-4">
+  <div class="mb-4">
+    <h2 class="fw-bold mb-1">How it works</h2>
+    <p class="text-muted mb-0">Structured learning that’s fun for kids and clear for parents.</p>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="p-4 border rounded-4 h-100">
+        <div class="fw-semibold mb-2"><i class="bi bi-person-check me-2 text-primary"></i>1) Parent signs up</div>
+        <div class="text-muted">Create a parent account and add child profiles safely.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-4 border rounded-4 h-100">
+        <div class="fw-semibold mb-2"><i class="bi bi-joystick me-2 text-primary"></i>2) Complete missions</div>
+        <div class="text-muted">Kids learn by doing — guided projects, XP and badges.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-4 border rounded-4 h-100">
+        <div class="fw-semibold mb-2"><i class="bi bi-graph-up me-2 text-primary"></i>3) Track progress</div>
+        <div class="text-muted">Parents see progress and next steps in a simple dashboard.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING (separated + spaced) -->
+<section id="pricing" class="py-5">
+  <div class="row g-4 align-items-start">
+    <div class="col-lg-6">
+      <h2 class="fw-bold mb-1">Simple pricing (MVP)</h2>
+      <p class="text-muted mb-0">Start free, then upgrade when you’re ready. Keep it easy for parents.</p>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="bg-white border rounded-4 shadow-sm p-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h4 class="fw-bold mb-0">Starter</h4>
+          <div class="fs-4 fw-bold">£0</div>
+        </div>
+        <p class="text-muted">Explore guided missions and track core progress.
+</p>
+        <ul class="text-muted">
+          <li>Parent + child profiles</li>
+          <li>Progress tracking</li>
+          <li>Selected missions</li>
+        </ul>
+        <a class="btn btn-primary w-100" href="{% url 'signup' %}">Start free</a>
+        <div class="text-muted small text-center mt-2">Paid plans coming soon.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="py-5">
+  <h2 class="fw-bold mb-3">FAQ</h2>
+
+  <div class="accordion" id="faqAcc">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+          What age is PipelineKids for?
+        </button>
+      </h2>
+      <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+        <div class="accordion-body text-muted">
+         Designed for ages 8–16, with parent guidance available for younger learners.
+.
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+          Is it safe for schools?
+        </button>
+      </h2>
+      <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
+        <div class="accordion-body text-muted">
+          Yes — designed with parent accounts, child profiles, and simple, controlled learning flows.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-5">
+  <div class="bg-white border rounded-4 shadow-sm p-4 p-lg-5 text-center">
+    <h2 class="fw-bold mb-2">Talk to us</h2>
+    <p class="text-muted mb-4">Schools and parents — we’d love to hear what you need for your students.</p>
+    <a class="btn btn-outline-primary" href="mailto:hello@maadai.co.uk">
+      <i class="bi bi-envelope me-1"></i> Contact us
+    </a>
+  </div>
+</section>
+
 {% endblock %}
