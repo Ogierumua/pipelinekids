@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
+from django.db.models import Count, Q  # ✅ ADD THIS
+
 from .forms import ParentSignupForm, ChildProfileForm
 from .models import ChildProfile
 from apps.progress.models import LessonProgress
 from apps.courses.models import Lesson
+
 
 def signup(request):
     if request.method == "POST":
@@ -15,10 +18,30 @@ def signup(request):
         form = ParentSignupForm()
     return render(request, "registration/signup.html", {"form": form})
 
+
 @login_required
 def parent_dashboard(request):
-    children = ChildProfile.objects.filter(parent=request.user).order_by("-created_at")
-    return render(request, "dashboard/parent.html", {"children": children})
+    total_lessons = Lesson.objects.count()
+
+    # ✅ List children + count completed lessons for each child
+    children = (
+        ChildProfile.objects
+        .filter(parent=request.user)
+        .order_by("-created_at")
+        .annotate(
+            completed_lessons=Count(
+                "lessonprogress",
+                filter=Q(lessonprogress__completed=True)
+            )
+        )
+    )
+
+    # ✅ IMPORTANT: return the page
+    return render(request, "dashboard/parent.html", {
+        "children": children,
+        "total_lessons": total_lessons,
+    })
+
 
 @login_required
 def add_child(request):
@@ -31,17 +54,21 @@ def add_child(request):
             return redirect("parent_dashboard")
     else:
         form = ChildProfileForm()
+
     return render(request, "dashboard/child.html", {"form": form})
+
 
 @login_required
 def child_overview(request, child_id: int):
     child = get_object_or_404(ChildProfile, id=child_id, parent=request.user)
+
     total = Lesson.objects.count()
     completed = LessonProgress.objects.filter(child=child, completed=True).count()
     progress_pct = int((completed / total) * 100) if total else 0
+
     return render(request, "dashboard/child.html", {
         "child": child,
         "progress_pct": progress_pct,
         "completed": completed,
-        "total": total
+        "total": total,
     })

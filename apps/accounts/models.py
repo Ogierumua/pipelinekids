@@ -6,6 +6,8 @@ class ChildProfile(models.Model):
     name = models.CharField(max_length=100)
     age = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    xp = models.PositiveIntegerField(default=0)  # ✅ ADD THIS
 
     def __str__(self):
         return f"{self.name} ({self.age})"

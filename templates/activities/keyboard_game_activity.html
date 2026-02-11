@@ -1,0 +1,93 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">{{ lesson.activity_json.title|default:"⌨️ Keyboard Game!" }}</h2>
+    <p class="text-muted mb-0">{{ lesson.activity_json.subtitle|default:"Type what you see to earn ⭐" }}</p>
+  </div>
+
+  <div class="card shadow-sm rounded-4 p-4">
+    <div class="mb-3">
+      <div class="fw-bold">Task:</div>
+      <div id="prompt" class="fs-3 fw-bold"></div>
+      <div class="small text-muted">Type exactly (case sensitive) then press Enter</div>
+    </div>
+
+    <input id="input" class="form-control form-control-lg" placeholder="Start typing here..." autocomplete="off"/>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <div class="fw-bold">⭐ Score: <span id="score">0</span>/<span id="total">0</span></div>
+      <button id="resetBtn" class="btn btn-outline-secondary">🔄 RESET</button>
+    </div>
+  </div>
+
+  <div id="resultBox" class="text-center mt-3 fw-bold fs-4"></div>
+
+  <div class="text-center mt-3">
+    <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+  </div>
+</div>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  const tasks = activity.tasks || ["Anthony", "12345", "@!?"];
+  let idx = 0;
+  let score = 0;
+
+  const promptEl = document.getElementById("prompt");
+  const inputEl  = document.getElementById("input");
+
+  document.getElementById("total").textContent = tasks.length;
+
+  function showTask(){
+    promptEl.textContent = tasks[idx];
+    inputEl.value = "";
+    inputEl.focus();
+  }
+
+  showTask();
+
+  inputEl.addEventListener("keydown", async (e) => {
+    if (e.key !== "Enter") return;
+
+    const expected = tasks[idx];
+    const got = inputEl.value;
+
+    if (got === expected){
+      score++;
+      document.getElementById("score").textContent = score;
+      idx++;
+
+      if (idx >= tasks.length){
+        const resultBox = document.getElementById("resultBox");
+        resultBox.className = "text-center mt-3 fw-bold fs-4 text-success";
+        resultBox.textContent = activity.success_text || "🎉 Keyboard Champion!";
+        await markComplete();
+        return;
+      }
+      showTask();
+    } else {
+      const resultBox = document.getElementById("resultBox");
+      resultBox.className = "text-center mt-3 fw-bold fs-4 text-danger";
+      resultBox.textContent = activity.fail_text || "❌ Try again — type exactly what you see.";
+    }
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => window.location.reload());
+
+  async function markComplete() {
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+      }
+    }
+  }
+</script>

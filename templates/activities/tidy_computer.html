@@ -1,0 +1,131 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">{{ lesson.activity_json.title|default:"🗂️ Tidy the Computer!" }}</h2>
+    <p class="text-muted mb-0">{{ lesson.activity_json.subtitle|default:"Drag files into the correct folders to earn ⭐" }}</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-5">
+      <div class="p-3 bg-white rounded-4 shadow-sm">
+        <h5 class="fw-bold">📄 Files</h5>
+        <div id="files" class="zone"></div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="p-3 bg-white rounded-4 shadow-sm">
+        <h5 class="fw-bold">🗄️ Folders</h5>
+        <div class="d-flex gap-3 flex-wrap" id="folders"></div>
+        <div class="mt-3 fw-bold">⭐ Neatness Score: <span id="score">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultBox" class="text-center mt-3 fw-bold fs-4"></div>
+
+  <div class="text-center mt-3">
+    <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+  </div>
+</div>
+
+<style>
+  .zone{min-height:180px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;}
+  .file{background:#fff;border:1px solid #eee;border-radius:14px;padding:8px 10px;font-weight:800;cursor:grab;user-select:none;}
+  .folder{min-width:160px;min-height:140px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;}
+  .folder.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  const folders = activity.folders || ["Pictures", "Homework", "Music"];
+  const files = activity.files || [
+    {"name":"cat.png","folder":"Pictures"},
+    {"name":"maths.docx","folder":"Homework"},
+    {"name":"song.mp3","folder":"Music"}
+  ];
+
+  let score = 0;
+  let placed = 0;
+  let dragged = null;
+
+  const filesEl = document.getElementById("files");
+  const foldersEl = document.getElementById("folders");
+  const scoreEl = document.getElementById("score");
+
+  // render files
+  files.forEach((f, i) => {
+    const el = document.createElement("div");
+    el.className = "file";
+    el.draggable = true;
+    el.textContent = "📄 " + f.name;
+    el.dataset.folder = f.folder;
+    el.dataset.id = "f"+i;
+
+    el.addEventListener("dragstart", () => dragged = el);
+    el.addEventListener("dragend", () => dragged = null);
+
+    filesEl.appendChild(el);
+  });
+
+  // render folders
+  folders.forEach(name => {
+    const box = document.createElement("div");
+    box.className = "folder";
+    box.dataset.name = name;
+    box.innerHTML = "🗂️ " + name;
+
+    box.addEventListener("dragover", (e) => { e.preventDefault(); box.classList.add("drag-over"); });
+    box.addEventListener("dragleave", () => box.classList.remove("drag-over"));
+    box.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      box.classList.remove("drag-over");
+      if (!dragged) return;
+
+      const correctFolder = dragged.dataset.folder;
+      const droppedFolder = box.dataset.name;
+
+      // avoid double scoring
+      if (dragged.dataset.done === "1") return;
+
+      if (correctFolder === droppedFolder) {
+        score += 1;
+        placed += 1;
+        dragged.dataset.done = "1";
+        scoreEl.textContent = score;
+        box.appendChild(dragged);
+
+        if (placed === files.length) {
+          const resultBox = document.getElementById("resultBox");
+          resultBox.className = "text-center mt-3 fw-bold fs-4 text-success";
+          resultBox.textContent = activity.success_text || "🎉 Super tidy!";
+
+          await markComplete();
+        }
+      } else {
+        const resultBox = document.getElementById("resultBox");
+        resultBox.className = "text-center mt-3 fw-bold fs-4 text-danger";
+        resultBox.textContent = activity.fail_text || "❌ Wrong folder — try again!";
+      }
+    });
+
+    foldersEl.appendChild(box);
+  });
+
+  async function markComplete() {
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+      }
+    }
+  }
+</script>

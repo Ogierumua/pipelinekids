@@ -1,0 +1,179 @@
+{% load static %}
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">{{ lesson.activity_json.title|default:"🖱️ Mouse Practice!" }}</h2>
+    <p class="text-muted mb-0">{{ lesson.activity_json.subtitle|default:"Click, double-click, and drag to win ⭐" }}</p>
+  </div>
+
+  <div class="row g-4">
+    <!-- CLICK BALLOONS -->
+    <div class="col-md-4">
+      <div class="p-3 rounded-4 shadow-sm bg-white h-100">
+        <h5 class="fw-bold">🎈 Click Balloons</h5>
+        <p class="small text-muted">Click all balloons ({{ lesson.activity_json.click_target|default:5 }})</p>
+        <div id="balloons" class="play-area"></div>
+        <div class="small fw-bold mt-2">Progress: <span id="clickCount">0</span>/<span id="clickTarget"></span></div>
+      </div>
+    </div>
+
+    <!-- DOUBLE CLICK FOLDERS -->
+    <div class="col-md-4">
+      <div class="p-3 rounded-4 shadow-sm bg-white h-100">
+        <h5 class="fw-bold">📂 Double-Click Folders</h5>
+        <p class="small text-muted">Double-click all folders ({{ lesson.activity_json.dbl_target|default:3 }})</p>
+        <div id="folders" class="play-area"></div>
+        <div class="small fw-bold mt-2">Progress: <span id="dblCount">0</span>/<span id="dblTarget"></span></div>
+      </div>
+    </div>
+
+    <!-- DRAG TOYS -->
+    <div class="col-md-4">
+      <div class="p-3 rounded-4 shadow-sm bg-white h-100">
+        <h5 class="fw-bold">🧸 Drag Toys into Box</h5>
+        <p class="small text-muted">Drag all toys into the box</p>
+
+        <div class="d-flex gap-2 flex-wrap mb-2" id="toys"></div>
+
+        <div id="toyBox" class="drop-box">
+          Drop toys here 👇
+        </div>
+
+        <div class="small fw-bold mt-2">Progress: <span id="dragCount">0</span>/<span id="dragTarget"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="d-flex justify-content-between align-items-center mt-4 p-3 bg-light rounded-4 shadow-sm">
+    <div>
+      <button id="resetBtn" class="btn btn-outline-secondary">🔄 RESET</button>
+    </div>
+    <div class="fw-bold">⭐ XP: {{ lesson.xp }}</div>
+  </div>
+
+  <div id="resultBox" class="text-center mt-3 fw-bold fs-4"></div>
+
+  <div class="text-center mt-3">
+    <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+  </div>
+</div>
+
+<style>
+  .play-area{min-height:140px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;background:#f8f9fa;}
+  .item{font-size:28px;cursor:pointer;user-select:none;padding:6px 10px;border-radius:12px;background:#fff;border:1px solid #eee;}
+  .item.done{opacity:.45;transform:scale(.95);}
+  .drop-box{min-height:90px;border:3px dashed #6c757d;border-radius:16px;padding:12px;background:#f8f9fa;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .drop-box.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  const clickTarget = activity.click_target ?? 5;
+  const dblTarget   = activity.dbl_target ?? 3;
+
+  const balloonsEl = document.getElementById("balloons");
+  const foldersEl  = document.getElementById("folders");
+  const toysEl     = document.getElementById("toys");
+  const toyBoxEl   = document.getElementById("toyBox");
+
+  document.getElementById("clickTarget").textContent = clickTarget;
+  document.getElementById("dblTarget").textContent   = dblTarget;
+
+  let clickCount = 0, dblCount = 0, dragCount = 0;
+
+  // ---------- 1) CLICK BALLOONS ----------
+  for (let i=0; i<clickTarget; i++){
+    const b = document.createElement("div");
+    b.className="item";
+    b.textContent="🎈";
+    b.onclick = () => {
+      if (b.classList.contains("done")) return;
+      b.classList.add("done");
+      clickCount++;
+      document.getElementById("clickCount").textContent = clickCount;
+      checkWin();
+    };
+    balloonsEl.appendChild(b);
+  }
+
+  // ---------- 2) DOUBLE CLICK FOLDERS ----------
+  for (let i=0; i<dblTarget; i++){
+    const f = document.createElement("div");
+    f.className="item";
+    f.textContent="📂";
+    f.ondblclick = () => {
+      if (f.classList.contains("done")) return;
+      f.classList.add("done");
+      dblCount++;
+      document.getElementById("dblCount").textContent = dblCount;
+      checkWin();
+    };
+    foldersEl.appendChild(f);
+  }
+
+  // ---------- 3) DRAG TOYS INTO BOX ----------
+  const toys = activity.toys || ["🧸","🚗","🧩","🪀"];
+  document.getElementById("dragTarget").textContent = toys.length;
+
+  let dragged = null;
+
+  toys.forEach((t, idx) => {
+    const toy = document.createElement("div");
+    toy.className="item";
+    toy.textContent=t;
+    toy.draggable=true;
+    toy.dataset.id="toy"+idx;
+
+    toy.addEventListener("dragstart", () => dragged = toy);
+    toy.addEventListener("dragend", () => dragged = null);
+
+    toysEl.appendChild(toy);
+  });
+
+  toyBoxEl.addEventListener("dragover", (e) => { e.preventDefault(); toyBoxEl.classList.add("drag-over"); });
+  toyBoxEl.addEventListener("dragleave", () => toyBoxEl.classList.remove("drag-over"));
+  toyBoxEl.addEventListener("drop", (e) => {
+    e.preventDefault();
+    toyBoxEl.classList.remove("drag-over");
+    if (!dragged) return;
+
+    if (!dragged.classList.contains("done")){
+      dragged.classList.add("done");
+      dragCount++;
+      document.getElementById("dragCount").textContent = dragCount;
+      toyBoxEl.appendChild(dragged);
+      checkWin();
+    }
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => window.location.reload());
+
+  async function checkWin(){
+    const ok = (clickCount === clickTarget) && (dblCount === dblTarget) && (dragCount === toys.length);
+    if (!ok) return;
+
+    const resultBox = document.getElementById("resultBox");
+    resultBox.className = "text-center mt-3 fw-bold fs-4 text-success";
+    resultBox.textContent = activity.success_text || "🎉 Mouse Master!";
+
+    await markComplete();
+  }
+
+  async function markComplete() {
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+      }
+    }
+  }
+</script>

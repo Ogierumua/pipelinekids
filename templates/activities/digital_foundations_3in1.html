@@ -1,0 +1,563 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🧠 Level 1 Challenge: Digital Foundations</h2>
+    <p class="text-muted mb-0">Complete all 3 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/3 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badgeDesk" class="badge bg-secondary">🖥️ Desktop Explorer</span>
+      <span id="badgeHS" class="badge bg-secondary">🧩 Hardware vs Software</span>
+      <span id="badgeTask" class="badge bg-secondary">▶️ Start & Taskbar</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4">
+    <li class="nav-item">
+      <button class="nav-link active" id="tabDesk" onclick="showPanel('desk')">🖥️ Desktop</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tabHS" onclick="showPanel('hs')">🧩 Hardware/Software</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tabTask" onclick="showPanel('task')">▶️ Start & Taskbar</button>
+    </li>
+  </ul>
+
+  <!-- PANEL 1: DESKTOP + ICONS -->
+  <div id="panelDesk" class="panel">
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1</h5>
+          <p class="text-muted small mb-2">
+            1) Drag all icons onto the desktop<br>
+            2) Click each icon to open the app
+          </p>
+
+          <div class="small fw-bold">Placed: <span id="placedCount">0</span>/<span id="placedTarget">0</span></div>
+          <div class="small fw-bold">Opened: <span id="openedCount">0</span>/<span id="openedTarget">0</span></div>
+
+          <button id="deskDoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission('desk')">
+            ✅ Desktop Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="fw-bold">🖥️ Desktop</div>
+            <div class="text-muted small">Drag icons here → then click them</div>
+          </div>
+
+          <div class="desktop">
+            <div id="desktopArea" class="desktop-area">
+              <div class="hint">Drop icons on the desktop 👇</div>
+            </div>
+
+            <div class="icon-tray">
+              <div class="fw-bold mb-2">🧰 Icon Tray</div>
+              <div id="iconTray" class="tray"></div>
+            </div>
+          </div>
+
+          <!-- Fake App Window -->
+          <div id="appWindow" class="app-window d-none">
+            <div class="app-title">
+              <span id="appTitle">App</span>
+              <button class="btn btn-sm btn-outline-secondary" onclick="closeWindow()">✖</button>
+            </div>
+            <div id="appBody" class="app-body">Welcome!</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL 2: HARDWARE VS SOFTWARE -->
+  <div id="panelHS" class="panel d-none">
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2</h5>
+          <p class="text-muted small mb-2">
+            Drag each card to the correct box.
+          </p>
+          <div class="small fw-bold">Correct: <span id="hsScore">0</span>/<span id="hsTotal">0</span></div>
+
+          <button id="hsDoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission('hs')">
+            ✅ Hardware/Software Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Drag Cards</div>
+
+          <div id="hsCards" class="cards-zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div id="boxHardware" class="dropbox">
+                🖥️ Hardware (things you can touch)
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div id="boxSoftware" class="dropbox">
+                💾 Software (apps/instructions)
+              </div>
+            </div>
+          </div>
+
+          <div id="hsMsg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL 3: START MENU + TASKBAR -->
+  <div id="panelTask" class="panel d-none">
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3</h5>
+          <p class="text-muted small mb-2">
+            1) Open <b><span id="openTarget">0</span></b> apps using Start Menu<br>
+            2) Switch between apps using the Taskbar
+          </p>
+
+          <div class="small fw-bold">Opened via Start: <span id="startOpened">0</span>/<span id="openTarget2">0</span></div>
+          <div class="small fw-bold">Switches done: <span id="switchDone">0</span>/<span id="switchTarget">0</span></div>
+
+          <button id="taskDoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission('task')">
+            ✅ Start & Taskbar Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+
+          <div class="fake-os">
+            <div class="fake-screen">
+              <div id="runningApp" class="running-app">No app open yet</div>
+            </div>
+
+            <div class="taskbar">
+              <button class="start-btn" onclick="toggleStart()">▶ Start</button>
+
+              <div id="taskbarApps" class="taskbar-apps"></div>
+
+              <div class="ms-auto small text-muted">Taskbar</div>
+            </div>
+
+            <div id="startMenu" class="start-menu d-none">
+              <div class="fw-bold mb-2">Start Menu</div>
+              <div id="startApps" class="start-apps"></div>
+              <div class="small text-muted mt-2">Click an app to open it</div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="fw-bold">Switch Challenge</div>
+            <div class="text-muted small">
+              Click taskbar icons in this order:
+              <span id="switchSeqText"></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 3 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* Desktop mission */
+  .desktop{display:grid;grid-template-columns:1fr 220px;gap:14px;}
+  .desktop-area{
+    min-height:260px;border:2px dashed #dee2e6;border-radius:18px;background:#f8f9fa;
+    padding:12px;position:relative;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start;
+  }
+  .hint{position:absolute;left:12px;top:10px;color:#6c757d;font-weight:700;font-size:13px;}
+  .icon-tray{border:1px solid #eee;border-radius:18px;padding:12px;background:#fff;}
+  .tray{display:flex;flex-direction:column;gap:10px;}
+  .icon{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;
+    cursor:grab;user-select:none;display:flex;justify-content:space-between;align-items:center;
+  }
+  .icon small{font-weight:700;color:#6c757d}
+  .icon.placed{opacity:.85}
+  .icon.opened{border-color:#198754;box-shadow:0 0 0 3px rgba(25,135,84,.15)}
+  .app-window{
+    margin-top:14px;border:1px solid #eee;border-radius:18px;overflow:hidden;
+  }
+  .app-title{
+    background:#f8f9fa;border-bottom:1px solid #eee;padding:10px 12px;
+    display:flex;justify-content:space-between;align-items:center;font-weight:900;
+  }
+  .app-body{padding:14px 12px;background:#fff;}
+
+  /* Hardware/Software mission */
+  .cards-zone{min-height:150px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;display:flex;gap:10px;flex-wrap:wrap;}
+  .card-item{background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;cursor:grab;user-select:none;}
+  .dropbox{min-height:150px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;}
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+
+  /* Start/Taskbar mission */
+  .fake-os{position:relative;}
+  .fake-screen{min-height:210px;border:1px solid #eee;border-radius:18px;background:#fff;padding:14px;display:flex;align-items:center;justify-content:center;font-weight:900;}
+  .running-app{padding:10px 12px;border-radius:14px;background:#f8f9fa;border:1px solid #eee;}
+  .taskbar{margin-top:10px;border-radius:18px;background:#f8f9fa;border:1px solid #eee;padding:10px;display:flex;gap:10px;align-items:center;}
+  .start-btn{border:0;border-radius:14px;padding:8px 12px;font-weight:900;background:#0d6efd;color:#fff;}
+  .taskbar-apps{display:flex;gap:8px;flex-wrap:wrap;}
+  .task-icon{border:1px solid #eee;border-radius:14px;padding:7px 10px;background:#fff;font-weight:900;cursor:pointer;}
+  .task-icon.active{border-color:#0d6efd;box-shadow:0 0 0 3px rgba(13,110,253,.12)}
+  .start-menu{
+    position:absolute;left:0;bottom:56px;width:260px;background:#fff;border:1px solid #eee;border-radius:18px;padding:12px;box-shadow:0 20px 50px rgba(0,0,0,.08);
+  }
+  .start-apps{display:flex;flex-direction:column;gap:8px;}
+  .start-item{border:1px solid #eee;border-radius:14px;padding:8px 10px;font-weight:900;cursor:pointer;background:#f8f9fa;}
+  .d-none{display:none!important;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TABS --------------------
+  function setActiveTab(activeId){
+    ["tabDesk","tabHS","tabTask"].forEach(id => document.getElementById(id).classList.remove("active"));
+    document.getElementById(activeId).classList.add("active");
+  }
+  function showPanel(which){
+    document.getElementById("panelDesk").classList.add("d-none");
+    document.getElementById("panelHS").classList.add("d-none");
+    document.getElementById("panelTask").classList.add("d-none");
+
+    if (which === "desk"){ document.getElementById("panelDesk").classList.remove("d-none"); setActiveTab("tabDesk"); }
+    if (which === "hs"){ document.getElementById("panelHS").classList.remove("d-none"); setActiveTab("tabHS"); }
+    if (which === "task"){ document.getElementById("panelTask").classList.remove("d-none"); setActiveTab("tabTask"); }
+  }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS + BADGES --------------------
+  const state = { desk:false, hs:false, task:false };
+
+  function badgeOn(id){
+    const el = document.getElementById(id);
+    el.className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/3)*100) + "%";
+
+    if (done === 3){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(which){
+    state[which] = true;
+
+    if (which === "desk") { badgeOn("badgeDesk"); showPanel("hs"); }
+    if (which === "hs")   { badgeOn("badgeHS"); showPanel("task"); }
+    if (which === "task") { badgeOn("badgeTask"); }
+
+    updateProgress();
+  }
+  window.completeMission = completeMission;
+
+  // -------------------- MISSION 1: DESKTOP + ICONS --------------------
+  const icons = activity.mission1?.icons || [
+    {"id":"game","label":"🎮 Game","desc":"Fun game"},
+    {"id":"paint","label":"🎨 Paint","desc":"Draw pictures"},
+    {"id":"browser","label":"🌐 Browser","desc":"Go online"}
+  ];
+
+  const placedTarget = icons.length;
+  const openedTarget = icons.length;
+  document.getElementById("placedTarget").textContent = placedTarget;
+  document.getElementById("openedTarget").textContent = openedTarget;
+
+  let placedCount = 0;
+  let openedCount = 0;
+  let draggedIcon = null;
+
+  const tray = document.getElementById("iconTray");
+  const desktopArea = document.getElementById("desktopArea");
+
+  icons.forEach((ic) => {
+    const el = document.createElement("div");
+    el.className = "icon";
+    el.draggable = true;
+    el.dataset.id = ic.id;
+    el.dataset.placed = "0";
+    el.dataset.opened = "0";
+    el.innerHTML = `<span>${ic.label}</span> <small>drag</small>`;
+
+    el.addEventListener("dragstart", () => draggedIcon = el);
+    el.addEventListener("dragend", () => draggedIcon = null);
+
+    el.addEventListener("click", () => {
+      // only count open after placed on desktop
+      if (el.dataset.placed !== "1") return;
+
+      if (el.dataset.opened !== "1"){
+        el.dataset.opened = "1";
+        el.classList.add("opened");
+        openedCount++;
+        document.getElementById("openedCount").textContent = openedCount;
+      }
+      openWindow(ic.label, ic.desc || "This is an app!");
+      checkDeskDone();
+    });
+
+    tray.appendChild(el);
+  });
+
+  desktopArea.addEventListener("dragover", (e) => e.preventDefault());
+  desktopArea.addEventListener("drop", (e) => {
+    e.preventDefault();
+    if (!draggedIcon) return;
+
+    if (draggedIcon.dataset.placed !== "1"){
+      draggedIcon.dataset.placed = "1";
+      draggedIcon.classList.add("placed");
+      placedCount++;
+      document.getElementById("placedCount").textContent = placedCount;
+      // remove hint once something dropped
+      const hint = desktopArea.querySelector(".hint");
+      if (hint) hint.remove();
+    }
+
+    desktopArea.appendChild(draggedIcon);
+    checkDeskDone();
+  });
+
+  function openWindow(title, body){
+    document.getElementById("appTitle").textContent = title;
+    document.getElementById("appBody").textContent = body;
+    document.getElementById("appWindow").classList.remove("d-none");
+  }
+  window.closeWindow = () => document.getElementById("appWindow").classList.add("d-none");
+
+  function checkDeskDone(){
+    if (placedCount === placedTarget && openedCount === openedTarget){
+      document.getElementById("deskDoneBtn").classList.remove("d-none");
+    }
+  }
+
+  // -------------------- MISSION 2: HARDWARE VS SOFTWARE --------------------
+  const hardware = activity.mission2?.hardware || ["Keyboard","Mouse","Monitor","CPU"];
+  const software = activity.mission2?.software || ["Game","Browser","Music App","Paint"];
+
+  const hsCards = [];
+  hardware.forEach(x => hsCards.push({label:x, type:"hardware"}));
+  software.forEach(x => hsCards.push({label:x, type:"software"}));
+
+  // shuffle
+  hsCards.sort(() => Math.random() - 0.5);
+
+  document.getElementById("hsTotal").textContent = hsCards.length;
+
+  let hsDragged = null;
+  let hsScore = 0;
+
+  const hsCardsEl = document.getElementById("hsCards");
+  hsCards.forEach((c, idx) => {
+    const el = document.createElement("div");
+    el.className = "card-item";
+    el.draggable = true;
+    el.dataset.type = c.type;
+    el.dataset.done = "0";
+    el.textContent = (c.type === "hardware" ? "🖥️ " : "💾 ") + c.label;
+
+    el.addEventListener("dragstart", () => hsDragged = el);
+    el.addEventListener("dragend", () => hsDragged = null);
+
+    hsCardsEl.appendChild(el);
+  });
+
+  const boxHardware = document.getElementById("boxHardware");
+  const boxSoftware = document.getElementById("boxSoftware");
+
+  function setupDrop(box, wantType){
+    box.addEventListener("dragover", (e) => { e.preventDefault(); box.classList.add("drag-over"); });
+    box.addEventListener("dragleave", () => box.classList.remove("drag-over"));
+    box.addEventListener("drop", (e) => {
+      e.preventDefault();
+      box.classList.remove("drag-over");
+      if (!hsDragged) return;
+      if (hsDragged.dataset.done === "1") return;
+
+      if (hsDragged.dataset.type === wantType){
+        hsDragged.dataset.done = "1";
+        box.appendChild(hsDragged);
+        hsScore++;
+        document.getElementById("hsScore").textContent = hsScore;
+        document.getElementById("hsMsg").textContent = "✅ Correct!";
+        document.getElementById("hsMsg").className = "text-center fw-bold mt-3 text-success";
+
+        if (hsScore === hsCards.length){
+          document.getElementById("hsDoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("hsMsg").textContent = "❌ Try again!";
+        document.getElementById("hsMsg").className = "text-center fw-bold mt-3 text-danger";
+      }
+    });
+  }
+  setupDrop(boxHardware, "hardware");
+  setupDrop(boxSoftware, "software");
+
+  // -------------------- MISSION 3: START MENU + TASKBAR --------------------
+  const apps = activity.mission3?.apps || ["Game","Paint","Browser"];
+  const openTarget = activity.mission3?.open_target ?? 2;
+  const switchSeq = activity.mission3?.switch_sequence || ["Browser","Paint","Browser"];
+
+  document.getElementById("openTarget").textContent = openTarget;
+  document.getElementById("openTarget2").textContent = openTarget;
+
+  document.getElementById("switchTarget").textContent = switchSeq.length;
+  document.getElementById("switchSeqText").textContent = switchSeq.join(" → ");
+
+  let openedViaStart = 0;
+  const openApps = new Set();
+  let activeApp = null;
+
+  let switchIndex = 0;
+
+  const startMenu = document.getElementById("startMenu");
+  const startAppsEl = document.getElementById("startApps");
+  const taskbarAppsEl = document.getElementById("taskbarApps");
+  const runningAppEl = document.getElementById("runningApp");
+
+  function toggleStart(){
+    startMenu.classList.toggle("d-none");
+  }
+  window.toggleStart = toggleStart;
+
+  function renderTaskbar(){
+    taskbarAppsEl.innerHTML = "";
+    Array.from(openApps).forEach(app => {
+      const btn = document.createElement("div");
+      btn.className = "task-icon" + (app === activeApp ? " active" : "");
+      btn.textContent = app;
+
+      btn.onclick = () => {
+        setActiveApp(app);
+        handleSwitchCheck(app);
+      };
+
+      taskbarAppsEl.appendChild(btn);
+    });
+  }
+
+  function setActiveApp(app){
+    activeApp = app;
+    runningAppEl.textContent = "✅ Running: " + app;
+    renderTaskbar();
+  }
+
+  // Build start menu items
+  apps.forEach(app => {
+    const item = document.createElement("div");
+    item.className = "start-item";
+    item.textContent = app;
+    item.onclick = () => {
+      // open only counts if first time opened
+      const before = openApps.size;
+      openApps.add(app);
+      if (openApps.size > before){
+        openedViaStart++;
+        document.getElementById("startOpened").textContent = openedViaStart;
+      }
+      setActiveApp(app);
+      renderTaskbar();
+      startMenu.classList.add("d-none");
+      checkTaskDone();
+    };
+    startAppsEl.appendChild(item);
+  });
+
+  function handleSwitchCheck(app){
+    // only start checking after open target reached
+    if (openedViaStart < openTarget) return;
+
+    const expected = switchSeq[switchIndex];
+    if (app === expected){
+      switchIndex++;
+      document.getElementById("switchDone").textContent = switchIndex;
+      checkTaskDone();
+    }
+  }
+
+  function checkTaskDone(){
+    const okOpen = openedViaStart >= openTarget;
+    const okSwitch = switchIndex >= switchSeq.length;
+
+    if (okOpen && okSwitch){
+      document.getElementById("taskDoneBtn").classList.remove("d-none");
+    }
+  }
+
+  // -------------------- FINAL: MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

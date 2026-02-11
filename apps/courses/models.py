@@ -1,12 +1,11 @@
 from django.db import models
 import re
 
-
 class Lesson(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField(blank=True)
     youtube_url = models.URLField(blank=True, null=True)
-   
+
     order = models.PositiveIntegerField()
     xp = models.PositiveIntegerField(default=10)
 
@@ -16,6 +15,14 @@ class Lesson(models.Model):
             ("none", "None"),
             ("order", "Order Blocks"),
             ("choice", "Choice Cards"),
+            ("mouse", "Mouse Practice"),
+            ("typing", "Keyboard Game"),
+            ("tidy", "Tidy the Computer"),
+            ("triple", "3-in-1 Digital Skills"),
+            ("foundations3", "3-in-1: Digital Foundations"),
+            ("files3", "3-in-1: Files & Folders"),
+
+
         ],
         default="none"
     )
@@ -45,5 +52,14 @@ class Lesson(models.Model):
 
         return ""
 
+    @property
+    def youtube_watch_url(self):
+        if not self.youtube_id:
+            return ""
+        return f"https://www.youtube.com/watch?v={self.youtube_id}"
 
-
+    @property
+    def youtube_thumbnail(self):
+        if not self.youtube_id:
+            return ""
+        return f"https://img.youtube.com/vi/{self.youtube_id}/hqdefault.jpg"

@@ -1,0 +1,365 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🎮 Digital Skills Challenge</h2>
+    <p class="text-muted mb-0">Complete all 3 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/3 missions complete</div>
+    </div>
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4">
+    <li class="nav-item">
+      <button class="nav-link active" id="tabMouse" onclick="showPanel('mouse')">🖱️ Mouse</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tabTyping" onclick="showPanel('typing')">⌨️ Keyboard</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tabTidy" onclick="showPanel('tidy')">🗂️ Tidy</button>
+    </li>
+  </ul>
+
+  <!-- PANELS -->
+
+  <!-- PANEL 1: MOUSE -->
+  <div id="panelMouse" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 rounded-4 shadow-sm bg-white h-100">
+          <h5 class="fw-bold">🎈 Click Balloons</h5>
+          <p class="small text-muted">Click all balloons</p>
+          <div id="balloons" class="play-area"></div>
+          <div class="small fw-bold mt-2"><span id="clickCount">0</span>/<span id="clickTarget"></span></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-3 rounded-4 shadow-sm bg-white h-100">
+          <h5 class="fw-bold">📂 Double-click Folders</h5>
+          <p class="small text-muted">Double-click all folders</p>
+          <div id="foldersDbl" class="play-area"></div>
+          <div class="small fw-bold mt-2"><span id="dblCount">0</span>/<span id="dblTarget"></span></div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="p-3 rounded-4 shadow-sm bg-white h-100">
+          <h5 class="fw-bold">🧸 Drag Toys</h5>
+          <p class="small text-muted">Drag all toys into the box</p>
+
+          <div class="d-flex gap-2 flex-wrap mb-2" id="toys"></div>
+
+          <div id="toyBox" class="drop-box">
+            Drop toys here 👇
+          </div>
+
+          <div class="small fw-bold mt-2"><span id="dragCount">0</span>/<span id="dragTarget"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <button id="mouseDoneBtn" class="btn btn-success d-none" onclick="completeMission('mouse')">✅ Mouse Mission Complete</button>
+    </div>
+  </div>
+
+  <!-- PANEL 2: TYPING -->
+  <div id="panelTyping" class="panel d-none">
+    <div class="card shadow-sm rounded-4 p-4">
+      <div class="mb-2">
+        <div class="fw-bold">Type this then press Enter:</div>
+        <div id="prompt" class="fs-3 fw-bold"></div>
+      </div>
+      <input id="input" class="form-control form-control-lg" placeholder="Type here..." autocomplete="off"/>
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <div class="fw-bold">⭐ Score: <span id="score">0</span>/<span id="total">0</span></div>
+        <button class="btn btn-outline-secondary" onclick="resetTyping()">🔄 Reset</button>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <button id="typingDoneBtn" class="btn btn-success d-none" onclick="completeMission('typing')">✅ Keyboard Mission Complete</button>
+    </div>
+  </div>
+
+  <!-- PANEL 3: TIDY -->
+  <div id="panelTidy" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-5">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <h5 class="fw-bold">📄 Files</h5>
+          <div id="files" class="zone"></div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <h5 class="fw-bold">🗄️ Folders</h5>
+          <div class="d-flex gap-3 flex-wrap" id="foldersTidy"></div>
+          <div class="mt-3 fw-bold">⭐ Neatness Score: <span id="neatScore">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <button id="tidyDoneBtn" class="btn btn-success d-none" onclick="completeMission('tidy')">✅ Tidy Mission Complete</button>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 3 missions!</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.5;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .play-area{min-height:140px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;background:#f8f9fa;}
+  .item{font-size:28px;cursor:pointer;user-select:none;padding:6px 10px;border-radius:12px;background:#fff;border:1px solid #eee;}
+  .item.done{opacity:.45;transform:scale(.95);}
+
+  .drop-box{min-height:90px;border:3px dashed #6c757d;border-radius:16px;padding:12px;background:#f8f9fa;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .drop-box.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+
+  .zone{min-height:180px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;}
+  .file{background:#fff;border:1px solid #eee;border-radius:14px;padding:8px 10px;font-weight:800;cursor:grab;user-select:none;}
+  .folder{min-width:160px;min-height:140px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;}
+  .folder.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TAB LOGIC --------------------
+  function setActiveTab(activeId){
+    ["tabMouse","tabTyping","tabTidy"].forEach(id => document.getElementById(id).classList.remove("active"));
+    document.getElementById(activeId).classList.add("active");
+  }
+
+  function showPanel(which){
+    document.getElementById("panelMouse").classList.add("d-none");
+    document.getElementById("panelTyping").classList.add("d-none");
+    document.getElementById("panelTidy").classList.add("d-none");
+
+    if (which === "mouse"){ document.getElementById("panelMouse").classList.remove("d-none"); setActiveTab("tabMouse"); }
+    if (which === "typing"){ document.getElementById("panelTyping").classList.remove("d-none"); setActiveTab("tabTyping"); }
+    if (which === "tidy"){ document.getElementById("panelTidy").classList.remove("d-none"); setActiveTab("tabTidy"); }
+  }
+
+  // -------------------- PROGRESS --------------------
+  const state = { mouse:false, typing:false, tidy:false };
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    const pct = Math.round((done/3)*100);
+    document.getElementById("progressBar").style.width = pct + "%";
+
+    if (done === 3){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(which){
+    state[which] = true;
+    updateProgress();
+    if (which === "mouse") showPanel("typing");
+    if (which === "typing") showPanel("tidy");
+  }
+
+  // -------------------- 1) MOUSE MISSION --------------------
+  const clickTarget = activity.click_target ?? 5;
+  const dblTarget = activity.dbl_target ?? 3;
+  const toys = activity.toys || ["🧸","🚗","🧩","🪀"];
+
+  document.getElementById("clickTarget").textContent = clickTarget;
+  document.getElementById("dblTarget").textContent = dblTarget;
+  document.getElementById("dragTarget").textContent = toys.length;
+
+  let clickCount = 0, dblCount = 0, dragCount = 0;
+
+  // balloons
+  for (let i=0;i<clickTarget;i++){
+    const el = document.createElement("div");
+    el.className="item";
+    el.textContent="🎈";
+    el.onclick = () => {
+      if (el.classList.contains("done")) return;
+      el.classList.add("done");
+      clickCount++;
+      document.getElementById("clickCount").textContent = clickCount;
+      checkMouseDone();
+    };
+    document.getElementById("balloons").appendChild(el);
+  }
+
+  // folders dbl
+  for (let i=0;i<dblTarget;i++){
+    const el = document.createElement("div");
+    el.className="item";
+    el.textContent="📂";
+    el.ondblclick = () => {
+      if (el.classList.contains("done")) return;
+      el.classList.add("done");
+      dblCount++;
+      document.getElementById("dblCount").textContent = dblCount;
+      checkMouseDone();
+    };
+    document.getElementById("foldersDbl").appendChild(el);
+  }
+
+  // toys drag
+  let draggedToy = null;
+  toys.forEach((t, idx) => {
+    const el = document.createElement("div");
+    el.className="item";
+    el.textContent=t;
+    el.draggable=true;
+    el.dataset.id="toy"+idx;
+    el.addEventListener("dragstart", () => draggedToy = el);
+    el.addEventListener("dragend", () => draggedToy = null);
+    document.getElementById("toys").appendChild(el);
+  });
+
+  const toyBox = document.getElementById("toyBox");
+  toyBox.addEventListener("dragover", (e) => { e.preventDefault(); toyBox.classList.add("drag-over"); });
+  toyBox.addEventListener("dragleave", () => toyBox.classList.remove("drag-over"));
+  toyBox.addEventListener("drop", (e) => {
+    e.preventDefault();
+    toyBox.classList.remove("drag-over");
+    if (!draggedToy) return;
+    if (draggedToy.classList.contains("done")) return;
+
+    draggedToy.classList.add("done");
+    toyBox.appendChild(draggedToy);
+    dragCount++;
+    document.getElementById("dragCount").textContent = dragCount;
+    checkMouseDone();
+  });
+
+  function checkMouseDone(){
+    const ok = (clickCount===clickTarget && dblCount===dblTarget && dragCount===toys.length);
+    if (ok) document.getElementById("mouseDoneBtn").classList.remove("d-none");
+  }
+
+  // -------------------- 2) TYPING MISSION --------------------
+  const tasks = activity.tasks || ["Anthony", "2048", "@!?"];
+  document.getElementById("total").textContent = tasks.length;
+
+  let tIdx=0, tScore=0;
+  const promptEl=document.getElementById("prompt");
+  const inputEl=document.getElementById("input");
+
+  function showTask(){
+    promptEl.textContent = tasks[tIdx];
+    inputEl.value = "";
+    inputEl.focus();
+  }
+  showTask();
+
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    if (inputEl.value === tasks[tIdx]){
+      tScore++;
+      document.getElementById("score").textContent = tScore;
+      tIdx++;
+      if (tIdx >= tasks.length){
+        document.getElementById("typingDoneBtn").classList.remove("d-none");
+        return;
+      }
+      showTask();
+    }
+  });
+
+  function resetTyping(){ tIdx=0; tScore=0; document.getElementById("score").textContent=0; showTask(); }
+  window.resetTyping = resetTyping;
+
+  // -------------------- 3) TIDY MISSION --------------------
+  const tidyFolders = activity.folders || ["Pictures","Homework","Music"];
+  const tidyFiles = activity.files || [
+    {"name":"family.jpg","folder":"Pictures"},
+    {"name":"maths.docx","folder":"Homework"},
+    {"name":"song.mp3","folder":"Music"},
+    {"name":"drawing.png","folder":"Pictures"}
+  ];
+
+  let neatScore=0, placed=0, draggedFile=null;
+  const filesEl=document.getElementById("files");
+  const foldersEl=document.getElementById("foldersTidy");
+
+  tidyFiles.forEach((f,i)=>{
+    const el=document.createElement("div");
+    el.className="file";
+    el.draggable=true;
+    el.textContent="📄 " + f.name;
+    el.dataset.folder=f.folder;
+    el.dataset.done="0";
+    el.addEventListener("dragstart",()=>draggedFile=el);
+    el.addEventListener("dragend",()=>draggedFile=null);
+    filesEl.appendChild(el);
+  });
+
+  tidyFolders.forEach(name=>{
+    const box=document.createElement("div");
+    box.className="folder";
+    box.dataset.name=name;
+    box.innerHTML="🗂️ " + name;
+
+    box.addEventListener("dragover",(e)=>{ e.preventDefault(); box.classList.add("drag-over"); });
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if (!draggedFile) return;
+      if (draggedFile.dataset.done==="1") return;
+
+      if (draggedFile.dataset.folder === box.dataset.name){
+        draggedFile.dataset.done="1";
+        box.appendChild(draggedFile);
+        neatScore++; placed++;
+        document.getElementById("neatScore").textContent = neatScore;
+
+        if (placed === tidyFiles.length){
+          document.getElementById("tidyDoneBtn").classList.remove("d-none");
+        }
+      }
+    });
+
+    foldersEl.appendChild(box);
+  });
+
+  // -------------------- FINAL: MARK COMPLETE WHEN ALL 3 DONE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+      }
+    }
+  }
+  window.completeMission = completeMission;
+  updateProgress();
+</script>

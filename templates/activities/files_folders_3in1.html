@@ -1,0 +1,457 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🗂️ Level 1 Challenge: Files & Folders</h2>
+    <p class="text-muted mb-0">Complete all 3 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/3 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badgeTidy" class="badge bg-secondary">🗄️ Folder Organizer</span>
+      <span id="badgeSave" class="badge bg-secondary">💾 Save Smart</span>
+      <span id="badgeRename" class="badge bg-secondary">✏️ Name Master</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4">
+    <li class="nav-item">
+      <button class="nav-link active" id="tabTidy" onclick="showPanel('tidy')">🗄️ Folders</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tabSave" onclick="showPanel('save')">💾 Save</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tabRename" onclick="showPanel('rename')">✏️ Rename</button>
+    </li>
+  </ul>
+
+  <!-- PANEL 1: FOLDERS + FILES (TIDY) -->
+  <div id="panelTidy" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1</h5>
+          <p class="text-muted small mb-2">
+            Drag each file into the correct folder.
+          </p>
+          <div class="small fw-bold">Correct: <span id="tidyCorrect">0</span>/<span id="tidyTotal">0</span></div>
+
+          <button id="tidyDoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission('tidy')">
+            ✅ Folder Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <div class="fw-bold mb-2">📄 Files</div>
+              <div id="tidyFiles" class="zone"></div>
+            </div>
+            <div class="col-md-7">
+              <div class="fw-bold mb-2">🗄️ Folders</div>
+              <div id="tidyFolders" class="folders-wrap"></div>
+              <div id="tidyMsg" class="text-center fw-bold mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL 2: SAVE vs SAVE AS -->
+  <div id="panelSave" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2</h5>
+          <p class="text-muted small mb-2">
+            Choose <b>Save</b> or <b>Save As</b> for each scenario.
+          </p>
+          <div class="small fw-bold">Correct: <span id="saveScore">0</span>/<span id="saveTotal">0</span></div>
+
+          <button id="saveDoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission('save')">
+            ✅ Save Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+
+          <div class="fw-bold">Scenario</div>
+          <div id="scenarioText" class="scenario"></div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-primary flex-grow-1" onclick="answerSave('save')">💾 Save</button>
+            <button class="btn btn-outline-primary flex-grow-1" onclick="answerSave('save_as')">💾 Save As</button>
+          </div>
+
+          <div id="saveMsg" class="text-center fw-bold mt-3"></div>
+
+          <div class="mt-3 small text-muted">
+            Tip: <b>Save</b> updates the same file. <b>Save As</b> creates a new copy.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL 3: CREATE FOLDER + RENAME -->
+  <div id="panelRename" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3</h5>
+          <p class="text-muted small mb-2">
+            1) Create the folder name<br>
+            2) Rename the file properly
+          </p>
+
+          <div class="small fw-bold">Steps done: <span id="renameDone">0</span>/2</div>
+
+          <button id="renameDoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission('rename')">
+            ✅ Rename Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+
+          <!-- Create Folder -->
+          <div class="mb-3">
+            <div class="fw-bold">📁 Create a Folder</div>
+            <div class="text-muted small">Type the correct folder name:</div>
+            <div class="d-flex gap-2 mt-2">
+              <input id="folderInput" class="form-control" placeholder="e.g. Homework" />
+              <button class="btn btn-outline-primary" onclick="createFolder()">Create</button>
+            </div>
+            <div id="folderMsg" class="fw-bold mt-2"></div>
+          </div>
+
+          <hr>
+
+          <!-- Rename File -->
+          <div class="mb-2">
+            <div class="fw-bold">✏️ Rename the File</div>
+            <div class="text-muted small">
+              Rename this file to a better name (keep the ending like .docx or .png):
+            </div>
+
+            <div class="rename-box mt-2">
+              <div class="fw-bold">Current:</div>
+              <div id="oldName" class="old-name"></div>
+            </div>
+
+            <div class="d-flex gap-2 mt-2">
+              <input id="renameInput" class="form-control" placeholder="Type new name..." />
+              <button class="btn btn-primary" onclick="checkRename()">Rename</button>
+            </div>
+
+            <div id="renameMsg" class="fw-bold mt-2"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 3 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  /* Tidy mission */
+  .zone{
+    min-height:220px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .file{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:8px 10px;font-weight:900;
+    cursor:grab;user-select:none;
+  }
+  .folders-wrap{display:flex;gap:10px;flex-wrap:wrap;}
+  .folder{
+    min-width:160px;min-height:130px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;
+  }
+  .folder.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+
+  /* Save mission */
+  .scenario{
+    margin-top:6px;padding:14px 12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;
+    font-weight:900;min-height:90px;display:flex;align-items:center;
+  }
+
+  /* Rename mission */
+  .rename-box{padding:12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;}
+  .old-name{font-weight:900;font-size:18px;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TABS --------------------
+  function setActiveTab(activeId){
+    ["tabTidy","tabSave","tabRename"].forEach(id => document.getElementById(id).classList.remove("active"));
+    document.getElementById(activeId).classList.add("active");
+  }
+  function showPanel(which){
+    document.getElementById("panelTidy").classList.add("d-none");
+    document.getElementById("panelSave").classList.add("d-none");
+    document.getElementById("panelRename").classList.add("d-none");
+
+    if (which === "tidy"){ document.getElementById("panelTidy").classList.remove("d-none"); setActiveTab("tabTidy"); }
+    if (which === "save"){ document.getElementById("panelSave").classList.remove("d-none"); setActiveTab("tabSave"); }
+    if (which === "rename"){ document.getElementById("panelRename").classList.remove("d-none"); setActiveTab("tabRename"); }
+  }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS + BADGES --------------------
+  const state = { tidy:false, save:false, rename:false };
+
+  function badgeOn(id){
+    const el = document.getElementById(id);
+    el.className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/3)*100) + "%";
+
+    if (done === 3){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(which){
+    state[which] = true;
+
+    if (which === "tidy") { badgeOn("badgeTidy"); showPanel("save"); }
+    if (which === "save") { badgeOn("badgeSave"); showPanel("rename"); }
+    if (which === "rename") { badgeOn("badgeRename"); }
+
+    updateProgress();
+  }
+  window.completeMission = completeMission;
+
+  // -------------------- MISSION 1: TIDY FILES INTO FOLDERS --------------------
+  const tidyFolders = activity.mission1?.folders || ["Pictures","Homework","Music"];
+  const tidyFiles = activity.mission1?.files || [
+    {"name":"family.jpg","folder":"Pictures"},
+    {"name":"maths.docx","folder":"Homework"},
+    {"name":"song.mp3","folder":"Music"},
+    {"name":"drawing.png","folder":"Pictures"}
+  ];
+
+  let tidyCorrect = 0;
+  let tidyDragged = null;
+
+  document.getElementById("tidyTotal").textContent = tidyFiles.length;
+  document.getElementById("tidyCorrect").textContent = 0;
+
+  const tidyFilesEl = document.getElementById("tidyFiles");
+  const tidyFoldersEl = document.getElementById("tidyFolders");
+
+  tidyFiles.forEach((f,i)=>{
+    const el = document.createElement("div");
+    el.className = "file";
+    el.draggable = true;
+    el.textContent = "📄 " + f.name;
+    el.dataset.folder = f.folder;
+    el.dataset.done = "0";
+    el.addEventListener("dragstart", ()=> tidyDragged = el);
+    el.addEventListener("dragend", ()=> tidyDragged = null);
+    tidyFilesEl.appendChild(el);
+  });
+
+  tidyFolders.forEach(name=>{
+    const box = document.createElement("div");
+    box.className = "folder";
+    box.dataset.name = name;
+    box.innerHTML = "🗄️ " + name;
+
+    box.addEventListener("dragover", (e)=>{ e.preventDefault(); box.classList.add("drag-over"); });
+    box.addEventListener("dragleave", ()=> box.classList.remove("drag-over"));
+    box.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      box.classList.remove("drag-over");
+      if (!tidyDragged) return;
+      if (tidyDragged.dataset.done === "1") return;
+
+      const want = tidyDragged.dataset.folder;
+      const got = box.dataset.name;
+
+      if (want === got){
+        tidyDragged.dataset.done = "1";
+        box.appendChild(tidyDragged);
+        tidyCorrect++;
+        document.getElementById("tidyCorrect").textContent = tidyCorrect;
+        document.getElementById("tidyMsg").textContent = "✅ Correct!";
+        document.getElementById("tidyMsg").className = "text-center fw-bold mt-2 text-success";
+
+        if (tidyCorrect === tidyFiles.length){
+          document.getElementById("tidyDoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("tidyMsg").textContent = "❌ Wrong folder — try again!";
+        document.getElementById("tidyMsg").className = "text-center fw-bold mt-2 text-danger";
+      }
+    });
+
+    tidyFoldersEl.appendChild(box);
+  });
+
+  // -------------------- MISSION 2: SAVE vs SAVE AS --------------------
+  const scenarios = activity.mission2?.scenarios || [
+    {"text":"You already saved your homework. You only added one more sentence. What should you click?","answer":"save"},
+    {"text":"You want a copy called 'Homework FINAL'. What should you click?","answer":"save_as"},
+    {"text":"You fixed a spelling mistake in the same file. What should you click?","answer":"save"}
+  ];
+
+  let saveIndex = 0;
+  let saveScore = 0;
+
+  document.getElementById("saveTotal").textContent = scenarios.length;
+  document.getElementById("scenarioText").textContent = scenarios[0].text;
+
+  function nextScenario(){
+    saveIndex++;
+    document.getElementById("saveMsg").textContent = "";
+    if (saveIndex >= scenarios.length){
+      document.getElementById("saveDoneBtn").classList.remove("d-none");
+      return;
+    }
+    document.getElementById("scenarioText").textContent = scenarios[saveIndex].text;
+  }
+
+  function answerSave(choice){
+    const expected = scenarios[saveIndex].answer;
+    if (choice === expected){
+      saveScore++;
+      document.getElementById("saveScore").textContent = saveScore;
+      document.getElementById("saveMsg").textContent = "✅ Correct!";
+      document.getElementById("saveMsg").className = "text-center fw-bold mt-3 text-success";
+      setTimeout(nextScenario, 450);
+    } else {
+      document.getElementById("saveMsg").textContent = "❌ Try again!";
+      document.getElementById("saveMsg").className = "text-center fw-bold mt-3 text-danger";
+    }
+  }
+  window.answerSave = answerSave;
+
+  // -------------------- MISSION 3: CREATE FOLDER + RENAME --------------------
+  const requiredFolder = (activity.mission3?.folder_name || "Homework").trim().toLowerCase();
+  const oldName = activity.mission3?.old_name || "New Document.docx";
+  const renameTargets = (activity.mission3?.rename_good || ["Math Homework Week 1.docx"])
+    .map(x => x.trim().toLowerCase());
+
+  document.getElementById("oldName").textContent = oldName;
+
+  let renameDone = 0;
+  function setRenameDone(){
+    document.getElementById("renameDone").textContent = renameDone;
+    if (renameDone >= 2){
+      document.getElementById("renameDoneBtn").classList.remove("d-none");
+    }
+  }
+  setRenameDone();
+
+  function createFolder(){
+    const val = (document.getElementById("folderInput").value || "").trim().toLowerCase();
+    if (!val){
+      document.getElementById("folderMsg").textContent = "❌ Type a folder name first.";
+      document.getElementById("folderMsg").className = "fw-bold mt-2 text-danger";
+      return;
+    }
+    if (val === requiredFolder){
+      document.getElementById("folderMsg").textContent = "✅ Folder created!";
+      document.getElementById("folderMsg").className = "fw-bold mt-2 text-success";
+      if (renameDone === 0) { renameDone = 1; setRenameDone(); }
+    } else {
+      document.getElementById("folderMsg").textContent = "❌ Not quite. Try: " + (activity.mission3?.folder_hint || "Homework");
+      document.getElementById("folderMsg").className = "fw-bold mt-2 text-danger";
+    }
+  }
+  window.createFolder = createFolder;
+
+  function checkRename(){
+    const val = (document.getElementById("renameInput").value || "").trim().toLowerCase();
+    if (!val){
+      document.getElementById("renameMsg").textContent = "❌ Type a new name first.";
+      document.getElementById("renameMsg").className = "fw-bold mt-2 text-danger";
+      return;
+    }
+
+    // must keep extension (basic check)
+    const ext = (oldName.includes(".") ? oldName.split(".").pop().toLowerCase() : "");
+    if (ext && !val.endsWith("." + ext)){
+      document.getElementById("renameMsg").textContent = "⚠️ Keep the ending ." + ext;
+      document.getElementById("renameMsg").className = "fw-bold mt-2 text-warning";
+      return;
+    }
+
+    if (renameTargets.includes(val)){
+      document.getElementById("renameMsg").textContent = "✅ Great rename!";
+      document.getElementById("renameMsg").className = "fw-bold mt-2 text-success";
+      if (renameDone < 2) { renameDone = 2; setRenameDone(); }
+    } else {
+      document.getElementById("renameMsg").textContent = "❌ Try a clearer name (what + subject + week).";
+      document.getElementById("renameMsg").className = "fw-bold mt-2 text-danger";
+    }
+  }
+  window.checkRename = checkRename;
+
+  // -------------------- FINAL: MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>
