@@ -1,7 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-<h2>Subscribe</h2>
-{% if message %}<div class="alert alert-info">{{ message }}</div>{% endif %}
-<p>Unlock all lessons for £12/month.</p>
-<a class="btn btn-primary" href="{% url 'create_checkout' %}">Subscribe with Stripe</a>
-{% endblock %}

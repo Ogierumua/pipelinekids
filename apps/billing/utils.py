@@ -1,21 +1,41 @@
-from django.urls import path
-from . import views
-from .webhooks import stripe_webhook
+import stripe
 from functools import wraps
+from django.conf import settings
+from django.shortcuts import redirect
+from .models import Subscription
 
-urlpatterns = [
-    path("subscribe/", views.subscribe, name="subscribe"),
-    path("checkout/", views.create_checkout, name="create_checkout"),
-    path("success/", views.success, name="billing_success"),
-    path("cancel/", views.cancel, name="billing_cancel"),
-    path("webhook/", stripe_webhook, name="stripe_webhook"),
-]
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
+
+def get_or_create_subscription(user):
+    sub, _ = Subscription.objects.get_or_create(parent=user)
+
+    if not sub.stripe_customer_id:
+        customer = stripe.Customer.create(
+            email=getattr(user, "email", "") or None,
+            name=getattr(user, "username", "") or None,
+        )
+        sub.stripe_customer_id = customer["id"]
+        sub.save(update_fields=["stripe_customer_id"])
+
+    return sub
+
+
+def has_active_subscription(user) -> bool:
+    if not user or not user.is_authenticated:
+        return False
+
+    try:
+        sub = Subscription.objects.get(parent=user)
+        return sub.status == "active"
+    except Subscription.DoesNotExist:
+        return False
 
 
 def subscription_required(view_func):
     @wraps(view_func)
     def _wrapped(request, *args, **kwargs):
-        # TEMP: allow everyone through for now
-        return view_func(request, *args, **kwargs)
+        if has_active_subscription(request.user):
+            return view_func(request, *args, **kwargs)
+        return redirect("billing_pricing")
     return _wrapped

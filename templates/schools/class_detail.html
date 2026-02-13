@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<a class="btn btn-primary btn-sm" href="{% url 'school_lessons' classroom.id %}">
+  📚 Open lessons
+</a>
+
+
+<div class="container my-5">
+
+  <div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+      <a class="text-decoration-none" href="{% url 'school_dashboard' %}">← Back to school dashboard</a>
+      <h2 class="fw-bold mb-1">{{ classroom.name }}</h2>
+      <div class="text-muted">{{ school.name }} • Ages {{ classroom.age_min }}–{{ classroom.age_max }}</div>
+    </div>
+  </div>
+
+  <!-- Add student -->
+  <div id="add-student" class="bg-white border rounded-4 shadow-sm p-4 mb-4">
+
+    <h5 class="fw-semibold mb-3">Add a student (MVP)</h5>
+    <form method="post" action="{% url 'class_add_student' classroom.id %}" class="row g-2 align-items-end">
+      {% csrf_token %}
+      <div class="col-md-8">
+        <label class="form-label small text-muted">Student name</label>
+        <input name="name" class="form-control" placeholder="e.g. Ada Okafor" required>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label small text-muted">Age</label>
+        <input name="age" type="number" class="form-control" value="10">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100">Add</button>
+      </div>
+    </form>
+    <div class="small text-muted mt-2">
+      Students don’t need passwords in MVP — teacher manages progress.
+    </div>
+  </div>
+
+  <!-- Student list -->
+  <div class="bg-white border rounded-4 shadow-sm p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="fw-semibold mb-0">Students</h5>
+      <div class="text-muted small">{{ students|length }} students</div>
+    </div>
+
+    {% if students %}
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr class="text-muted small">
+              <th>Name</th>
+              <th>Age</th>
+              <th>XP</th>
+              <th class="text-end">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in students %}
+              <tr>
+                <td class="fw-semibold">{{ s.name }}</td>
+                <td>{{ s.age }}</td>
+                <td>⭐ {{ s.xp }}</td>
+                <td class="text-end">
+                  <span class="badge text-bg-secondary">MVP</span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="text-muted">No students yet. Add your first student above.</div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

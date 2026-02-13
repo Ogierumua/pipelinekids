@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="fw-bold mb-0">{{ school.name }}</h2>
+      <div class="text-muted small">Teacher: {{ teacher.user.username }}</div>
+    </div>
+    <div class="text-end">
+      <div class="fw-semibold">Students</div>
+      <div class="fs-4 fw-bold">{{ total_students }}</div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    {% for c in classrooms %}
+      <div class="col-md-6">
+        <div class="card shadow-sm rounded-4">
+          <div class="card-body">
+            <h5 class="fw-bold mb-1">{{ c.name }}</h5>
+            <div class="text-muted small mb-2">Students: {{ c.student_count }}</div>
+
+            <div class="d-flex gap-2">
+              <a class="btn btn-outline-primary btn-sm" href="{% url 'class_detail' c.id %}">
+                View class
+              </a>
+              <a class="btn btn-outline-secondary btn-sm" href="{% url 'class_detail' c.id %}#add-student">
+                Add students
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="alert alert-info">
+          No classrooms yet. Create one in Admin first (for now).
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock %}

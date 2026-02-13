@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-4">
+
+  <a class="text-decoration-none" href="{% url 'class_detail' classroom.id %}">← Back to class</a>
+
+  <div class="d-flex justify-content-between align-items-center mt-2 mb-3">
+    <div>
+      <h3 class="fw-bold mb-0">{{ classroom.name }} — Lessons</h3>
+      <div class="text-muted small">{{ school.name }}</div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    {% for l in lessons %}
+      <div class="col-md-6">
+        <div class="card shadow-sm rounded-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <div class="fw-bold">{{ l.title }}</div>
+                <div class="small text-muted">XP: {{ l.xp }}</div>
+              </div>
+              <a class="btn btn-outline-primary btn-sm"
+                 href="{% url 'school_lesson_detail' classroom.id l.id %}">
+                Open
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="alert alert-info">No lessons yet. Add lessons in Admin.</div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

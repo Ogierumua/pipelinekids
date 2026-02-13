@@ -3,14 +3,13 @@
 
 {% block content %}
 
-<!-- HERO -->
+<!-- ================= HERO ================= -->
 <section class="py-4 py-lg-5">
   <div class="row g-4 align-items-stretch">
     <div class="col-lg-7">
       <div class="p-4 p-lg-5 bg-white rounded-4 shadow-sm border">
         <span class="badge rounded-pill text-bg-primary-subtle text-primary px-3 py-2 mb-3">
-          <i class="bi bi-shield-check me-1"></i> Safe, structured tech learning — designed for parents and schools
-
+          Safe, structured tech learning — for parents & schools
         </span>
 
         <h1 class="display-5 fw-bold mb-3">
@@ -18,24 +17,34 @@
         </h1>
 
         <p class="fs-5 text-secondary mb-4">
-          PipelineKids helps children build strong  foundations in <strong>Data</strong>, <strong>Networks</strong>, and
-          <strong>Cloud</strong> with guided projects, XP, badges, and progress tracking for parents.
+          PipelineKids helps children build strong foundations in
+          <strong>Data</strong>, <strong>Networks</strong>, and <strong>Cloud</strong>
+          through guided activities, XP, badges, and progress tracking.
         </p>
 
         <div class="d-flex flex-wrap gap-2 mb-4">
           <a class="btn btn-primary btn-lg" href="{% url 'signup' %}">
-            Start Free <i class="bi bi-arrow-right ms-1"></i>
+            For Parents
           </a>
+
+          <a class="btn btn-outline-primary btn-lg" href="#schools-ng">
+            Nigerian Schools
+          </a>
+
+          <a class="btn btn-outline-secondary btn-lg" href="#schools-uk">
+            UK Schools
+          </a>
+
           <a class="btn btn-outline-secondary btn-lg" href="#how">
             How it works
           </a>
         </div>
 
         <div class="d-flex flex-wrap gap-3 small text-muted">
-          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Parent accounts</span>
-          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Child profiles</span>
-          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Progress & XP</span>
-          <span><i class="bi bi-check-circle-fill text-success me-1"></i>Certificates (coming)</span>
+          <span>✔ Parent accounts</span>
+          <span>✔ Child profiles</span>
+          <span>✔ XP & progress</span>
+          <span>✔ Classroom mode for schools</span>
         </div>
       </div>
     </div>
@@ -43,18 +52,16 @@
     <div class="col-lg-5">
       <div class="p-4 bg-white rounded-4 shadow-sm border h-100">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <div class="fw-semibold">
-            <i class="bi bi-bullseye me-2 text-danger"></i>Today’s Mission
-          </div>
+          <div class="fw-semibold">Today’s Mission</div>
           <span class="badge text-bg-primary">Beginner</span>
         </div>
 
         <div class="border rounded-3 p-3 bg-light">
-          <div class="fw-semibold mb-1">Make your first “Data Pipeline”</div>
+          <div class="fw-semibold mb-1">Build your first Data Pipeline</div>
           <div class="small text-muted mb-3">Collect → Clean → Store → Visualise</div>
 
           <div class="progress mb-2" style="height: 10px;">
-            <div class="progress-bar" role="progressbar" style="width: 35%"></div>
+            <div class="progress-bar" style="width: 35%"></div>
           </div>
 
           <div class="d-flex justify-content-between small">
@@ -63,20 +70,18 @@
           </div>
         </div>
 
+        <!-- ✅ ADD THIS PART (Badges / Skills + parent note) -->
         <div class="row g-3 mt-3">
           <div class="col-6">
             <div class="border rounded-3 p-3 h-100">
-              <div class="fw-semibold mb-1">
-                <i class="bi bi-award-fill me-2 text-warning"></i>Badges
-              </div>
+              <div class="fw-semibold mb-1">🏅 Badges</div>
               <div class="small text-muted">Earn rewards by completing missions.</div>
             </div>
           </div>
+
           <div class="col-6">
             <div class="border rounded-3 p-3 h-100">
-              <div class="fw-semibold mb-1">
-                <i class="bi bi-lightbulb-fill me-2 text-info"></i>Skills
-              </div>
+              <div class="fw-semibold mb-1">💡 Skills</div>
               <div class="small text-muted">Problem solving + real tech thinking.</div>
             </div>
           </div>
@@ -85,45 +90,34 @@
         <div class="small text-muted mt-3">
           For parents: clear dashboards and simple progress reports.
         </div>
+        <!-- ✅ END ADD -->
       </div>
     </div>
   </div>
 </section>
 
-<!-- TRACKS -->
+<!-- ================= TRACKS ================= -->
 <section id="tracks" class="py-5">
-  <div class="d-flex justify-content-between align-items-end mb-3">
-    <div>
-      <h2 class="fw-bold mb-1">Choose a track</h2>
-      <p class="text-muted mb-0">Kids learn by building. Parents track progress.</p>
-    </div>
-    <a class="text-decoration-none" href="#how">How it works <i class="bi bi-arrow-right"></i></a>
-  </div>
+  <h2 class="fw-bold mb-3">Learning tracks</h2>
 
   <div class="row g-3">
     <div class="col-md-4">
       <div class="p-4 bg-white rounded-4 border shadow-sm h-100">
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <i class="bi bi-database-fill text-primary fs-4"></i>
-          <h5 class="mb-0 fw-semibold">Data</h5>
-        </div>
-        <p class="text-muted mb-3">Collect, clean, and store data like real engineers.</p>
-        <ul class="small text-muted mb-0">
-          <li>CSV + APIs</li>
+        <h5 class="fw-semibold">Data</h5>
+        <p class="text-muted">Collect, clean and explore data.</p>
+        <ul class="small text-muted">
+          <li>CSV & APIs</li>
           <li>Cleaning rules</li>
-          <li>Simple dashboards</li>
+          <li>Dashboards</li>
         </ul>
       </div>
     </div>
 
     <div class="col-md-4">
       <div class="p-4 bg-white rounded-4 border shadow-sm h-100">
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <i class="bi bi-diagram-3-fill text-primary fs-4"></i>
-          <h5 class="mb-0 fw-semibold">Networks</h5>
-        </div>
-        <p class="text-muted mb-3">Understand how devices connect and data moves.</p>
-        <ul class="small text-muted mb-0">
+        <h5 class="fw-semibold">Networks</h5>
+        <p class="text-muted">Understand how computers connect.</p>
+        <ul class="small text-muted">
           <li>IP basics</li>
           <li>Routing concepts</li>
           <li>Safe simulations</li>
@@ -133,14 +127,11 @@
 
     <div class="col-md-4">
       <div class="p-4 bg-white rounded-4 border shadow-sm h-100">
-        <div class="d-flex align-items-center gap-2 mb-2">
-          <i class="bi bi-cloud-fill text-primary fs-4"></i>
-          <h5 class="mb-0 fw-semibold">Cloud</h5>
-        </div>
-        <p class="text-muted mb-3">Learn cloud thinking: storage, compute, security.</p>
-        <ul class="small text-muted mb-0">
-          <li>Cloud services explained</li>
-          <li>Permissions basics</li>
+        <h5 class="fw-semibold">Cloud</h5>
+        <p class="text-muted">Learn modern cloud thinking.</p>
+        <ul class="small text-muted">
+          <li>Storage & compute</li>
+          <li>Permissions</li>
           <li>Real-world examples</li>
         </ul>
       </div>
@@ -148,106 +139,272 @@
   </div>
 </section>
 
-<!-- HOW IT WORKS (separated clearly) -->
-<section id="how" class="py-5 bg-white rounded-4 border shadow-sm px-3 px-md-4">
-  <div class="mb-4">
-    <h2 class="fw-bold mb-1">How it works</h2>
-    <p class="text-muted mb-0">Structured learning that’s fun for kids and clear for parents.</p>
-  </div>
+<!-- ================= NIGERIAN SCHOOLS ================= -->
+<section id="schools-ng" class="py-5 bg-light rounded-4 px-3 px-md-4">
+  <h2 class="fw-bold mb-2">PipelineKids for Nigerian Schools</h2>
+  <p class="text-muted mb-4">
+    Perfect for ICT lessons, computer labs, clubs, holiday programs and after-school training.
+  </p>
 
-  <div class="row g-3">
-    <div class="col-md-4">
-      <div class="p-4 border rounded-4 h-100">
-        <div class="fw-semibold mb-2"><i class="bi bi-person-check me-2 text-primary"></i>1) Parent signs up</div>
-        <div class="text-muted">Create a parent account and add child profiles safely.</div>
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="p-3 border rounded-4 bg-white">
+        <strong>One teacher login</strong>
+        <div class="small text-muted">No student emails needed.</div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="p-4 border rounded-4 h-100">
-        <div class="fw-semibold mb-2"><i class="bi bi-joystick me-2 text-primary"></i>2) Complete missions</div>
-        <div class="text-muted">Kids learn by doing — guided projects, XP and badges.</div>
+    <div class="col-md-6">
+      <div class="p-3 border rounded-4 bg-white">
+        <strong>Classroom delivery</strong>
+        <div class="small text-muted">Teach with projector or in the lab.</div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="p-4 border rounded-4 h-100">
-        <div class="fw-semibold mb-2"><i class="bi bi-graph-up me-2 text-primary"></i>3) Track progress</div>
-        <div class="text-muted">Parents see progress and next steps in a simple dashboard.</div>
+    <div class="col-md-6">
+      <div class="p-3 border rounded-4 bg-white">
+        <strong>Completion tracking</strong>
+        <div class="small text-muted">Track progress per class/cohort.</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- PRICING (separated + spaced) -->
-<section id="pricing" class="py-5">
-  <div class="row g-4 align-items-start">
-    <div class="col-lg-6">
-      <h2 class="fw-bold mb-1">Simple pricing (MVP)</h2>
-      <p class="text-muted mb-0">Start free, then upgrade when you’re ready. Keep it easy for parents.</p>
-    </div>
-
-    <div class="col-lg-6">
-      <div class="bg-white border rounded-4 shadow-sm p-4">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h4 class="fw-bold mb-0">Starter</h4>
-          <div class="fs-4 fw-bold">£0</div>
-        </div>
-        <p class="text-muted">Explore guided missions and track core progress.
-</p>
-        <ul class="text-muted">
-          <li>Parent + child profiles</li>
-          <li>Progress tracking</li>
-          <li>Selected missions</li>
-        </ul>
-        <a class="btn btn-primary w-100" href="{% url 'signup' %}">Start free</a>
-        <div class="text-muted small text-center mt-2">Paid plans coming soon.</div>
+    <div class="col-md-6">
+      <div class="p-3 border rounded-4 bg-white">
+        <strong>Certificates</strong>
+        <div class="small text-muted">Certificates per cohort.</div>
       </div>
     </div>
   </div>
-</section>
 
-<!-- FAQ -->
-<section id="faq" class="py-5">
-  <h2 class="fw-bold mb-3">FAQ</h2>
-
-  <div class="accordion" id="faqAcc">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-          What age is PipelineKids for?
-        </button>
-      </h2>
-      <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
-        <div class="accordion-body text-muted">
-         Designed for ages 8–16, with parent guidance available for younger learners.
-.
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
-          Is it safe for schools?
-        </button>
-      </h2>
-      <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
-        <div class="accordion-body text-muted">
-          Yes — designed with parent accounts, child profiles, and simple, controlled learning flows.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="py-5">
-  <div class="bg-white border rounded-4 shadow-sm p-4 p-lg-5 text-center">
-    <h2 class="fw-bold mb-2">Talk to us</h2>
-    <p class="text-muted mb-4">Schools and parents — we’d love to hear what you need for your students.</p>
-    <a class="btn btn-outline-primary" href="mailto:hello@maadai.co.uk">
-      <i class="bi bi-envelope me-1"></i> Contact us
+  <div class="d-flex flex-wrap gap-2">
+    <a class="btn btn-success btn-lg" href="mailto:hello@maadai.co.uk?subject=PipelineKids%20Nigeria%20School%20Demo">
+      Request Nigeria School Demo
+    </a>
+    <a class="btn btn-outline-secondary btn-lg" href="#school-pricing">
+      School Pricing
     </a>
   </div>
 </section>
+
+<!-- ================= UK SCHOOLS ================= -->
+<section id="schools-uk" class="py-5 bg-white rounded-4 border shadow-sm px-3 px-md-4 mt-4">
+  <h2 class="fw-bold mb-2">PipelineKids for UK Schools</h2>
+  <p class="text-muted mb-4">
+    Designed to support computing clubs and enrichment programmes — with clear safeguarding-first learning flows.
+  </p>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="p-3 border rounded-4 h-100">
+        <strong>Clubs & enrichment</strong>
+        <div class="small text-muted">After-school coding/tech club structure.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 border rounded-4 h-100">
+        <strong>Teacher dashboard</strong>
+        <div class="small text-muted">Progress reports per group (MVP style).</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 border rounded-4 h-100">
+        <strong>Safeguarding-first</strong>
+        <div class="small text-muted">No student email required in MVP.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap gap-2">
+    <a class="btn btn-primary btn-lg" href="mailto:hello@maadai.co.uk?subject=PipelineKids%20UK%20School%20Pilot">
+      Join UK Pilot List
+    </a>
+    <a class="btn btn-outline-secondary btn-lg" href="#contact">
+      Talk to us
+    </a>
+  </div>
+
+  <div class="small text-muted mt-3">
+    UK schools often need extra safeguarding + approval steps — we start with a pilot list and onboard schools gradually.
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how" class="py-5">
+  <h2 class="fw-bold mb-3">How it works</h2>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="p-3 border rounded-4">
+        <strong>1) Sign up</strong>
+        <div class="text-muted small">Parent or school creates an account.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 border rounded-4">
+        <strong>2) Complete missions</strong>
+        <div class="text-muted small">Kids learn by doing.</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 border rounded-4">
+        <strong>3) Track progress</strong>
+        <div class="text-muted small">XP, progress & simple reports.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SCHOOL PRICING ================= -->
+<section id="school-pricing" class="py-5">
+  <div class="bg-white border rounded-4 shadow-sm p-4">
+    <h2 class="fw-bold mb-2">School Pricing (MVP)</h2>
+    <p class="text-muted mb-3">
+      Simple licensing for schools. Nigeria can start now; UK onboard via pilot list.
+    </p>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="border rounded-4 p-4 text-center bg-light h-100">
+          <div class="fw-semibold">Nigeria School License</div>
+          <div class="display-6 fw-bold my-2">₦ ———</div>
+          <div class="small text-muted mb-3">Per term or per cohort</div>
+          <a class="btn btn-success" href="mailto:hello@maadai.co.uk?subject=PipelineKids%20Nigeria%20Pricing">
+            Get Nigeria Quote
+          </a>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="border rounded-4 p-4 text-center bg-light h-100">
+          <div class="fw-semibold">UK School Pilot</div>
+          <div class="display-6 fw-bold my-2">Pilot</div>
+          <div class="small text-muted mb-3">Start with a small club</div>
+          <a class="btn btn-primary" href="mailto:hello@maadai.co.uk?subject=PipelineKids%20UK%20Pilot">
+            Join UK Pilot
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="py-5">
+  <div class="bg-white border rounded-4 shadow-sm p-4 p-lg-5 text-center">
+    <h2 class="fw-bold mb-2">Talk to us</h2>
+    <p class="text-muted mb-4">
+      Parents and schools — tell us what you need for your learners.
+    </p>
+    <a class="btn btn-outline-primary" href="mailto:hello@maadai.co.uk">
+      Contact us
+    </a>
+  </div>
+</section>
+
+<footer class="mt-5 pt-5 pb-4 bg-light border-top">
+  <div class="container">
+
+    <div class="row g-4">
+
+      <!-- BRAND -->
+      <div class="col-md-4">
+        <h5 class="fw-bold mb-2">PipelineKids</h5>
+        <p class="text-muted small">
+          Helping children build real-world technology skills through guided missions,
+          problem-solving, and structured learning — designed for parents and schools.
+        </p>
+
+        <p class="small text-muted mb-0">
+          Data • Networks • Cloud
+        </p>
+      </div>
+
+      <!-- FOR PARENTS -->
+      <div class="col-md-2">
+        <h6 class="fw-semibold mb-2">For Parents</h6>
+        <ul class="list-unstyled small">
+          <li class="mb-1">
+            <a href="{% url 'signup' %}" class="text-decoration-none text-muted">
+              Parent sign up
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="{% url 'parent_dashboard' %}" class="text-decoration-none text-muted">
+              Parent dashboard
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="#how" class="text-decoration-none text-muted">
+              How learning works
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- FOR SCHOOLS -->
+      <div class="col-md-3">
+        <h6 class="fw-semibold mb-2">For Schools</h6>
+        <ul class="list-unstyled small">
+          <li class="mb-1">
+            <a href="#schools-ng" class="text-decoration-none text-muted">
+              Nigerian schools
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="#schools-uk" class="text-decoration-none text-muted">
+              UK school pilots
+            </a>
+          </li>
+          <li class="mb-1">
+            <a href="mailto:hello@maadai.co.uk?subject=PipelineKids%20School%20Demo"
+               class="text-decoration-none text-muted">
+              Request a school demo
+            </a>
+          </li>
+          <li class="mb-1">
+            <span class="text-muted">
+              Classroom & club delivery
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- TRUST & CONTACT -->
+      <div class="col-md-3">
+        <h6 class="fw-semibold mb-2">Trust & Contact</h6>
+        <ul class="list-unstyled small">
+          <li class="mb-1 text-muted">
+            Designed with safeguarding in mind
+          </li>
+          <li class="mb-1 text-muted">
+            No student emails required (MVP)
+          </li>
+          <li class="mb-1 text-muted">
+            GDPR-aware design
+          </li>
+          <li class="mb-1">
+            <a href="mailto:hello@maadai.co.uk" class="text-decoration-none text-muted">
+              hello@maadai.co.uk
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- DIVIDER -->
+    <hr class="my-4">
+
+    <!-- BOTTOM -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-muted">
+      <div>
+        © {{ now|date:"Y" }} PipelineKids. All rights reserved.
+      </div>
+      <div class="mt-2 mt-md-0">
+        Built in the UK • Supporting schools in Nigeria & the UK
+      </div>
+    </div>
+
+  </div>
+</footer>
+
 
 {% endblock %}
