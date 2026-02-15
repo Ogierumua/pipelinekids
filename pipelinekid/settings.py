@@ -44,7 +44,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "piplinekid.urls"
+ROOT_URLCONF = "pipelinekid.urls"
 
 TEMPLATES = [
     {
