@@ -14,76 +14,73 @@
     {{ module_title }} • XP: {{ lesson.xp }}
   </div>
 
-  {# -------------------------------
-     VIDEO (embedded) + GATE CONTROL
-     ------------------------------- #}
+  {# ✅ VIDEO (embedded inside PipelineKids — no YouTube redirect) #}
   {% if lesson.youtube_id %}
     <div class="my-4">
-
-      <div class="ratio ratio-16x9 rounded overflow-hidden shadow">
+      <div class="ratio ratio-16x9 rounded shadow overflow-hidden">
         <iframe
-          id="lessonVideo"
-          src="https://www.youtube.com/embed/{{ lesson.youtube_id }}?rel=0&modestbranding=1"
+          src="{{ lesson.youtube_embed_url }}"
           title="Lesson video"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
           allowfullscreen>
         </iframe>
       </div>
 
-      <div class="mt-3 d-flex flex-wrap gap-2 align-items-center">
-        <button id="unlockBtn" class="btn btn-primary">
-          ✅ I watched the video → Unlock activity
-        </button>
-
-        <span class="small text-muted">
-          Watch first, then unlock the mission task below.
-        </span>
+      <div class="small text-muted mt-2 text-center">
+        After watching, complete the activity below to unlock the next mission.
       </div>
-
     </div>
   {% endif %}
 
-  {# -------------------------------
-     ACTIVITY (hidden until unlocked)
-     If no video, show activity normally
-     ------------------------------- #}
-  <div id="activityGateLocked" class="alert alert-warning {% if not lesson.youtube_id %}d-none{% endif %}">
-    🔒 Activity is locked. Watch the video, then click “Unlock activity”.
-  </div>
+  <!-- ACTIVITY LOADER -->
+  {% if lesson.activity_type == "files3" %}
+    {% include "activities/files_folders_3in1.html" %}
 
-  <div id="activitySection" class="{% if lesson.youtube_id %}d-none{% endif %}">
-    {% if lesson.activity_type == "files3" %}
-      {% include "activities/files_folders_3in1.html" %}
-    {% elif lesson.activity_type == "word5" %}
-      {% include "activities/word_5in1.html" %}
-    {% elif lesson.activity_type == "excel8" %}
-      {% include "activities/excel_8in1.html" %}
-    {% elif lesson.activity_type == "ppt10" %}
-      {% include "activities/ppt_10in1.html" %}
-    {% elif lesson.activity_type == "cp12" %}
-      {% include "activities/control_panel_12in1.html" %}
-    {% elif lesson.activity_type == "safety12" %}
-      {% include "activities/safety_12in1.html" %}
-    {% elif lesson.activity_type == "jobs8" %}
-      {% include "activities/jobs_8in1.html" %}
-    {% elif lesson.activity_type == "logic5" %}
-      {% include "activities/logic_5in1.html" %}
-    {% elif lesson.activity_type == "net5" %}
-      {% include "activities/networks_5in1.html" %}
-    {% elif lesson.activity_type == "teams8" %}
-      {% include "activities/teams8.html" %}
-    {% elif lesson.activity_type == "career8" %}
-      {% include "activities/career_engineers_8in1.html" %}
-    {% elif lesson.activity_type == "netcloud8" %}
-      {% include "activities/netcloud_8in1.html" %}
-    {% elif lesson.activity_type == "cyberai8" %}
-      {% include "activities/cyber_ai_8in1.html" %}
-    {% elif lesson.activity_type == "project8" %}
-      {% include "activities/project_ethics_paths_8in1.html" %}
-    {% else %}
-      <div class="alert alert-info">No activity for this lesson yet.</div>
-    {% endif %}
-  </div>
+  {% elif lesson.activity_type == "word5" %}
+    {% include "activities/word_5in1.html" %}
+
+  {% elif lesson.activity_type == "excel8" %}
+    {% include "activities/excel_8in1.html" %}
+
+  {% elif lesson.activity_type == "ppt10" %}
+    {% include "activities/ppt_10in1.html" %}
+
+  {% elif lesson.activity_type == "cp12" %}
+    {% include "activities/control_panel_12in1.html" %}
+
+  {% elif lesson.activity_type == "safety12" %}
+    {% include "activities/safety_12in1.html" %}
+
+  {% elif lesson.activity_type == "jobs8" %}
+    {% include "activities/jobs_8in1.html" %}
+
+  {% elif lesson.activity_type == "logic5" %}
+    {% include "activities/logic_5in1.html" %}
+
+  {% elif lesson.activity_type == "net5" %}
+    {% include "activities/networks_5in1.html" %}
+
+  {% elif lesson.activity_type == "teams8" %}
+    {% include "activities/teams8.html" %}
+
+  {% elif lesson.activity_type == "career8" %}
+    {% include "activities/career_engineers_8in1.html" %}
+
+  {% elif lesson.activity_type == "netcloud8" %}
+    {% include "activities/netcloud_8in1.html" %}
+
+  {% elif lesson.activity_type == "cyberai8" %}
+    {% include "activities/cyber_ai_8in1.html" %}
+
+  {% elif lesson.activity_type == "project8" %}
+    {% include "activities/project_ethics_paths_8in1.html" %}
+
+  {% else %}
+    <div class="alert alert-info mt-3">
+      No activity for this lesson yet.
+    </div>
+  {% endif %}
 
   <!-- COMPLETE BUTTON -->
   {% if not completed %}
@@ -97,35 +94,6 @@
   {% endif %}
 
 </div>
-
-<script>
-(function () {
-  const hasVideo = {{ lesson.youtube_id|yesno:"true,false" }};
-  if (!hasVideo) return;
-
-  const lessonKey = "pk_video_unlocked_" + "{{ lesson.id }}";
-  const unlockBtn = document.getElementById("unlockBtn");
-  const lockedBox = document.getElementById("activityGateLocked");
-  const activitySection = document.getElementById("activitySection");
-
-  function unlock() {
-    localStorage.setItem(lessonKey, "1");
-    if (lockedBox) lockedBox.classList.add("d-none");
-    if (activitySection) activitySection.classList.remove("d-none");
-    if (unlockBtn) {
-      unlockBtn.disabled = true;
-      unlockBtn.textContent = "✅ Activity unlocked";
-      unlockBtn.classList.remove("btn-primary");
-      unlockBtn.classList.add("btn-success");
-    }
-  }
-
-  // Auto-unlock if already unlocked before
-  if (localStorage.getItem(lessonKey) === "1") unlock();
-
-  if (unlockBtn) unlockBtn.addEventListener("click", unlock);
-})();
-</script>
 
 <script>
 const btn = document.getElementById("completeBtn");
