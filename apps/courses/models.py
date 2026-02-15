@@ -1,91 +1,25 @@
-from django.db import models
 import re
+from urllib.parse import urlencode
+from django.conf import settings
+from django.db import models
 
+YOUTUBE_ID_RE = re.compile(r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{11})")
 
 class Lesson(models.Model):
-    # ✅ NEW: Modules (to avoid long list of missions)
-    MODULE_CHOICES = [
-        ("computer_basics", "Computer Basics"),
-        ("systems_logic", "Systems Logic & Critical Thinking"),
-        ("careers", "Careers"),
-        ("logic5", "5-in-1: Logic Mission"),
-    ]
-
-    module = models.CharField(
-        max_length=40,
-        choices=MODULE_CHOICES,
-        default="computer_basics"
-    )
-
     title = models.CharField(max_length=200)
     content = models.TextField(blank=True)
     youtube_url = models.URLField(blank=True, null=True)
-
     order = models.PositiveIntegerField()
     xp = models.PositiveIntegerField(default=10)
 
-    activity_type = models.CharField(
-        max_length=20,
-        choices=[
-            ("none", "None"),
-            ("order", "Order Blocks"),
-            ("choice", "Choice Cards"),
-            ("mouse", "Mouse Practice"),
-            ("typing", "Keyboard Game"),
-            ("tidy", "Tidy the Computer"),
-            ("triple", "3-in-1 Digital Skills"),
-            ("foundations3", "3-in-1: Digital Foundations"),
-            ("files3", "3-in-1: Files & Folders"),
-            ("word5", "5-in-1: Microsoft Word"),
-            ("excel8", "8-in-1: Excel Basics"),
-            ("ppt10", "10-in-1: Microsoft PowerPoint Playground"),
-            ("cp12", "12-in-1: Control Panel Playground"),
-            ("safety12", "12-in-1: Safety + Good/Not Good"),
-            ("jobs8", "8-in-1: Jobs That Use Computers"),
-            ("logic5", "5-in-1: Logic & Critical Thinking"),
-            ("ipo5", "5-in-1: IPO + Decisions + Loops + Data"),
-            ("sys5", "5-in-1: Systems + Memory + Storage"),
-            ("net5", "5-in-1: Internet + Apps + Networks"),
-            ("teams8", "8-in-1: Speed + Safety + Tech Teams"),
-            ("career8", "8-in-1: Engineers + Data Engineers"),
-            ("netcloud8", "8-in-1: Network + Cloud Engineers"),
-            ("cyberai8", "8-in-1: Cybersecurity + AI Engineers"),
-            ("teamtools8", "8-in-1: Teams + Tools Playground"),
-            ("project8", "8-in-1: Projects + Ethics + Paths"),
-        ],
-        default="none"
-    )
-    activity_json = models.JSONField(blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.order}. {self.title}"
+    # ... your fields ...
 
     @property
     def youtube_id(self):
-        """
-        Extract YouTube video ID from common URL formats:
-        - https://youtu.be/VIDEOID
-        - https://www.youtube.com/watch?v=VIDEOID
-        - https://www.youtube.com/embed/VIDEOID
-        - https://www.youtube.com/shorts/VIDEOID
-        """
         if not self.youtube_url:
-            return ""
-
-        url = self.youtube_url.strip()
-
-        patterns = [
-            r"youtu\.be/([A-Za-z0-9_-]{6,})",
-            r"[?&]v=([A-Za-z0-9_-]{6,})",
-            r"youtube\.com/embed/([A-Za-z0-9_-]{6,})",
-            r"youtube\.com/shorts/([A-Za-z0-9_-]{6,})",
-        ]
-        for p in patterns:
-            m = re.search(p, url)
-            if m:
-                return m.group(1)
-
-        return ""
+            return None
+        m = YOUTUBE_ID_RE.search(self.youtube_url)
+        return m.group(1) if m else None
 
     @property
     def youtube_watch_url(self):
@@ -102,9 +36,21 @@ class Lesson(models.Model):
     @property
     def youtube_embed_url(self):
         """
-        Embed inside PipelineKids without redirecting users to YouTube.
-        Using youtube-nocookie is better for privacy (especially for kids).
+        Important:
+        - Use nocookie domain (better for schools).
+        - Only add origin if SITE_URL is a real https domain (not localhost).
         """
         if not self.youtube_id:
             return ""
-        return f"https://www.youtube-nocookie.com/embed/{self.youtube_id}?rel=0&modestbranding=1"
+
+        params = {
+            "rel": 0,
+            "modestbranding": 1,
+            "playsinline": 1,
+        }
+
+        site_url = getattr(settings, "SITE_URL", "")
+        if site_url and site_url.startswith("https://") and "onrender.com" in site_url:
+            params["origin"] = site_url
+
+        return f"https://www.youtube-nocookie.com/embed/{self.youtube_id}?{urlencode(params)}"
