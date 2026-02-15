@@ -1,0 +1,2704 @@
+[
+{
+  "model": "courses.lesson",
+  "pk": 14,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 3: Software & Hardware",
+    "content": "",
+    "youtube_url": "https://youtu.be/nd0mtXQhjYc?si=hzO5DApz57j86oiM",
+    "order": 3,
+    "xp": 10,
+    "activity_type": "foundations3",
+    "activity_json": {
+      "mission1": {
+        "icons": [
+          {
+            "id": "game",
+            "desc": "A game is software you can play.",
+            "label": "\ud83c\udfae Game"
+          },
+          {
+            "id": "paint",
+            "desc": "Paint is software for drawing.",
+            "label": "\ud83c\udfa8 Paint"
+          },
+          {
+            "id": "browser",
+            "desc": "A browser is software for the internet.",
+            "label": "\ud83c\udf10 Browser"
+          }
+        ]
+      },
+      "mission2": {
+        "hardware": [
+          "Keyboard",
+          "Mouse",
+          "Monitor",
+          "CPU"
+        ],
+        "software": [
+          "Game",
+          "Browser",
+          "Music App",
+          "Paint"
+        ]
+      },
+      "mission3": {
+        "apps": [
+          "Game",
+          "Paint",
+          "Browser"
+        ],
+        "open_target": 2,
+        "switch_sequence": [
+          "Browser",
+          "Paint",
+          "Browser"
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 17,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 6 Microsoft Excel",
+    "content": "",
+    "youtube_url": "https://youtu.be/bwXSZBX1mG8?si=Ef1TKTvBLkqXjl25",
+    "order": 6,
+    "xp": 60,
+    "activity_type": "excel8",
+    "activity_json": {
+      "m1": {
+        "target_cell": "B2"
+      },
+      "m2": {
+        "name": "Ada",
+        "apples": 3,
+        "oranges": 2
+      },
+      "m3": {
+        "expected": "=B2+C2"
+      },
+      "m7": {
+        "rows": [
+          {
+            "name": "Ada",
+            "total": 5
+          },
+          {
+            "name": "Tobi",
+            "total": 6
+          },
+          {
+            "name": "Zara",
+            "total": 2
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 15,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mision 4 Save & Saveas",
+    "content": "",
+    "youtube_url": "https://youtu.be/QF7g6qbgc48?si=esc9d8oQyCc1WWaR",
+    "order": 4,
+    "xp": 20,
+    "activity_type": "files3",
+    "activity_json": {
+      "mission1": {
+        "files": [
+          {
+            "name": "family.jpg",
+            "folder": "Pictures"
+          },
+          {
+            "name": "maths.docx",
+            "folder": "Homework"
+          },
+          {
+            "name": "song.mp3",
+            "folder": "Music"
+          },
+          {
+            "name": "drawing.png",
+            "folder": "Pictures"
+          },
+          {
+            "name": "english_story.docx",
+            "folder": "Homework"
+          }
+        ],
+        "folders": [
+          "Pictures",
+          "Homework",
+          "Music"
+        ]
+      },
+      "mission2": {
+        "scenarios": [
+          {
+            "text": "You already saved your homework. You only added one more sentence. What should you click?",
+            "answer": "save"
+          },
+          {
+            "text": "You want a copy called 'Homework FINAL'. What should you click?",
+            "answer": "save_as"
+          },
+          {
+            "text": "You fixed a spelling mistake in the same file. What should you click?",
+            "answer": "save"
+          }
+        ]
+      },
+      "mission3": {
+        "old_name": "New Document.docx",
+        "folder_hint": "Homework",
+        "folder_name": "Homework",
+        "rename_good": [
+          "Math Homework Week 1.docx",
+          "Math Homework - Week 1.docx"
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 11,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 1: What Is Computer",
+    "content": "Watch the video, then complete the activity to earn your badge.\u201d",
+    "youtube_url": "https://www.youtube.com/watch?v=c7Llo1_trs0",
+    "order": 1,
+    "xp": 20,
+    "activity_type": "order",
+    "activity_json": {
+      "title": "\ud83c\udfae Make the Computers Talk!",
+      "blocks": [
+        {
+          "id": "type",
+          "label": "\ud83d\udfe8 Type message"
+        },
+        {
+          "id": "send",
+          "label": "\ud83d\udfe8 Click send"
+        },
+        {
+          "id": "show",
+          "label": "\ud83d\udfe8 Show on screen"
+        }
+      ],
+      "subtitle": "Computers follow instructions. Drag the blocks in the right order!",
+      "fail_text": "\ud83e\udd14 Almost there! Try changing the order.",
+      "message_a": "Hello \ud83d\udc4b",
+      "message_b": "Hello \ud83d\udc4b",
+      "success_text": "\ud83c\udf89 Great job! You made computers talk!",
+      "correct_order": [
+        "type",
+        "send",
+        "show"
+      ]
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 13,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 2: Keyboard & Mouse",
+    "content": "",
+    "youtube_url": "https://youtu.be/OJ0QQ-1fRnM?si=jG-gH-PdS9HjNCjb",
+    "order": 2,
+    "xp": 20,
+    "activity_type": "triple",
+    "activity_json": {
+      "toys": [
+        "\ud83e\uddf8",
+        "\ud83d\ude97",
+        "\ud83e\udde9",
+        "\ud83e\ude80"
+      ],
+      "files": [
+        {
+          "name": "family.jpg",
+          "folder": "Pictures"
+        },
+        {
+          "name": "maths.docx",
+          "folder": "Homework"
+        },
+        {
+          "name": "song.mp3",
+          "folder": "Music"
+        },
+        {
+          "name": "drawing.png",
+          "folder": "Pictures"
+        }
+      ],
+      "tasks": [
+        "Anthony",
+        "2048",
+        "@!?"
+      ],
+      "folders": [
+        "Pictures",
+        "Homework",
+        "Music"
+      ],
+      "dbl_target": 3,
+      "click_target": 5
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 16,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 5 Word Processing",
+    "content": "",
+    "youtube_url": "https://youtu.be/ArQXMd09HYE?si=Z-WNUQ7NvIB_ZXdN",
+    "order": 5,
+    "xp": 40,
+    "activity_type": "word5",
+    "activity_json": {
+      "missions": {
+        "save": {
+          "save_steps": [
+            "File",
+            "Save As",
+            "Homework",
+            "MyStory.docx",
+            "Save"
+          ]
+        },
+        "print": {
+          "questions": [
+            {
+              "q": "What should you click first to print?",
+              "answer": "File",
+              "options": [
+                "Home",
+                "File",
+                "Insert"
+              ]
+            },
+            {
+              "q": "What page shows how your document will look on paper?",
+              "answer": "Print Preview",
+              "options": [
+                "Print Preview",
+                "Spell Check",
+                "Undo"
+              ]
+            },
+            {
+              "q": "Should you print without asking an adult?",
+              "answer": "No",
+              "options": [
+                "Yes",
+                "No"
+              ]
+            }
+          ]
+        },
+        "story": {
+          "prompt": "Write a short story about your day. Put a TITLE on the first line.",
+          "min_words": 20,
+          "required_words": [
+            "title",
+            "my",
+            "story"
+          ]
+        },
+        "format": {
+          "targets": [
+            {
+              "type": "size",
+              "label": "Make the title BIG (32)",
+              "value": "32"
+            },
+            {
+              "type": "bold",
+              "label": "Make one word BOLD",
+              "value": "true"
+            },
+            {
+              "type": "color",
+              "label": "Change text colour to BLUE",
+              "value": "blue"
+            }
+          ]
+        },
+        "picture": {
+          "choices": [
+            {
+              "id": "cat",
+              "label": "\ud83d\udc31 Cat",
+              "is_correct": true
+            },
+            {
+              "id": "car",
+              "label": "\ud83d\ude97 Car",
+              "is_correct": false
+            },
+            {
+              "id": "book",
+              "label": "\ud83d\udcda Book",
+              "is_correct": false
+            }
+          ],
+          "instruction": "Click the correct picture to insert it into your document."
+        }
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 18,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 7 Microsoft Powerpoint",
+    "content": "",
+    "youtube_url": "https://youtu.be/gHJ2mv4qIik?si=qbbMayctLx_XHWql",
+    "order": 7,
+    "xp": 60,
+    "activity_type": "ppt10",
+    "activity_json": {
+      "missions": [
+        {
+          "id": "title",
+          "label": "Add a slide title",
+          "target": "My First Presentation"
+        },
+        {
+          "id": "text",
+          "label": "Add bullet text",
+          "target": 3
+        },
+        {
+          "id": "layout",
+          "label": "Choose a layout",
+          "target": "Title and Content"
+        },
+        {
+          "id": "image",
+          "label": "Insert a picture",
+          "target": 1
+        },
+        {
+          "id": "shape",
+          "label": "Add a shape",
+          "target": 1
+        },
+        {
+          "id": "theme",
+          "label": "Apply a theme",
+          "target": "Blue"
+        },
+        {
+          "id": "animation",
+          "label": "Add animation",
+          "target": 1
+        },
+        {
+          "id": "transition",
+          "label": "Add slide transition",
+          "target": 1
+        },
+        {
+          "id": "slideshow",
+          "label": "Start slideshow",
+          "target": true
+        },
+        {
+          "id": "save",
+          "label": "Save presentation",
+          "target": true
+        }
+      ]
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 19,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 8 Control Panel",
+    "content": "",
+    "youtube_url": "https://youtu.be/Lyh8cOgNnZE?si=diAwCzfypdI1xThI",
+    "order": 8,
+    "xp": 80,
+    "activity_type": "cp12",
+    "activity_json": {
+      "tabs": [
+        {
+          "id": "basics",
+          "to": 4,
+          "from": 1,
+          "label": "\ud83d\udd0e Basics"
+        },
+        {
+          "id": "mouse",
+          "to": 6,
+          "from": 5,
+          "label": "\ud83d\uddb1\ufe0f Mouse"
+        },
+        {
+          "id": "display",
+          "to": 8,
+          "from": 7,
+          "label": "\ud83d\udda5\ufe0f Display"
+        },
+        {
+          "id": "accounts",
+          "to": 10,
+          "from": 9,
+          "label": "\ud83d\udc64 Accounts"
+        },
+        {
+          "id": "devices",
+          "to": 12,
+          "from": 11,
+          "label": "\ud83d\udda8\ufe0f Devices"
+        }
+      ],
+      "title": "\u2699\ufe0f Control Panel Playground",
+      "badges": [
+        {
+          "id": "badgeExplorer",
+          "label": "\ud83e\udded Settings Explorer",
+          "unlock_after": 3
+        },
+        {
+          "id": "badgeController",
+          "label": "\ud83c\udf9b\ufe0f Slider Controller",
+          "unlock_after": 6
+        },
+        {
+          "id": "badgeSmart",
+          "label": "\ud83e\udde0 Smart Chooser",
+          "unlock_after": 9
+        },
+        {
+          "id": "badgeSafe",
+          "label": "\ud83d\udee1\ufe0f Safety Star",
+          "unlock_after": 10
+        },
+        {
+          "id": "badgePro",
+          "label": "\ud83c\udfc6 Control Panel Pro",
+          "unlock_after": 12
+        }
+      ],
+      "missions": [
+        {
+          "id": "open_cp",
+          "hint": "Click Start \u2192 type Control Panel",
+          "type": "tap",
+          "label": "Open Control Panel"
+        },
+        {
+          "id": "view_mode",
+          "hint": "Change Category \u2194 Icons view",
+          "type": "choice",
+          "label": "Switch View",
+          "answer": "Large icons",
+          "options": [
+            "Category",
+            "Large icons",
+            "Small icons"
+          ]
+        },
+        {
+          "id": "sound",
+          "hint": "Find the speaker icon area",
+          "type": "tap",
+          "label": "Open Sound settings"
+        },
+        {
+          "id": "volume",
+          "max": 100,
+          "min": 0,
+          "hint": "Drag the slider to 60",
+          "type": "slider",
+          "label": "Set volume to 60%",
+          "target": 60,
+          "tolerance": 5
+        },
+        {
+          "id": "mouse",
+          "hint": "Mouse controls pointer speed",
+          "type": "tap",
+          "label": "Open Mouse settings"
+        },
+        {
+          "id": "pointer_speed",
+          "max": 10,
+          "min": 1,
+          "hint": "Drag to the middle",
+          "type": "slider",
+          "label": "Set pointer speed to Medium",
+          "target": 5,
+          "tolerance": 1
+        },
+        {
+          "id": "display",
+          "hint": "Display controls text size",
+          "type": "tap",
+          "label": "Open Display settings"
+        },
+        {
+          "id": "scale",
+          "hint": "Pick the safest choice for kids",
+          "type": "choice",
+          "label": "Choose text size",
+          "answer": "125%",
+          "options": [
+            "100%",
+            "125%",
+            "150%"
+          ]
+        },
+        {
+          "id": "users",
+          "hint": "Users = people on the computer",
+          "type": "tap",
+          "label": "Open User Accounts"
+        },
+        {
+          "id": "safety",
+          "hint": "What should you do before changing settings?",
+          "type": "choice",
+          "label": "Safety rule",
+          "answer": "Ask parent/teacher",
+          "options": [
+            "Change everything",
+            "Ask parent/teacher",
+            "Turn off computer"
+          ]
+        },
+        {
+          "id": "devices",
+          "hint": "See printers, headphones, USB devices",
+          "type": "tap",
+          "label": "Open Devices & Printers"
+        },
+        {
+          "id": "finish",
+          "hint": "Click Done to complete the mission set",
+          "type": "tap",
+          "label": "Finish like a pro"
+        }
+      ],
+      "subtitle": "Complete 12 missions to unlock the next lesson."
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 20,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 9 Safet, What Computer can do and not do",
+    "content": "",
+    "youtube_url": "https://youtu.be/RHc_2sbdZ28?si=uxSErxvWuyLLQuI8",
+    "order": 9,
+    "xp": 80,
+    "activity_type": "safety12",
+    "activity_json": {
+      "title": "Safety + Computer Power (12-in-1)",
+      "missions": [
+        {
+          "id": "m1",
+          "type": "password_meter",
+          "label": "\ud83d\udd11 Password Builder",
+          "prompt": "Make a strong password: letters + numbers + symbol (don\u2019t use your name).",
+          "min_score": 3
+        },
+        {
+          "q": "Should you share your password with a friend?",
+          "id": "m2",
+          "type": "mcq",
+          "label": "\ud83e\udd2b Keep It Secret",
+          "options": [
+            {
+              "t": "Yes",
+              "ok": false
+            },
+            {
+              "t": "No",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "q": "If you forget your password, what should you do?",
+          "id": "m3",
+          "type": "mcq",
+          "label": "\ud83e\uddd1\u200d\ud83e\udd1d\u200d\ud83e\uddd1 Ask an Adult",
+          "options": [
+            {
+              "t": "Ask a parent/teacher",
+              "ok": true
+            },
+            {
+              "t": "Post it online",
+              "ok": false
+            }
+          ]
+        },
+        {
+          "id": "m4",
+          "type": "sort_drag",
+          "items": [
+            {
+              "t": "Good job!",
+              "side": "left"
+            },
+            {
+              "t": "You are silly!",
+              "side": "right"
+            },
+            {
+              "t": "Can I help you?",
+              "side": "left"
+            },
+            {
+              "t": "I hate you!",
+              "side": "right"
+            }
+          ],
+          "label": "\ud83d\ude42 Kind Words",
+          "prompt": "Drag messages into KIND or MEAN.",
+          "left_title": "\ud83d\ude42 KIND",
+          "right_title": "\ud83d\ude21 MEAN"
+        },
+        {
+          "q": "A stranger asks for your address. What do you do?",
+          "id": "m5",
+          "type": "mcq",
+          "label": "\ud83d\udd75\ufe0f Strangers",
+          "options": [
+            {
+              "t": "Tell them",
+              "ok": false
+            },
+            {
+              "t": "Don\u2019t reply, tell an adult",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "id": "m6",
+          "type": "order_steps",
+          "label": "\ud83d\udea8 What To Do",
+          "order": [
+            "Stop",
+            "Don\u2019t reply",
+            "Tell an adult"
+          ],
+          "prompt": "Put the safety steps in the right order:"
+        },
+        {
+          "id": "m7",
+          "type": "drag_two_boxes",
+          "boxes": [
+            {
+              "id": "good",
+              "title": "\u2705 GOOD AT",
+              "accept": [
+                "good"
+              ]
+            },
+            {
+              "id": "bad",
+              "title": "\u274c NOT GOOD AT",
+              "accept": [
+                "bad"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "t": "Counting fast",
+              "kind": "good"
+            },
+            {
+              "t": "Remembering lots of files",
+              "kind": "good"
+            },
+            {
+              "t": "Feeling happy",
+              "kind": "bad"
+            },
+            {
+              "t": "Understanding jokes",
+              "kind": "bad"
+            }
+          ],
+          "label": "\u26a1 Computers Are Good At",
+          "prompt": "Drag each card to GOOD AT or NOT GOOD AT."
+        },
+        {
+          "id": "m8",
+          "type": "match_three",
+          "label": "\ud83d\udce5 Input-Process-Output",
+          "groups": [
+            {
+              "id": "in",
+              "title": "\ud83d\udce5 INPUT",
+              "wants": [
+                "Keyboard",
+                "Mouse click",
+                "Microphone"
+              ]
+            },
+            {
+              "id": "pr",
+              "title": "\u2699\ufe0f PROCESS",
+              "wants": [
+                "Thinking steps",
+                "Sorting",
+                "Calculating"
+              ]
+            },
+            {
+              "id": "out",
+              "title": "\ud83d\udce4 OUTPUT",
+              "wants": [
+                "Screen shows text",
+                "Sound plays",
+                "Printer prints"
+              ]
+            }
+          ],
+          "prompt": "Match the examples to the right box."
+        },
+        {
+          "q": "If you want a computer to do the same thing 10 times, what do you use?",
+          "id": "m9",
+          "type": "mcq",
+          "label": "\ud83d\udd01 Repeat (Loops)",
+          "options": [
+            {
+              "t": "A loop (repeat)",
+              "ok": true
+            },
+            {
+              "t": "A guess",
+              "ok": false
+            }
+          ]
+        },
+        {
+          "q": "Can a computer decide what to do with no instructions?",
+          "id": "m10",
+          "type": "mcq",
+          "label": "\ud83e\udde0 Computers Need Instructions",
+          "options": [
+            {
+              "t": "Yes, always",
+              "ok": false
+            },
+            {
+              "t": "No, it needs steps",
+              "ok": true
+            }
+          ]
+        },
+        {
+          "q": "Which one is like a long-term cupboard for files?",
+          "id": "m11",
+          "type": "mcq",
+          "label": "\ud83d\udcbe Memory vs Storage",
+          "options": [
+            {
+              "t": "Storage (hard drive/cloud)",
+              "ok": true
+            },
+            {
+              "t": "Memory (RAM)",
+              "ok": false
+            }
+          ]
+        },
+        {
+          "id": "m12",
+          "quiz": [
+            {
+              "a": "No",
+              "q": "Share passwords?"
+            },
+            {
+              "a": "Yes",
+              "q": "Computers good at counting?"
+            },
+            {
+              "a": "Yes",
+              "q": "If scared online, tell an adult?"
+            }
+          ],
+          "type": "quick_quiz",
+          "label": "\ud83c\udfc1 Final Mixed Quiz",
+          "prompt": "Answer 3 quick questions!"
+        }
+      ]
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 21,
+  "fields": {
+    "module": "computer_basics",
+    "title": "Mission 10: Jobs that Uses Computer",
+    "content": "",
+    "youtube_url": null,
+    "order": 10,
+    "xp": 60,
+    "activity_type": "jobs8",
+    "activity_json": {
+      "mission1": {
+        "pairs": [
+          {
+            "job": "Doctor",
+            "tool": "Patient Records"
+          },
+          {
+            "job": "Teacher",
+            "tool": "Lesson Planner"
+          },
+          {
+            "job": "Pilot",
+            "tool": "Flight Screen"
+          },
+          {
+            "job": "Banker",
+            "tool": "Money System"
+          }
+        ]
+      },
+      "mission2": {
+        "jobs": [
+          {
+            "cat": "Health",
+            "job": "Nurse"
+          },
+          {
+            "cat": "Education",
+            "job": "Teacher"
+          },
+          {
+            "cat": "Safety",
+            "job": "Police"
+          },
+          {
+            "cat": "Farming",
+            "job": "Farmer"
+          },
+          {
+            "cat": "Creative",
+            "job": "Artist"
+          },
+          {
+            "cat": "Money",
+            "job": "Banker"
+          },
+          {
+            "cat": "Transport",
+            "job": "Driver"
+          },
+          {
+            "cat": "Tech",
+            "job": "Data Engineer"
+          }
+        ],
+        "categories": [
+          "Health",
+          "Education",
+          "Safety",
+          "Farming",
+          "Creative",
+          "Money",
+          "Transport",
+          "Tech"
+        ]
+      },
+      "mission3": {
+        "questions": [
+          {
+            "q": "Who uses computers to mark tests and track progress?",
+            "answer": "Teacher",
+            "options": [
+              "Teacher",
+              "Farmer",
+              "Pilot"
+            ]
+          },
+          {
+            "q": "Who uses computers to keep money safe?",
+            "answer": "Banker",
+            "options": [
+              "Banker",
+              "Artist",
+              "Driver"
+            ]
+          },
+          {
+            "q": "Who uses computers to check patient records?",
+            "answer": "Doctor",
+            "options": [
+              "Doctor",
+              "Chef",
+              "Builder"
+            ]
+          },
+          {
+            "q": "Who uses computers to plan routes?",
+            "answer": "Driver",
+            "options": [
+              "Driver",
+              "Painter",
+              "Singer"
+            ]
+          },
+          {
+            "q": "Who protects computers from hackers?",
+            "answer": "Cybersecurity",
+            "options": [
+              "Cybersecurity",
+              "Dancer",
+              "Nurse"
+            ]
+          }
+        ]
+      },
+      "mission4": {
+        "items": [
+          {
+            "tool": "\ud83d\udcf7 CCTV screen",
+            "answer": "Police",
+            "options": [
+              "Teacher",
+              "Police",
+              "Farmer"
+            ]
+          },
+          {
+            "tool": "\ud83e\ude7a Patient record",
+            "answer": "Doctor",
+            "options": [
+              "Doctor",
+              "Artist",
+              "Driver"
+            ]
+          },
+          {
+            "tool": "\u2708\ufe0f Flight dashboard",
+            "answer": "Pilot",
+            "options": [
+              "Pilot",
+              "Banker",
+              "Nurse"
+            ]
+          },
+          {
+            "tool": "\ud83d\uded2 Checkout system",
+            "answer": "Shop Worker",
+            "options": [
+              "Shop Worker",
+              "Chef",
+              "Builder"
+            ]
+          }
+        ]
+      },
+      "mission5": {
+        "pairs": [
+          {
+            "job": "Teacher",
+            "task": "Write and print a report"
+          },
+          {
+            "job": "Nurse",
+            "task": "Check patient temperature"
+          },
+          {
+            "job": "Cybersecurity",
+            "task": "Protect a network from hackers"
+          },
+          {
+            "job": "Data Engineer",
+            "task": "Organise data into tables"
+          }
+        ]
+      },
+      "mission6": {
+        "items": [
+          {
+            "a": true,
+            "t": "A farmer can use a tablet to check the weather."
+          },
+          {
+            "a": false,
+            "t": "Only computer programmers use computers."
+          },
+          {
+            "a": true,
+            "t": "Teachers can use computers to make quizzes."
+          },
+          {
+            "a": false,
+            "t": "Computers can do jobs without instructions."
+          }
+        ]
+      },
+      "mission7": {
+        "steps": [
+          {
+            "id": "open",
+            "text": "Open the computer"
+          },
+          {
+            "id": "plan",
+            "text": "Plan the lesson"
+          },
+          {
+            "id": "teach",
+            "text": "Teach the students"
+          },
+          {
+            "id": "mark",
+            "text": "Mark the work"
+          }
+        ],
+        "correct_order": [
+          "open",
+          "plan",
+          "teach",
+          "mark"
+        ]
+      },
+      "mission8": {
+        "interests": [
+          {
+            "k": "Helping people",
+            "careers": [
+              "Doctor",
+              "Nurse",
+              "Teacher"
+            ]
+          },
+          {
+            "k": "Building things",
+            "careers": [
+              "Engineer",
+              "Architect",
+              "Game Builder"
+            ]
+          },
+          {
+            "k": "Solving puzzles",
+            "careers": [
+              "Data Engineer",
+              "Programmer",
+              "Detective"
+            ]
+          },
+          {
+            "k": "Staying safe",
+            "careers": [
+              "Police",
+              "Cybersecurity",
+              "Firefighter"
+            ]
+          },
+          {
+            "k": "Drawing & design",
+            "careers": [
+              "Artist",
+              "Designer",
+              "Animator"
+            ]
+          },
+          {
+            "k": "Flying & travel",
+            "careers": [
+              "Pilot",
+              "Driver",
+              "Train Operator"
+            ]
+          },
+          {
+            "k": "Money & business",
+            "careers": [
+              "Banker",
+              "Shop Owner",
+              "Accountant"
+            ]
+          },
+          {
+            "k": "Computers & internet",
+            "careers": [
+              "Network Engineer",
+              "Cloud Engineer",
+              "Cybersecurity"
+            ]
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 22,
+  "fields": {
+    "module": "systems_logic",
+    "title": "Mission 1: Instructions & steps,  Mistakes & fixing them  Patterns",
+    "content": "",
+    "youtube_url": "https://youtu.be/dkhkeUXUSo4?si=w4uAnQ9wYKdtJ9Bh",
+    "order": 1,
+    "xp": 40,
+    "activity_type": "logic5",
+    "activity_json": {
+      "title": "Logic Mission 1: Instructions & Steps",
+      "badges": {
+        "b1": "\ud83d\udccb Step Starter",
+        "b2": "\ud83e\udde0 Next Step Pro",
+        "b3": "\ud83d\udee0\ufe0f Fixer",
+        "b4": "\ud83e\udd16 Robot Boss",
+        "b5": "\ud83c\udfc1 Logic Winner"
+      },
+      "a5_quiz": {
+        "prompt": "Quick quiz!",
+        "questions": [
+          {
+            "q": "What is an instruction?",
+            "options": [
+              {
+                "text": "A step that tells you what to do",
+                "correct": true
+              },
+              {
+                "text": "A type of snack",
+                "correct": false
+              },
+              {
+                "text": "A phone charger",
+                "correct": false
+              }
+            ]
+          },
+          {
+            "q": "Why do steps matter?",
+            "options": [
+              {
+                "text": "Because order changes the result",
+                "correct": true
+              },
+              {
+                "text": "Because computers like noise",
+                "correct": false
+              },
+              {
+                "text": "Because it\u2019s not important",
+                "correct": false
+              }
+            ]
+          }
+        ]
+      },
+      "a2_next_step": {
+        "prompt": "Choose the correct next step:",
+        "options": [
+          {
+            "id": "a",
+            "text": "Press the power button",
+            "correct": true
+          },
+          {
+            "id": "b",
+            "text": "Throw it on the floor",
+            "correct": false
+          },
+          {
+            "id": "c",
+            "text": "Wash it with water",
+            "correct": false
+          }
+        ],
+        "question": "You opened your laptop. What should you do next?"
+      },
+      "a1_order_steps": {
+        "steps": [
+          {
+            "id": "bread1",
+            "text": "\ud83c\udf5e Get two slices of bread"
+          },
+          {
+            "id": "spread",
+            "text": "\ud83e\uddc8 Spread butter"
+          },
+          {
+            "id": "fill",
+            "text": "\ud83e\udd6c Add filling"
+          },
+          {
+            "id": "bread2",
+            "text": "\ud83c\udf5e Put the second bread on top"
+          },
+          {
+            "id": "eat",
+            "text": "\ud83d\ude0b Eat your sandwich"
+          }
+        ],
+        "prompt": "Put the steps in the correct order to make a sandwich \ud83e\udd6a",
+        "correct_order": [
+          "bread1",
+          "spread",
+          "fill",
+          "bread2",
+          "eat"
+        ]
+      },
+      "a3_fix_mistake": {
+        "prompt": "Fix the instructions (one step is wrong!)",
+        "explain": "You should read the lesson before closing the notebook.",
+        "options": [
+          {
+            "id": "step2",
+            "text": "Step 2",
+            "correct": false
+          },
+          {
+            "id": "step3",
+            "text": "Step 3",
+            "correct": true
+          },
+          {
+            "id": "step4",
+            "text": "Step 4",
+            "correct": false
+          }
+        ],
+        "question": "Which step is in the wrong place?",
+        "wrong_steps": [
+          "1) Open your notebook",
+          "2) Write your name",
+          "3) Close your notebook",
+          "4) Read the lesson"
+        ]
+      },
+      "a4_robot_instructions": {
+        "prompt": "Build instructions for the robot \ud83e\udd16 to reach the treasure \ud83c\udfc1",
+        "choices": [
+          {
+            "id": "up",
+            "text": "\u2b06\ufe0f Move Up"
+          },
+          {
+            "id": "down",
+            "text": "\u2b07\ufe0f Move Down"
+          },
+          {
+            "id": "left",
+            "text": "\u2b05\ufe0f Move Left"
+          },
+          {
+            "id": "right",
+            "text": "\u27a1\ufe0f Move Right"
+          }
+        ],
+        "target_length": 4,
+        "correct_sequence": [
+          "right",
+          "right",
+          "down",
+          "down"
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 23,
+  "fields": {
+    "module": "systems_logic",
+    "title": "Mission 2: IPO Decision",
+    "content": "",
+    "youtube_url": "https://youtu.be/Vbl01sDGzlI?si=IW4Nz5E5I8vEhXI5",
+    "order": 2,
+    "xp": 10,
+    "activity_type": "logic5",
+    "activity_json": {
+      "decision_options": [
+        {
+          "text": "You can log in",
+          "correct": true
+        },
+        {
+          "text": "The computer turns off",
+          "correct": false
+        },
+        {
+          "text": "Nothing happens forever",
+          "correct": false
+        }
+      ],
+      "decision_question": "IF the password is correct, THEN what happens?"
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 25,
+  "fields": {
+    "module": "systems_logic",
+    "title": "Mission 4: Network Basic",
+    "content": "",
+    "youtube_url": "https://youtu.be/cJNl8pb8SwQ?si=5MD4sMcj09nVXtJ7",
+    "order": 4,
+    "xp": 60,
+    "activity_type": "net5",
+    "activity_json": {
+      "mission2": {
+        "pieces": [
+          "Buttons",
+          "Pictures",
+          "Text",
+          "Instructions"
+        ]
+      },
+      "mission3": {
+        "flow": [
+          "Your Device",
+          "Internet",
+          "Server",
+          "Your Screen"
+        ]
+      },
+      "mission5": {
+        "cards": [
+          {
+            "type": "memory",
+            "label": "RAM"
+          },
+          {
+            "type": "memory",
+            "label": "Memory (fast)"
+          },
+          {
+            "type": "storage",
+            "label": "SSD / Hard Drive"
+          },
+          {
+            "type": "storage",
+            "label": "USB Flash"
+          },
+          {
+            "type": "storage",
+            "label": "Cloud Drive"
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 24,
+  "fields": {
+    "module": "systems_logic",
+    "title": "Mision 3: Storage",
+    "content": "",
+    "youtube_url": "https://youtu.be/_L96Z9vsh2A?si=tneNyHhWK0SMvM5h",
+    "order": 3,
+    "xp": 60,
+    "activity_type": "sys5",
+    "activity_json": {
+      "badge": "System Star \u2b50",
+      "activities": [
+        {
+          "type": "mcq",
+          "title": "1) Memory or Storage?",
+          "prompt": "Where does a computer keep things FOREVER, even when it is off?",
+          "options": [
+            {
+              "text": "Memory (RAM)",
+              "correct": false,
+              "feedback": "Memory is fast but forgets when power is off."
+            },
+            {
+              "text": "Storage (Disk)",
+              "correct": true,
+              "feedback": "Yes! Storage keeps files for a long time."
+            }
+          ]
+        },
+        {
+          "type": "truefalse",
+          "title": "2) Quick True or False",
+          "prompt": "Memory is usually faster than storage.",
+          "correct": true,
+          "feedback_wrong": "Not quite \u2014 memory is usually faster.",
+          "feedback_correct": "Correct! Memory is super fast."
+        },
+        {
+          "type": "match",
+          "pairs": [
+            {
+              "left": "Memory",
+              "right": "Brain (Fast Now)"
+            },
+            {
+              "left": "Storage",
+              "right": "Backpack (Save for Later)"
+            },
+            {
+              "left": "Process",
+              "right": "Steps (Process)"
+            },
+            {
+              "left": "System failure",
+              "right": "Problem (Failure)"
+            }
+          ],
+          "title": "3) Match the system parts",
+          "prompt": "Match each item to what it is MOST like.",
+          "choices": [
+            "Brain (Fast Now)",
+            "Backpack (Save for Later)",
+            "Steps (Process)",
+            "Problem (Failure)"
+          ]
+        },
+        {
+          "type": "order",
+          "items": [
+            "Boil water",
+            "Put teabag in cup",
+            "Pour water",
+            "Stir and drink"
+          ],
+          "title": "4) Put the process in order",
+          "prompt": "How do you make tea? Put the steps in the right order.",
+          "correct_order": [
+            "Boil water",
+            "Put teabag in cup",
+            "Pour water",
+            "Stir and drink"
+          ]
+        },
+        {
+          "type": "mcq",
+          "title": "5) System Failure!",
+          "prompt": "Which one is a system failure?",
+          "options": [
+            {
+              "text": "Traffic light stops working",
+              "correct": true,
+              "feedback": "Yes! That system failed."
+            },
+            {
+              "text": "A pencil is sharp",
+              "correct": false,
+              "feedback": "That\u2019s not a system failure \ud83d\ude04"
+            }
+          ]
+        }
+      ]
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 26,
+  "fields": {
+    "module": "systems_logic",
+    "title": "Mission 5: Speed Safety & Tech Team",
+    "content": "",
+    "youtube_url": "https://youtu.be/PYerw0c3oL4",
+    "order": 5,
+    "xp": 60,
+    "activity_type": "teams8",
+    "activity_json": {
+      "m7_plan": [
+        "Open the computer",
+        "Click Print",
+        "Type your document after printing (wrong)",
+        "Save the document"
+      ],
+      "m1_items": [
+        {
+          "text": "Opening a small picture",
+          "type": "fast"
+        },
+        {
+          "text": "Downloading a huge game on slow internet",
+          "type": "slow"
+        },
+        {
+          "text": "Sending a short email",
+          "type": "fast"
+        },
+        {
+          "text": "An old computer starting up very slowly",
+          "type": "slow"
+        }
+      ],
+      "m5_roles": [
+        {
+          "job": "Builds data pipelines",
+          "role": "Data Engineer"
+        },
+        {
+          "job": "Connects computers safely",
+          "role": "Network Engineer"
+        },
+        {
+          "job": "Protects systems from attackers",
+          "role": "Cybersecurity"
+        },
+        {
+          "job": "Builds apps people use",
+          "role": "Software Engineer"
+        }
+      ],
+      "m6_order": [
+        "What is the problem?",
+        "What do we know?",
+        "What can we try?",
+        "Did it work?"
+      ],
+      "m3_correct": [
+        "Long password",
+        "Numbers",
+        "Symbols",
+        "Upper + lower case"
+      ],
+      "m3_options": [
+        "1234",
+        "MyName",
+        "Long password",
+        "Numbers",
+        "Symbols",
+        "Upper + lower case",
+        "password"
+      ],
+      "m2_questions": [
+        {
+          "a": 1,
+          "q": "You need to send homework from Lagos to London. Which is more efficient?",
+          "choices": [
+            "Write it on paper and post it (slow)",
+            "Email/upload it (fast + smart)"
+          ]
+        },
+        {
+          "a": 1,
+          "q": "Your laptop is slow. What\u2019s efficient?",
+          "choices": [
+            "Open 30 apps at once",
+            "Close unused apps and restart"
+          ]
+        },
+        {
+          "a": 1,
+          "q": "You want to find a file quickly. What\u2019s efficient?",
+          "choices": [
+            "Keep files messy everywhere",
+            "Use folders + clear names"
+          ]
+        }
+      ],
+      "m4_questions": [
+        {
+          "a": "not_safe",
+          "q": "A stranger online asks for your home address."
+        },
+        {
+          "a": "safe",
+          "q": "You tell a parent/teacher when something feels wrong online."
+        },
+        {
+          "a": "not_safe",
+          "q": "You share your password with a best friend."
+        },
+        {
+          "a": "safe",
+          "q": "You use kind words in class chat."
+        }
+      ],
+      "m8_questions": [
+        {
+          "a": 0,
+          "q": "Who helps move data from one place to another (collect \u2192 clean \u2192 store)?",
+          "choices": [
+            "Data Engineer",
+            "Chef",
+            "Driver"
+          ]
+        },
+        {
+          "a": 1,
+          "q": "Who helps computers talk to each other using networks?",
+          "choices": [
+            "Artist",
+            "Network Engineer",
+            "Doctor"
+          ]
+        },
+        {
+          "a": 0,
+          "q": "Who protects systems from hackers?",
+          "choices": [
+            "Cybersecurity Engineer",
+            "Football Coach",
+            "Musician"
+          ]
+        },
+        {
+          "a": 0,
+          "q": "Who builds apps like games and learning platforms?",
+          "choices": [
+            "Software Engineer",
+            "Farmer",
+            "Pilot"
+          ]
+        }
+      ],
+      "m7_wrong_index": 2
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 27,
+  "fields": {
+    "module": "careers",
+    "title": "Mission1: Engineer & Data Engineer",
+    "content": "",
+    "youtube_url": "https://youtu.be/qt3om-8S1Pk",
+    "order": 1,
+    "xp": 60,
+    "activity_type": "career8",
+    "activity_json": {
+      "ui": {
+        "badge_rules": {
+          "badgeEng": [
+            "m1_match_types",
+            "m2_system_parts"
+          ],
+          "badgePro": [
+            "m6_fix_the_failure",
+            "m8_career_quiz"
+          ],
+          "badgeData": [
+            "m3_pipeline_order",
+            "m4_clean_the_data"
+          ],
+          "badgeTeam": [
+            "m5_jobs_to_tools",
+            "m7_team_roles"
+          ]
+        },
+        "total_missions": 8,
+        "auto_unlock_next": true
+      },
+      "badges": [
+        {
+          "id": "badgeEng",
+          "label": "\ud83d\udee0\ufe0f System Builder"
+        },
+        {
+          "id": "badgeData",
+          "label": "\ud83d\udcca Data Pipeline Hero"
+        },
+        {
+          "id": "badgeTeam",
+          "label": "\ud83e\udd1d Team Player"
+        },
+        {
+          "id": "badgePro",
+          "label": "\ud83c\udfc6 Career Explorer"
+        }
+      ],
+      "module": "careers",
+      "missions": [
+        {
+          "key": "m1_match_types",
+          "pairs": [
+            {
+              "left": "Software Engineer",
+              "right": "Apps & Games"
+            },
+            {
+              "left": "Network Engineer",
+              "right": "Computer Connections"
+            },
+            {
+              "left": "Cloud Engineer",
+              "right": "Internet Servers"
+            },
+            {
+              "left": "Data Engineer",
+              "right": "Data Pipelines"
+            }
+          ],
+          "title": "Match Engineer \u2192 What they build"
+        },
+        {
+          "key": "m2_system_parts",
+          "items": [
+            {
+              "label": "Teacher",
+              "system": "school"
+            },
+            {
+              "label": "Students",
+              "system": "school"
+            },
+            {
+              "label": "Timetable",
+              "system": "school"
+            },
+            {
+              "label": "Driver",
+              "system": "bus"
+            },
+            {
+              "label": "Tickets",
+              "system": "bus"
+            },
+            {
+              "label": "Roads",
+              "system": "bus"
+            }
+          ],
+          "title": "Drag parts into the right System",
+          "systems": [
+            {
+              "id": "school",
+              "name": "\ud83c\udfeb School System"
+            },
+            {
+              "id": "bus",
+              "name": "\ud83d\ude8c Bus System"
+            }
+          ]
+        },
+        {
+          "key": "m3_pipeline_order",
+          "title": "Build the Data Pipeline",
+          "blocks": [
+            {
+              "id": "collect",
+              "text": "\ud83d\udce5 Collect"
+            },
+            {
+              "id": "clean",
+              "text": "\ud83e\uddfc Clean"
+            },
+            {
+              "id": "store",
+              "text": "\ud83d\uddc4\ufe0f Store"
+            },
+            {
+              "id": "dashboard",
+              "text": "\ud83d\udcc8 Dashboard"
+            }
+          ],
+          "correct_order": [
+            "collect",
+            "clean",
+            "store",
+            "dashboard"
+          ]
+        },
+        {
+          "key": "m4_clean_the_data",
+          "title": "Clean the Data",
+          "questions": [
+            {
+              "prompt": "Which list is CLEAN (no duplicates)?",
+              "options": [
+                "Ada, John, Ada, Mary",
+                "Ada, John, Mary, Zainab",
+                "John, John, John, John"
+              ],
+              "answer_index": 1
+            },
+            {
+              "prompt": "Which is the BEST date format?",
+              "options": [
+                "12/3/25",
+                "March 12th",
+                "2025-03-12"
+              ],
+              "answer_index": 2
+            },
+            {
+              "prompt": "Which is a MISSING value?",
+              "options": [
+                "0",
+                "(blank)",
+                "100"
+              ],
+              "answer_index": 1
+            }
+          ]
+        },
+        {
+          "key": "m5_jobs_to_tools",
+          "pairs": [
+            {
+              "left": "Teacher",
+              "right": "Lesson plan"
+            },
+            {
+              "left": "Doctor",
+              "right": "Patient records"
+            },
+            {
+              "left": "Bank worker",
+              "right": "Money system"
+            },
+            {
+              "left": "Data engineer",
+              "right": "Pipeline dashboard"
+            }
+          ],
+          "title": "Who uses what tool?"
+        },
+        {
+          "key": "m6_fix_the_failure",
+          "title": "Fix the System Failure",
+          "scenarios": [
+            {
+              "text": "The school register is missing some students. What should we do first?",
+              "options": [
+                "Ignore it",
+                "Check and update the list",
+                "Delete everything"
+              ],
+              "answer_index": 1
+            },
+            {
+              "text": "The dashboard shows wrong totals. What is likely needed?",
+              "options": [
+                "Clean the data",
+                "Add more emojis",
+                "Turn off the computer"
+              ],
+              "answer_index": 0
+            }
+          ]
+        },
+        {
+          "key": "m7_team_roles",
+          "roles": [
+            {
+              "job": "Engineer",
+              "role": "Builder"
+            },
+            {
+              "job": "Network Engineer",
+              "role": "Connector"
+            },
+            {
+              "job": "Data Engineer",
+              "role": "Data Cleaner"
+            },
+            {
+              "job": "Software Engineer",
+              "role": "App Maker"
+            }
+          ],
+          "title": "Team Roles: Who does what?"
+        },
+        {
+          "key": "m8_career_quiz",
+          "title": "Final Quiz: Engineer or Data Engineer?",
+          "questions": [
+            {
+              "prompt": "Makes sure data is clean before dashboards.",
+              "options": [
+                "Engineer",
+                "Data Engineer"
+              ],
+              "answer_index": 1
+            },
+            {
+              "prompt": "Builds a bridge or a machine system.",
+              "options": [
+                "Engineer",
+                "Data Engineer"
+              ],
+              "answer_index": 0
+            },
+            {
+              "prompt": "Collect \u2192 Clean \u2192 Store \u2192 Dashboard",
+              "options": [
+                "Engineer",
+                "Data Engineer"
+              ],
+              "answer_index": 1
+            }
+          ]
+        }
+      ],
+      "lesson_title": "What Engineers Do + What Data Engineers Do"
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 28,
+  "fields": {
+    "module": "careers",
+    "title": "Mission 2: Network & Cloud Engineer",
+    "content": "",
+    "youtube_url": "https://youtu.be/wfU_6qPWRQk?si=plEAZIhQmdNvZ5FK",
+    "order": 2,
+    "xp": 60,
+    "activity_type": "netcloud8",
+    "activity_json": {
+      "m1": {
+        "items": [
+          {
+            "label": "\ud83e\uddf5 Ethernet Cable",
+            "target": "router"
+          },
+          {
+            "label": "\ud83e\uddf5 Ethernet Cable",
+            "target": "pc"
+          },
+          {
+            "label": "\ud83e\uddf5 Fibre Cable",
+            "target": "server"
+          }
+        ]
+      },
+      "m2": {
+        "steps": [
+          {
+            "id": "check",
+            "text": "\u2705 Check Wi-Fi is ON"
+          },
+          {
+            "id": "router",
+            "text": "\ud83d\udce1 Restart the router"
+          },
+          {
+            "id": "reconnect",
+            "text": "\ud83d\udd01 Reconnect to the network"
+          },
+          {
+            "id": "test",
+            "text": "\ud83c\udf10 Test a website"
+          }
+        ],
+        "correct": [
+          "check",
+          "router",
+          "reconnect",
+          "test"
+        ]
+      },
+      "m3": {
+        "target": 3
+      },
+      "m4": {
+        "questions": [
+          {
+            "a": "Router",
+            "q": "What device shares internet in a building?",
+            "choices": [
+              "Monitor",
+              "Router",
+              "Printer"
+            ]
+          },
+          {
+            "a": "Talk to each other",
+            "q": "What do networks help computers do?",
+            "choices": [
+              "Talk to each other",
+              "Cook food",
+              "Grow plants"
+            ]
+          },
+          {
+            "a": "Wireless internet",
+            "q": "What does Wi-Fi give you?",
+            "choices": [
+              "Wireless internet",
+              "A new keyboard",
+              "A TV remote"
+            ]
+          }
+        ]
+      },
+      "m5": {
+        "items": [
+          {
+            "type": "cloud",
+            "label": "\ud83d\udcfa Watching YouTube"
+          },
+          {
+            "type": "cloud",
+            "label": "\ud83c\udfae Online Game"
+          },
+          {
+            "type": "local",
+            "label": "\ud83d\udcdd Typing in Word (offline)"
+          },
+          {
+            "type": "local",
+            "label": "\ud83d\udcc1 Files on your USB"
+          }
+        ]
+      },
+      "m6": {
+        "steps": [
+          {
+            "id": "users",
+            "text": "\ud83d\udc67\ud83e\uddd2 Users"
+          },
+          {
+            "id": "internet",
+            "text": "\ud83c\udf10 Internet"
+          },
+          {
+            "id": "servers",
+            "text": "\ud83d\uddc4\ufe0f Cloud Servers"
+          },
+          {
+            "id": "app",
+            "text": "\ud83d\udcf1 App"
+          }
+        ],
+        "correct": [
+          "users",
+          "internet",
+          "servers",
+          "app"
+        ]
+      },
+      "m7": {
+        "questions": [
+          {
+            "a": "Add more cloud servers (scale up)",
+            "q": "1,000 kids are logging in at once. What should a Cloud Engineer do?",
+            "choices": [
+              "Add more cloud servers (scale up)",
+              "Turn off the internet",
+              "Delete the app"
+            ]
+          },
+          {
+            "a": "Use servers closer to users",
+            "q": "The app is slow in Nigeria and UK. What helps?",
+            "choices": [
+              "Use servers closer to users",
+              "Put the laptop in rice",
+              "Close your eyes"
+            ]
+          }
+        ]
+      },
+      "m8": {
+        "items": [
+          {
+            "type": "net",
+            "label": "Fix Wi-Fi in a school"
+          },
+          {
+            "type": "net",
+            "label": "Set up routers and switches"
+          },
+          {
+            "type": "cloud",
+            "label": "Keep an app online 24/7"
+          },
+          {
+            "type": "cloud",
+            "label": "Add more servers for many users"
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 29,
+  "fields": {
+    "module": "careers",
+    "title": "Mission 4: Teams Tools",
+    "content": "",
+    "youtube_url": "https://youtu.be/dfW6kFbNFcc",
+    "order": 4,
+    "xp": 60,
+    "activity_type": "teamtools8",
+    "activity_json": {
+      "m1": {
+        "roles": [
+          {
+            "id": "dev",
+            "label": "\ud83d\udc68\ud83c\udffd\u200d\ud83d\udcbb Developer",
+            "target": "writes"
+          },
+          {
+            "id": "design",
+            "label": "\ud83c\udfa8 Designer",
+            "target": "looks"
+          },
+          {
+            "id": "test",
+            "label": "\ud83d\udc1b Tester",
+            "target": "bugs"
+          },
+          {
+            "id": "pm",
+            "label": "\ud83e\udded Project Manager",
+            "target": "plan"
+          }
+        ],
+        "targets": [
+          {
+            "id": "writes",
+            "text": "Writes code to build the app"
+          },
+          {
+            "id": "looks",
+            "text": "Makes it beautiful and easy"
+          },
+          {
+            "id": "bugs",
+            "text": "Finds mistakes and problems"
+          },
+          {
+            "id": "plan",
+            "text": "Plans tasks and helps the team"
+          }
+        ]
+      },
+      "m2": {
+        "tools": [
+          {
+            "label": "\ud83e\uddd1\ud83c\udffd\u200d\ud83d\udcbb VS Code",
+            "target": "code"
+          },
+          {
+            "label": "\ud83d\uddc2\ufe0f GitHub",
+            "target": "save"
+          },
+          {
+            "label": "\ud83d\udccb Trello/Jira",
+            "target": "tasks"
+          },
+          {
+            "label": "\ud83d\udcac Slack/Teams",
+            "target": "chat"
+          }
+        ],
+        "targets": [
+          {
+            "id": "code",
+            "text": "Write code here"
+          },
+          {
+            "id": "save",
+            "text": "Save versions / checkpoints"
+          },
+          {
+            "id": "tasks",
+            "text": "Track work: To Do \u2192 Doing \u2192 Done"
+          },
+          {
+            "id": "chat",
+            "text": "Message and share updates"
+          }
+        ]
+      },
+      "m3": {
+        "steps": [
+          {
+            "id": "idea",
+            "label": "\ud83d\udca1 Idea"
+          },
+          {
+            "id": "plan",
+            "label": "\ud83e\udded Plan"
+          },
+          {
+            "id": "build",
+            "label": "\ud83c\udfd7\ufe0f Build"
+          },
+          {
+            "id": "test",
+            "label": "\ud83d\udc1b Test"
+          },
+          {
+            "id": "launch",
+            "label": "\ud83d\ude80 Launch"
+          }
+        ],
+        "correct": [
+          "idea",
+          "plan",
+          "build",
+          "test",
+          "launch"
+        ]
+      },
+      "m4": {
+        "questions": [
+          {
+            "q": "A tester found a bug. What should they do?",
+            "answer": 1,
+            "choices": [
+              "Keep quiet",
+              "Tell the team clearly",
+              "Delete the code"
+            ]
+          },
+          {
+            "q": "You finished your task. What next?",
+            "answer": 1,
+            "choices": [
+              "Hide it",
+              "Update the task board",
+              "Do nothing"
+            ]
+          },
+          {
+            "q": "You are confused about a task. Best choice?",
+            "answer": 0,
+            "choices": [
+              "Ask your team lead",
+              "Guess randomly",
+              "Stop working"
+            ]
+          }
+        ]
+      },
+      "m5": {
+        "bugs": 3
+      },
+      "m6": {
+        "actions": [
+          {
+            "type": "safe",
+            "label": "Use a strong password"
+          },
+          {
+            "type": "unsafe",
+            "label": "Share password with friends"
+          },
+          {
+            "type": "safe",
+            "label": "Log out on shared computer"
+          },
+          {
+            "type": "unsafe",
+            "label": "Click unknown links"
+          }
+        ]
+      },
+      "m8": {
+        "questions": [
+          {
+            "q": "A school in Nigeria wants an app for students. What team do you need?",
+            "answer": 1,
+            "choices": [
+              "Only a designer",
+              "Developer + Designer + Tester + Security",
+              "Only a tester"
+            ]
+          },
+          {
+            "q": "Your app stores XP and progress. Who helps most?",
+            "answer": 0,
+            "choices": [
+              "Data Engineer",
+              "Football Coach",
+              "Bus Driver"
+            ]
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 30,
+  "fields": {
+    "module": "careers",
+    "title": "Mission 5: Ethics",
+    "content": "",
+    "youtube_url": "https://youtu.be/4FWVkIukNM4",
+    "order": 5,
+    "xp": 60,
+    "activity_type": "project8",
+    "activity_json": {
+      "m1": {
+        "steps": [
+          "Idea",
+          "Plan",
+          "Design",
+          "Build",
+          "Test",
+          "Launch",
+          "Improve"
+        ]
+      },
+      "m2": {
+        "cards": [
+          "Build",
+          "Idea",
+          "Test",
+          "Design",
+          "Launch",
+          "Plan"
+        ],
+        "correct": [
+          "Idea",
+          "Plan",
+          "Design",
+          "Build",
+          "Test",
+          "Launch"
+        ]
+      },
+      "m3": {
+        "cards": [
+          {
+            "type": "build",
+            "label": "Developer"
+          },
+          {
+            "type": "look",
+            "label": "Designer"
+          },
+          {
+            "type": "test",
+            "label": "Tester"
+          },
+          {
+            "type": "plan",
+            "label": "Project Manager"
+          }
+        ]
+      },
+      "m4": {
+        "questions": [
+          {
+            "text": "A kids app asks for your home address and shares it with others.",
+            "answer": "bad"
+          },
+          {
+            "text": "An app blocks rude comments and keeps kids safe.",
+            "answer": "good"
+          },
+          {
+            "text": "A game tricks you into clicking ads all the time.",
+            "answer": "bad"
+          }
+        ]
+      },
+      "m5": {
+        "items": [
+          {
+            "safe": true,
+            "text": "Your favourite colour"
+          },
+          {
+            "safe": false,
+            "text": "Your password"
+          },
+          {
+            "safe": false,
+            "text": "Your home address"
+          },
+          {
+            "safe": true,
+            "text": "Your nickname (not full name)"
+          },
+          {
+            "safe": false,
+            "text": "Your school gate code"
+          }
+        ]
+      },
+      "m6": {
+        "options": [
+          "Data",
+          "Networks",
+          "Cloud",
+          "Cybersecurity",
+          "AI"
+        ],
+        "questions": [
+          {
+            "text": "I love building tables and tracking XP data.",
+            "answer": "Data"
+          },
+          {
+            "text": "I want to connect computers like Lagos to London!",
+            "answer": "Networks"
+          },
+          {
+            "text": "I want to run apps on big servers online.",
+            "answer": "Cloud"
+          },
+          {
+            "text": "I want to stop hackers and protect accounts.",
+            "answer": "Cybersecurity"
+          }
+        ]
+      },
+      "m7": {
+        "items": [
+          {
+            "good": true,
+            "text": "Practice small missions daily"
+          },
+          {
+            "good": false,
+            "text": "Give up when you see a bug"
+          },
+          {
+            "good": true,
+            "text": "Ask questions when stuck"
+          },
+          {
+            "good": false,
+            "text": "Copy answers without learning"
+          },
+          {
+            "good": true,
+            "text": "Finish one lesson before jumping to 10"
+          }
+        ]
+      },
+      "m8": {
+        "scenario": {
+          "text": "Your class app is almost ready. Someone says: \u201cLet\u2019s launch fast and ignore testing and safety.\u201d What is the best answer?",
+          "options": [
+            {
+              "t": "Launch now, fix later",
+              "ok": false
+            },
+            {
+              "t": "Test + protect kids first, then launch",
+              "ok": true
+            },
+            {
+              "t": "Add ads everywhere for money",
+              "ok": false
+            }
+          ]
+        }
+      }
+    }
+  }
+},
+{
+  "model": "courses.lesson",
+  "pk": 31,
+  "fields": {
+    "module": "careers",
+    "title": "Mission 3: Cyber Security & AI",
+    "content": "",
+    "youtube_url": "https://youtu.be/_RJoT-2P86o",
+    "order": 3,
+    "xp": 80,
+    "activity_type": "cyberai8",
+    "activity_json": {
+      "m1": [
+        {
+          "text": "\ud83c\udf81 'You won a FREE iPhone! Click now!'",
+          "answer": "scam"
+        },
+        {
+          "text": "\ud83c\udfeb 'Your teacher shared homework in your class app.'",
+          "answer": "safe"
+        },
+        {
+          "text": "\ud83d\udd10 'Send me your password to fix your account.'",
+          "answer": "scam"
+        }
+      ],
+      "m2": {
+        "min_len": 8
+      },
+      "m3": {
+        "items": [
+          {
+            "type": "secret",
+            "label": "Password"
+          },
+          {
+            "type": "secret",
+            "label": "Home address"
+          },
+          {
+            "type": "share",
+            "label": "Favourite colour"
+          },
+          {
+            "type": "share",
+            "label": "Pet name"
+          },
+          {
+            "type": "secret",
+            "label": "School ID number"
+          }
+        ]
+      },
+      "m4": {
+        "items": [
+          {
+            "type": "ai",
+            "label": "Voice assistant"
+          },
+          {
+            "type": "ai",
+            "label": "YouTube recommendations"
+          },
+          {
+            "type": "not",
+            "label": "Calculator"
+          },
+          {
+            "type": "not",
+            "label": "Stopwatch"
+          },
+          {
+            "type": "ai",
+            "label": "Face unlock"
+          }
+        ]
+      },
+      "m5": {
+        "order": [
+          "data",
+          "train",
+          "test",
+          "use"
+        ],
+        "blocks": [
+          {
+            "id": "data",
+            "label": "\ud83d\udce6 Collect Data"
+          },
+          {
+            "id": "train",
+            "label": "\ud83c\udfcb\ufe0f Train AI"
+          },
+          {
+            "id": "test",
+            "label": "\ud83e\uddea Test AI"
+          },
+          {
+            "id": "use",
+            "label": "\u2705 Use it safely"
+          }
+        ]
+      },
+      "m6": [
+        {
+          "prompt": "You want the real school portal. Which link looks safest?",
+          "options": [
+            {
+              "ok": true,
+              "text": "https://school-portal.com/login"
+            },
+            {
+              "ok": false,
+              "text": "http://sch00l-portal.com/freeprize"
+            },
+            {
+              "ok": false,
+              "text": "https://school-portal.com.login-now.badsite.net"
+            }
+          ]
+        },
+        {
+          "prompt": "You want a real game website. Which link looks safest?",
+          "options": [
+            {
+              "ok": true,
+              "text": "https://coolgame.com"
+            },
+            {
+              "ok": false,
+              "text": "https://coo1game.com"
+            },
+            {
+              "ok": false,
+              "text": "http://coolgame.com-win-prize.net"
+            }
+          ]
+        }
+      ],
+      "m7": [
+        {
+          "text": "It\u2019s OK to share your password with friends.",
+          "answer": false
+        },
+        {
+          "text": "AI can learn from many examples.",
+          "answer": true
+        },
+        {
+          "text": "If a link looks weird, ask an adult.",
+          "answer": true
+        },
+        {
+          "text": "Scammers sometimes rush you to click fast.",
+          "answer": true
+        }
+      ],
+      "m8": {
+        "choices": [
+          {
+            "ok": false,
+            "text": "Click fast and type password"
+          },
+          {
+            "ok": true,
+            "text": "Stop. Think. Check. Ask a parent/teacher"
+          },
+          {
+            "ok": false,
+            "text": "Reply: 'Here is my password'"
+          }
+        ],
+        "scenario": "You get a message: 'Your account is locked! Click fast and type your password!'"
+      }
+    }
+  }
+}
+]
