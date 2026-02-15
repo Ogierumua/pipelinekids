@@ -70,16 +70,30 @@ if not DATABASE_URL:
 
 url = urllib.parse.urlparse(DATABASE_URL)
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": url.path[1:],  # removes leading "/"
-        "USER": url.username,
-        "PASSWORD": url.password,
-        "HOST": url.hostname,
-        "PORT": url.port or 5432,
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    url = urlparse(DATABASE_URL)
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": url.path[1:],  # remove leading "/"
+            "USER": url.username,
+            "PASSWORD": url.password,
+            "HOST": url.hostname,
+            "PORT": url.port or 5432,
+        }
     }
-}
+else:
+    # Local fallback (SQLite)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
 
 # -----------------------
 # Auth / Password rules
