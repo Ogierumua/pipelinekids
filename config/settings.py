@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     "apps.billing",
     "apps.certificates",
 
-    "embed_video",
 ]
 
 MIDDLEWARE = [

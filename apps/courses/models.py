@@ -1,6 +1,7 @@
 from django.db import models
 import re
 
+
 class Lesson(models.Model):
     # ✅ NEW: Modules (to avoid long list of missions)
     MODULE_CHOICES = [
@@ -8,7 +9,6 @@ class Lesson(models.Model):
         ("systems_logic", "Systems Logic & Critical Thinking"),
         ("careers", "Careers"),
         ("logic5", "5-in-1: Logic Mission"),
-
     ]
 
     module = models.CharField(
@@ -43,7 +43,7 @@ class Lesson(models.Model):
             ("safety12", "12-in-1: Safety + Good/Not Good"),
             ("jobs8", "8-in-1: Jobs That Use Computers"),
             ("logic5", "5-in-1: Logic & Critical Thinking"),
-            ("logic5", "5-in-1: IPO + Decisions + Loops + Data"),
+            ("ipo5", "5-in-1: IPO + Decisions + Loops + Data"),
             ("sys5", "5-in-1: Systems + Memory + Storage"),
             ("net5", "5-in-1: Internet + Apps + Networks"),
             ("teams8", "8-in-1: Speed + Safety + Tech Teams"),
@@ -52,17 +52,6 @@ class Lesson(models.Model):
             ("cyberai8", "8-in-1: Cybersecurity + AI Engineers"),
             ("teamtools8", "8-in-1: Teams + Tools Playground"),
             ("project8", "8-in-1: Projects + Ethics + Paths"),
-
-
-
-            
-            
-
-
-
-
-
-
         ],
         default="none"
     )
@@ -73,22 +62,28 @@ class Lesson(models.Model):
 
     @property
     def youtube_id(self):
+        """
+        Extract YouTube video ID from common URL formats:
+        - https://youtu.be/VIDEOID
+        - https://www.youtube.com/watch?v=VIDEOID
+        - https://www.youtube.com/embed/VIDEOID
+        - https://www.youtube.com/shorts/VIDEOID
+        """
         if not self.youtube_url:
             return ""
 
         url = self.youtube_url.strip()
 
-        m = re.search(r"youtu\.be/([A-Za-z0-9_-]{11})", url)
-        if m:
-            return m.group(1)
-
-        m = re.search(r"[?&]v=([A-Za-z0-9_-]{11})", url)
-        if m:
-            return m.group(1)
-
-        m = re.search(r"youtube\.com/embed/([A-Za-z0-9_-]{11})", url)
-        if m:
-            return m.group(1)
+        patterns = [
+            r"youtu\.be/([A-Za-z0-9_-]{6,})",
+            r"[?&]v=([A-Za-z0-9_-]{6,})",
+            r"youtube\.com/embed/([A-Za-z0-9_-]{6,})",
+            r"youtube\.com/shorts/([A-Za-z0-9_-]{6,})",
+        ]
+        for p in patterns:
+            m = re.search(p, url)
+            if m:
+                return m.group(1)
 
         return ""
 
@@ -103,3 +98,13 @@ class Lesson(models.Model):
         if not self.youtube_id:
             return ""
         return f"https://img.youtube.com/vi/{self.youtube_id}/hqdefault.jpg"
+
+    @property
+    def youtube_embed_url(self):
+        """
+        Embed inside PipelineKids without redirecting users to YouTube.
+        Using youtube-nocookie is better for privacy (especially for kids).
+        """
+        if not self.youtube_id:
+            return ""
+        return f"https://www.youtube-nocookie.com/embed/{self.youtube_id}?rel=0&modestbranding=1"

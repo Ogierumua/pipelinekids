@@ -1,0 +1,105 @@
+{% load youtube %}
+
+
+
+
+{# ✅ 1) VIDEO AT TOP #}
+{% if lesson.youtube_url %}
+  <div class="bg-white border rounded-4 shadow-sm p-3 mb-4">
+    <div class="fw-semibold mb-2">🎬 Watch first (2–5 mins)</div>
+
+    <div class="ratio ratio-16x9">
+      <iframe
+   src="https://www.youtube.com/embed/{{ lesson.youtube_url|youtube_id }}?rel=0&modestbranding=1"
+
+
+
+        title="Lesson video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="small text-muted mt-2">
+      After watching, complete the activity below to unlock the next mission.
+    </div>
+  </div>
+{% endif %}
+
+{# ✅ 2) ACTIVITY BELOW VIDEO #}
+{% if lesson.activity_type == "choice" %}
+<div class="mt-4">
+  <h4 class="fw-bold text-center mb-4">
+    {{ lesson.activity_json.question }}
+  </h4>
+
+  <div class="row g-4">
+    {% for option in lesson.activity_json.options %}
+    <div class="col-md-4">
+      <button
+        class="card h-100 shadow-sm choice-card"
+        data-correct="{{ option.correct|yesno:'true,false' }}"
+      >
+        <img src="{{ option.image }}" class="card-img-top p-3" alt="">
+        <div class="card-body text-center fw-semibold">
+          {{ option.label }}
+        </div>
+      </button>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div id="feedback" class="mt-4 text-center fw-bold"></div>
+
+  {# ✅ NEXT BUTTON (hidden until success) #}
+  <div class="text-center mt-3">
+    <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+  </div>
+</div>
+{% endif %}
+
+<script>
+document.querySelectorAll(".choice-card").forEach(card => {
+  card.addEventListener("click", async () => {
+    const feedback = document.getElementById("feedback");
+
+    if (card.dataset.correct === "true") {
+      card.classList.add("border-success");
+      feedback.innerHTML = "✅ Correct! Great job!";
+      feedback.className = "text-success fs-4";
+
+      // ✅ mark complete + award XP + unlock next
+      await markComplete();
+
+    } else {
+      card.classList.add("border-danger");
+      feedback.innerHTML = "❌ Try again!";
+      feedback.className = "text-danger fs-4";
+    }
+  });
+});
+
+async function markComplete() {
+  const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+    method: "POST",
+    headers: { "X-CSRFToken": "{{ csrf_token }}" },
+  });
+
+  const data = await res.json();
+
+  if (data.ok) {
+    const nextBtn = document.getElementById("nextBtn");
+    if (nextBtn && data.next_url) {
+      nextBtn.href = data.next_url;
+      nextBtn.classList.remove("d-none");
+    }
+  }
+}
+</script>
+
+
+
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+            aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
