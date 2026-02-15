@@ -3,6 +3,9 @@ import os
 import urllib.parse
 from dotenv import load_dotenv
 
+from urllib.parse import urlparse
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
