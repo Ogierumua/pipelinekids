@@ -1,0 +1,655 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">📊 Level 1 Challenge: Excel Basics (8 Missions)</h2>
+    <p class="text-muted mb-0">Complete all 8 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/8 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="b1" class="badge bg-secondary">🧱 Cells & Grid</span>
+      <span id="b2" class="badge bg-secondary">⌨️ Data Entry</span>
+      <span id="b3" class="badge bg-secondary">🧠 Formula Starter</span>
+      <span id="b4" class="badge bg-secondary">➕ SUM Master</span>
+      <span id="b5" class="badge bg-secondary">🧲 Autofill Pro</span>
+      <span id="b6" class="badge bg-secondary">🎨 Format Hero</span>
+      <span id="b7" class="badge bg-secondary">🔀 Sort & Filter</span>
+      <span id="b8" class="badge bg-secondary">💾 Save Boss</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">1️⃣ Cells</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">2️⃣ Type</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">3️⃣ Formula</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">4️⃣ SUM</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">5️⃣ Autofill</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab6" onclick="showPanel(6)">6️⃣ Format</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab7" onclick="showPanel(7)">7️⃣ Sort</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab8" onclick="showPanel(8)">8️⃣ Save</button></li>
+  </ul>
+
+  <!-- PANEL 1: CELLS & GRID -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1: Click the correct cell</h5>
+          <p class="text-muted small mb-2">Click the cell named: <b id="targetCellText"></b></p>
+          <div id="msg1" class="fw-bold mt-2"></div>
+          <button id="done1" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">✅ Mission 1 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧱 Excel Grid</div>
+          <div class="grid" id="grid1"></div>
+          <div class="small text-muted mt-2">Tip: Columns are letters. Rows are numbers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: DATA ENTRY -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2: Type the correct values</h5>
+          <p class="text-muted small mb-2">Fill the boxes exactly as shown.</p>
+          <div id="msg2" class="fw-bold mt-2"></div>
+          <button id="done2" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">✅ Mission 2 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">⌨️ Mini Table</div>
+
+          <div class="row g-2">
+            <div class="col-4"><div class="cellbox head">Name</div></div>
+            <div class="col-4"><div class="cellbox head">Apples</div></div>
+            <div class="col-4"><div class="cellbox head">Oranges</div></div>
+
+            <div class="col-4"><input id="name2" class="form-control" placeholder="Type name"></div>
+            <div class="col-4"><input id="a2" class="form-control" placeholder="e.g. 3"></div>
+            <div class="col-4"><input id="o2" class="form-control" placeholder="e.g. 2"></div>
+          </div>
+
+          <button class="btn btn-primary mt-3" onclick="checkMission2()">Check</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: FORMULA -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3: Write a formula</h5>
+          <p class="text-muted small mb-2">Make Total = Apples + Oranges</p>
+          <div id="msg3" class="fw-bold mt-2"></div>
+          <button id="done3" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(3)">✅ Mission 3 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧠 Formula Box</div>
+          <div class="text-muted small">Type a formula like: <b>=B2+C2</b></div>
+
+          <div class="mt-2 d-flex gap-2">
+            <input id="formula3" class="form-control" placeholder="Type formula here...">
+            <button class="btn btn-primary" onclick="checkMission3()">Run</button>
+          </div>
+
+          <div class="mt-3">
+            <div class="cellbox head">Apples (B2)</div>
+            <div class="cellbox head">Oranges (C2)</div>
+            <div class="cellbox head">Total (D2)</div>
+            <div class="row g-2 mt-1">
+              <div class="col-4"><div class="cellbox" id="b2val"></div></div>
+              <div class="col-4"><div class="cellbox" id="c2val"></div></div>
+              <div class="col-4"><div class="cellbox" id="d2val">?</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4: SUM -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4: Use SUM</h5>
+          <p class="text-muted small mb-2">Choose the correct SUM formula.</p>
+          <div id="msg4" class="fw-bold mt-2"></div>
+          <button id="done4" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">✅ Mission 4 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">➕ SUM Quiz</div>
+          <div class="scenario">You want to add Apples in cells B2 and B3. Which formula is correct?</div>
+
+          <div class="d-grid gap-2 mt-3">
+            <button class="btn btn-outline-primary" onclick="answer4(false)">=B2+B4</button>
+            <button class="btn btn-outline-primary" onclick="answer4(true)">=SUM(B2:B3)</button>
+            <button class="btn btn-outline-primary" onclick="answer4(false)">=ADD(B2,B3)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5: AUTOFILL -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5: Autofill</h5>
+          <p class="text-muted small mb-2">Drag the handle down to copy the pattern.</p>
+          <div id="msg5" class="fw-bold mt-2"></div>
+          <button id="done5" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(5)">✅ Mission 5 Complete</button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧲 Drag to Autofill</div>
+
+          <div class="auto-wrap">
+            <div class="auto-col">
+              <div class="cellbox head">A</div>
+              <div class="cellbox">1</div>
+              <div class="cellbox">2</div>
+              <div class="cellbox">3</div>
+              <div class="cellbox" id="auto4">?</div>
+              <div class="cellbox" id="auto5">?</div>
+            </div>
+
+            <div class="auto-tool">
+              <div class="text-muted small mb-2">Drag the slider down 👇</div>
+              <input id="autoRange" type="range" min="0" max="2" value="0" class="form-range" oninput="autoFill(this.value)">
+              <div class="small text-muted">0 = not done, 2 = fully dragged</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 6: FORMAT -->
+  <div id="panel6" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 6: Formatting</h5>
+          <p class="text-muted small mb-2">Make the heading bold and coloured.</p>
+          <div id="msg6" class="fw-bold mt-2"></div>
+          <button id="done6" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(6)">✅ Mission 6 Complete</button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🎨 Format Controls</div>
+
+          <div class="format-demo">
+            <div id="fmtCell" class="cellbox head fmt-target">Fruit Tracker</div>
+
+            <div class="d-flex gap-2 flex-wrap mt-3">
+              <button class="btn btn-outline-dark" onclick="toggleBold()">B</button>
+              <button class="btn btn-outline-primary" onclick="setColor('blue')">Blue</button>
+              <button class="btn btn-outline-success" onclick="setColor('green')">Green</button>
+              <button class="btn btn-outline-danger" onclick="setColor('red')">Red</button>
+              <button class="btn btn-primary" onclick="checkMission6()">Check</button>
+            </div>
+
+            <div class="small text-muted mt-2">
+              Goal: <b>Bold</b> + any colour (blue/green/red).
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7: SORT & FILTER -->
+  <div id="panel7" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 7: Sort</h5>
+          <p class="text-muted small mb-2">Sort totals from biggest to smallest.</p>
+          <div id="msg7" class="fw-bold mt-2"></div>
+          <button id="done7" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(7)">✅ Mission 7 Complete</button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🔀 Sorting Game</div>
+
+          <div class="small text-muted">Click “Sort” to arrange by Total.</div>
+
+          <div class="table-responsive mt-2">
+            <table class="table align-middle">
+              <thead>
+                <tr class="text-muted small">
+                  <th>Name</th><th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="sortBody"></tbody>
+            </table>
+          </div>
+
+          <button class="btn btn-primary" onclick="doSort()">Sort Biggest → Smallest</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 8: SAVE -->
+  <div id="panel8" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 8: Save the file</h5>
+          <p class="text-muted small mb-2">Type a good filename and choose Save As.</p>
+          <div id="msg8" class="fw-bold mt-2"></div>
+          <button id="done8" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(8)">✅ Mission 8 Complete</button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">💾 Save Simulation</div>
+
+          <div class="scenario">
+            You made a new spreadsheet. What should you use?
+          </div>
+
+          <div class="d-flex gap-2 mt-2 flex-wrap">
+            <button class="btn btn-outline-primary" onclick="answer8(false)">Save</button>
+            <button class="btn btn-outline-primary" onclick="answer8(true)">Save As</button>
+          </div>
+
+          <div class="mt-3">
+            <label class="form-label small text-muted">Filename</label>
+            <input id="fileName" class="form-control" placeholder="e.g. MyFruitTracker.xlsx">
+            <div class="small text-muted mt-2">Tip: Excel files usually end with <b>.xlsx</b></div>
+          </div>
+
+          <button class="btn btn-primary mt-3" onclick="checkMission8()">Finish Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 8 missions!</div>
+    <div class="text-muted">XP will be awarded and the next lesson will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .grid{
+    display:grid;
+    grid-template-columns: 46px repeat(4, 1fr);
+    gap:6px;
+    align-items:stretch;
+  }
+  .ghead{
+    background:#f8f9fa;border:1px solid #eee;border-radius:10px;
+    padding:10px;text-align:center;font-weight:900;color:#6c757d;
+  }
+  .gcell{
+    background:#fff;border:1px solid #eee;border-radius:10px;
+    padding:16px;text-align:center;font-weight:900;cursor:pointer;user-select:none;
+  }
+  .gcell:hover{box-shadow:0 0 0 3px rgba(13,110,253,.10)}
+  .gcell.good{border-color:#198754;box-shadow:0 0 0 3px rgba(25,135,84,.12)}
+  .gcell.bad{border-color:#dc3545;box-shadow:0 0 0 3px rgba(220,53,69,.12)}
+
+  .cellbox{
+    background:#f8f9fa;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;
+    text-align:center;
+  }
+  .cellbox.head{background:#fff;border:1px solid #e9ecef}
+  .scenario{padding:12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;font-weight:900;min-height:70px;display:flex;align-items:center;}
+
+  .auto-wrap{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;}
+  .auto-col{min-width:160px}
+  .auto-tool{flex:1;min-width:220px;border:1px solid #eee;border-radius:18px;padding:12px;background:#fff;}
+
+  .format-demo{border:1px solid #eee;border-radius:18px;padding:12px;background:#fff;}
+  .fmt-target{font-size:18px}
+  .fmt-bold{font-weight:1000}
+  .fmt-blue{background:#e7f1ff!important;border-color:#b6d4fe!important}
+  .fmt-green{background:#d1e7dd!important;border-color:#a3cfbb!important}
+  .fmt-red{background:#f8d7da!important;border-color:#f1aeb5!important}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TABS --------------------
+  function setActiveTab(n){
+    for (let i=1;i<=8;i++){
+      document.getElementById("tab"+i).classList.remove("active");
+    }
+    document.getElementById("tab"+n).classList.add("active");
+  }
+  function showPanel(n){
+    for (let i=1;i<=8;i++){
+      document.getElementById("panel"+i).classList.add("d-none");
+    }
+    document.getElementById("panel"+n).classList.remove("d-none");
+    setActiveTab(n);
+  }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS + BADGES --------------------
+  const state = {1:false,2:false,3:false,4:false,5:false,6:false,7:false,8:false};
+
+  function badgeOn(n){
+    const el = document.getElementById("b"+n);
+    el.className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/8)*100) + "%";
+
+    if (done === 8){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(n){
+    state[n] = true;
+    badgeOn(n);
+    updateProgress();
+    if (n < 8) showPanel(n+1);
+  }
+  window.completeMission = completeMission;
+
+  // -------------------- MISSION 1: CELL CLICK --------------------
+  const targetCell = (activity.m1?.target_cell || "B2").toUpperCase();
+  document.getElementById("targetCellText").textContent = targetCell;
+
+  const cols = ["A","B","C","D"];
+  const rows = [1,2,3];
+
+  const grid1 = document.getElementById("grid1");
+
+  // header row
+  grid1.appendChild(Object.assign(document.createElement("div"), {className:"ghead", textContent:""}));
+  cols.forEach(c=>{
+    grid1.appendChild(Object.assign(document.createElement("div"), {className:"ghead", textContent:c}));
+  });
+
+  rows.forEach(r=>{
+    grid1.appendChild(Object.assign(document.createElement("div"), {className:"ghead", textContent:r}));
+    cols.forEach(c=>{
+      const cellName = `${c}${r}`;
+      const el = document.createElement("div");
+      el.className = "gcell";
+      el.textContent = cellName;
+      el.onclick = () => {
+        if (cellName === targetCell){
+          el.classList.remove("bad"); el.classList.add("good");
+          document.getElementById("msg1").textContent = "✅ Correct! That is " + targetCell;
+          document.getElementById("msg1").className = "fw-bold mt-2 text-success";
+          document.getElementById("done1").classList.remove("d-none");
+        } else {
+          el.classList.add("bad");
+          document.getElementById("msg1").textContent = "❌ Not that one. Try again!";
+          document.getElementById("msg1").className = "fw-bold mt-2 text-danger";
+        }
+      };
+      grid1.appendChild(el);
+    });
+  });
+
+  // -------------------- MISSION 2: DATA ENTRY --------------------
+  const m2 = activity.m2 || {name:"Ada", apples:3, oranges:2};
+  function checkMission2(){
+    const name = (document.getElementById("name2").value||"").trim().toLowerCase();
+    const apples = (document.getElementById("a2").value||"").trim();
+    const oranges = (document.getElementById("o2").value||"").trim();
+
+    const ok =
+      name === String(m2.name).trim().toLowerCase() &&
+      apples === String(m2.apples) &&
+      oranges === String(m2.oranges);
+
+    if (ok){
+      document.getElementById("msg2").textContent = "✅ Perfect data entry!";
+      document.getElementById("msg2").className = "fw-bold mt-2 text-success";
+      document.getElementById("done2").classList.remove("d-none");
+      // also feed mission 3 values
+      document.getElementById("b2val").textContent = m2.apples;
+      document.getElementById("c2val").textContent = m2.oranges;
+    } else {
+      document.getElementById("msg2").textContent = "❌ Check spelling and numbers.";
+      document.getElementById("msg2").className = "fw-bold mt-2 text-danger";
+    }
+  }
+  window.checkMission2 = checkMission2;
+
+  // init m3 values
+  document.getElementById("b2val").textContent = m2.apples;
+  document.getElementById("c2val").textContent = m2.oranges;
+
+  // -------------------- MISSION 3: FORMULA --------------------
+  function normaliseFormula(s){
+    return (s||"")
+      .replace(/\s+/g,"")
+      .toUpperCase();
+  }
+
+  function checkMission3(){
+    const input = normaliseFormula(document.getElementById("formula3").value);
+    const expected = normaliseFormula(activity.m3?.expected || "=B2+C2");
+
+    if (!input.startsWith("=")){
+      document.getElementById("msg3").textContent = "⚠️ Formulas must start with =";
+      document.getElementById("msg3").className = "fw-bold mt-2 text-warning";
+      return;
+    }
+
+    // allow either order =B2+C2 OR =C2+B2
+    const ok = (input === expected) || (input === "=C2+B2");
+
+    if (ok){
+      const total = Number(m2.apples) + Number(m2.oranges);
+      document.getElementById("d2val").textContent = total;
+      document.getElementById("msg3").textContent = "✅ Great! Excel calculated: " + total;
+      document.getElementById("msg3").className = "fw-bold mt-2 text-success";
+      document.getElementById("done3").classList.remove("d-none");
+    } else {
+      document.getElementById("msg3").textContent = "❌ Try: =B2+C2";
+      document.getElementById("msg3").className = "fw-bold mt-2 text-danger";
+    }
+  }
+  window.checkMission3 = checkMission3;
+
+  // -------------------- MISSION 4: SUM QUIZ --------------------
+  function answer4(ok){
+    if (ok){
+      document.getElementById("msg4").textContent = "✅ Correct! SUM adds a range.";
+      document.getElementById("msg4").className = "fw-bold mt-2 text-success";
+      document.getElementById("done4").classList.remove("d-none");
+    } else {
+      document.getElementById("msg4").textContent = "❌ Not quite. Try again!";
+      document.getElementById("msg4").className = "fw-bold mt-2 text-danger";
+    }
+  }
+  window.answer4 = answer4;
+
+  // -------------------- MISSION 5: AUTOFILL --------------------
+  function autoFill(val){
+    const v = Number(val);
+    if (v >= 1){
+      document.getElementById("auto4").textContent = "4";
+    } else {
+      document.getElementById("auto4").textContent = "?";
+    }
+    if (v >= 2){
+      document.getElementById("auto5").textContent = "5";
+      document.getElementById("msg5").textContent = "✅ Autofill complete!";
+      document.getElementById("msg5").className = "fw-bold mt-2 text-success";
+      document.getElementById("done5").classList.remove("d-none");
+    } else {
+      document.getElementById("auto5").textContent = "?";
+      document.getElementById("msg5").textContent = "";
+    }
+  }
+  window.autoFill = autoFill;
+
+  // -------------------- MISSION 6: FORMAT --------------------
+  let fmtBold = false;
+  let fmtColor = null;
+
+  function toggleBold(){
+    fmtBold = !fmtBold;
+    document.getElementById("fmtCell").classList.toggle("fmt-bold", fmtBold);
+  }
+  window.toggleBold = toggleBold;
+
+  function setColor(c){
+    fmtColor = c;
+    const el = document.getElementById("fmtCell");
+    el.classList.remove("fmt-blue","fmt-green","fmt-red");
+    el.classList.add("fmt-" + c);
+  }
+  window.setColor = setColor;
+
+  function checkMission6(){
+    if (fmtBold && (fmtColor === "blue" || fmtColor === "green" || fmtColor === "red")){
+      document.getElementById("msg6").textContent = "✅ Nice formatting!";
+      document.getElementById("msg6").className = "fw-bold mt-2 text-success";
+      document.getElementById("done6").classList.remove("d-none");
+    } else {
+      document.getElementById("msg6").textContent = "❌ Make it Bold + choose a colour.";
+      document.getElementById("msg6").className = "fw-bold mt-2 text-danger";
+    }
+  }
+  window.checkMission6 = checkMission6;
+
+  // -------------------- MISSION 7: SORT --------------------
+  const sortData = (activity.m7?.rows || [
+    {name:"Ada", total:5},
+    {name:"Tobi", total:6},
+    {name:"Zara", total:2},
+  ]);
+
+  let sorted = false;
+
+  function renderSort(){
+    const body = document.getElementById("sortBody");
+    body.innerHTML = "";
+    sortData.forEach(r=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="fw-semibold">${r.name}</td><td>${r.total}</td>`;
+      body.appendChild(tr);
+    });
+  }
+  renderSort();
+
+  function doSort(){
+    sortData.sort((a,b)=> b.total - a.total);
+    renderSort();
+    sorted = true;
+    document.getElementById("msg7").textContent = "✅ Sorted! Biggest is on top.";
+    document.getElementById("msg7").className = "fw-bold mt-2 text-success";
+    document.getElementById("done7").classList.remove("d-none");
+  }
+  window.doSort = doSort;
+
+  // -------------------- MISSION 8: SAVE --------------------
+  let pickedSaveAs = false;
+
+  function answer8(ok){
+    pickedSaveAs = ok;
+    document.getElementById("msg8").textContent = ok ? "✅ Correct: Save As for a new file!" : "❌ Try again — new file needs Save As.";
+    document.getElementById("msg8").className = "fw-bold mt-2 " + (ok ? "text-success" : "text-danger");
+  }
+  window.answer8 = answer8;
+
+  function checkMission8(){
+    const fn = (document.getElementById("fileName").value||"").trim();
+    const okExt = fn.toLowerCase().endsWith(".xlsx");
+    if (!pickedSaveAs){
+      document.getElementById("msg8").textContent = "❌ First choose Save As.";
+      document.getElementById("msg8").className = "fw-bold mt-2 text-danger";
+      return;
+    }
+    if (!fn){
+      document.getElementById("msg8").textContent = "❌ Type a filename.";
+      document.getElementById("msg8").className = "fw-bold mt-2 text-danger";
+      return;
+    }
+    if (!okExt){
+      document.getElementById("msg8").textContent = "⚠️ Excel files should end with .xlsx";
+      document.getElementById("msg8").className = "fw-bold mt-2 text-warning";
+      return;
+    }
+
+    document.getElementById("msg8").textContent = "✅ Saved! Great filename.";
+    document.getElementById("msg8").className = "fw-bold mt-2 text-success";
+    document.getElementById("done8").classList.remove("d-none");
+  }
+  window.checkMission8 = checkMission8;
+
+  // -------------------- FINAL: MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

@@ -1,0 +1,780 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🌍 Network + ☁️ Cloud Engineers (8 Missions)</h2>
+    <p class="text-muted mb-0">Complete all 8 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/8 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badgeNet" class="badge bg-secondary">🔌 Connection Builder</span>
+      <span id="badgeCloud" class="badge bg-secondary">☁️ Cloud Hero</span>
+      <span id="badgeSecure" class="badge bg-secondary">🛡️ Safe Systems</span>
+      <span id="badgePro" class="badge bg-secondary">🏆 Engineer Mode</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">1) Cable Map</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">2) Wi-Fi Fix</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">3) Packet Run</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">4) Net Quiz</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">5) Cloud Match</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab6" onclick="showPanel(6)">6) Cloud Build</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab7" onclick="showPanel(7)">7) Scale Up</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab8" onclick="showPanel(8)">8) Final Mix</button></li>
+  </ul>
+
+  <!-- PANEL 1: Cable Map -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1: Cable Map</h5>
+          <p class="text-muted small mb-2">Drag the correct cable into the correct device.</p>
+          <div class="small fw-bold">Correct: <span id="m1Score">0</span>/<span id="m1Total">0</span></div>
+          <button id="m1Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">✅ Mission 1 Complete</button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🔌 Drag Cables</div>
+          <div id="m1Cables" class="zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-4"><div id="m1BoxRouter" class="dropbox">📡 Router</div></div>
+            <div class="col-md-4"><div id="m1BoxPC" class="dropbox">🖥️ Computer</div></div>
+            <div class="col-md-4"><div id="m1BoxServer" class="dropbox">🗄️ Server</div></div>
+          </div>
+
+          <div id="m1Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Wi-Fi Fix -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2: Wi-Fi Fix</h5>
+          <p class="text-muted small mb-2">Put the steps in the right order to fix Wi-Fi.</p>
+          <button id="m2Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">✅ Mission 2 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Drag steps into the box</div>
+
+          <div class="row g-3">
+            <div class="col-md-5">
+              <div id="m2Steps" class="zone"></div>
+            </div>
+            <div class="col-md-7">
+              <div id="m2Drop" class="dropzone">
+                <div class="hint">Drop steps here 👇</div>
+              </div>
+
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-primary w-100" onclick="checkM2()">✅ Check</button>
+                <button class="btn btn-outline-secondary w-100" onclick="resetM2()">🔄 Reset</button>
+              </div>
+              <div id="m2Msg" class="text-center fw-bold mt-3"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: Packet Run -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3: Packet Run</h5>
+          <p class="text-muted small mb-2">Click “Send Packet” to deliver data from A → B.</p>
+          <div class="small fw-bold">Packets delivered: <span id="m3DoneCount">0</span>/<span id="m3Target">0</span></div>
+          <button id="m3Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(3)">✅ Mission 3 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm text-center">
+          <div class="fw-bold mb-2">🌍 Lagos ↔ London Network</div>
+
+          <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+            <div class="net-box">🖥️ Computer A<br><small class="text-muted">Lagos</small></div>
+
+            <div class="road" id="m3Road">
+              🌐 Internet
+              <span id="m3Packet" class="packet d-none">📦</span>
+            </div>
+
+            <div class="net-box">🖥️ Computer B<br><small class="text-muted">London</small></div>
+          </div>
+
+          <button class="btn btn-primary mt-3" onclick="sendPacket()">📨 Send Packet</button>
+          <div id="m3Msg" class="fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4: Network Quiz -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4: Network Quiz</h5>
+          <p class="text-muted small mb-2">Pick the correct answer.</p>
+          <div class="small fw-bold">Score: <span id="m4Score">0</span>/<span id="m4Total">0</span></div>
+          <button id="m4Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">✅ Mission 4 Complete</button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Question</div>
+          <div id="m4Q" class="scenario"></div>
+
+          <div id="m4Choices" class="d-grid gap-2 mt-3"></div>
+          <div id="m4Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5: Cloud Match -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5: Cloud Match</h5>
+          <p class="text-muted small mb-2">Drag apps to “Cloud” or “Local”.</p>
+          <div class="small fw-bold">Correct: <span id="m5Score">0</span>/<span id="m5Total">0</span></div>
+          <button id="m5Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(5)">✅ Mission 5 Complete</button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">☁️ Where does it run?</div>
+          <div id="m5Cards" class="zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6"><div id="m5Cloud" class="dropbox">☁️ Cloud (servers online)</div></div>
+            <div class="col-md-6"><div id="m5Local" class="dropbox">💻 Local (your device)</div></div>
+          </div>
+          <div id="m5Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 6: Cloud Build -->
+  <div id="panel6" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 6: Cloud Build</h5>
+          <p class="text-muted small mb-2">Drag components into the correct order.</p>
+          <button id="m6Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(6)">✅ Mission 6 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🏗️ Build an app system</div>
+
+          <div class="row g-3">
+            <div class="col-md-5">
+              <div id="m6Items" class="zone"></div>
+            </div>
+            <div class="col-md-7">
+              <div id="m6Drop" class="dropzone">
+                <div class="hint">Drop here in order 👇</div>
+              </div>
+
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-primary w-100" onclick="checkM6()">✅ Check</button>
+                <button class="btn btn-outline-secondary w-100" onclick="resetM6()">🔄 Reset</button>
+              </div>
+              <div id="m6Msg" class="text-center fw-bold mt-3"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7: Scale Up -->
+  <div id="panel7" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 7: Scale Up</h5>
+          <p class="text-muted small mb-2">Choose what to do when 1,000 kids login!</p>
+          <div class="small fw-bold">Score: <span id="m7Score">0</span>/<span id="m7Total">0</span></div>
+          <button id="m7Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(7)">✅ Mission 7 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Scenario</div>
+          <div id="m7Q" class="scenario"></div>
+          <div id="m7Choices" class="d-grid gap-2 mt-3"></div>
+          <div id="m7Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 8: Final Mix -->
+  <div id="panel8" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 8: Final Mix</h5>
+          <p class="text-muted small mb-2">Sort tasks into Network Engineer or Cloud Engineer.</p>
+          <div class="small fw-bold">Correct: <span id="m8Score">0</span>/<span id="m8Total">0</span></div>
+          <button id="m8Done" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(8)">✅ Mission 8 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧠 Who does what?</div>
+          <div id="m8Cards" class="zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6"><div id="m8Net" class="dropbox">🔌 Network Engineer</div></div>
+            <div class="col-md-6"><div id="m8Cloud" class="dropbox">☁️ Cloud Engineer</div></div>
+          </div>
+
+          <div id="m8Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 8 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .zone{
+    min-height:140px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .dropbox{
+    min-height:120px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;
+  }
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+  .card-item{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;
+    cursor:grab;user-select:none;
+  }
+  .dropzone{
+    min-height:180px;border:3px dashed #6c757d;border-radius:16px;padding:12px;background:#f8f9fa;
+  }
+  .hint{color:#6c757d;font-weight:800;}
+
+  .scenario{
+    margin-top:6px;padding:14px 12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;
+    font-weight:900;min-height:90px;display:flex;align-items:center;
+  }
+
+  .net-box{
+    border:1px solid #eee;border-radius:18px;padding:14px 12px;background:#fff;min-width:160px;
+    text-align:center;font-weight:900;
+  }
+  .road{
+    position:relative;display:inline-block;padding:10px 18px;border-radius:999px;border:2px dashed #0d6efd;
+    background:#f8f9fa;font-weight:900;min-width:220px;text-align:center;
+  }
+  .packet{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:22px;}
+  .packet.move{display:inline-block!important;animation:move 1.1s ease-in-out forwards;}
+  @keyframes move{0%{left:10px}100%{left:calc(100% - 34px)}}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // ---------- GLOBAL PROGRESS ----------
+  const state = Array(8).fill(false);
+
+  function badgeOn(id){
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = state.filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/8)*100) + "%";
+
+    // Badges unlock
+    if (done >= 2) badgeOn("badgeNet");
+    if (done >= 4) badgeOn("badgeCloud");
+    if (done >= 6) badgeOn("badgeSecure");
+    if (done === 8) badgeOn("badgePro");
+
+    if (done === 8){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function showPanel(n){
+    for (let i=1;i<=8;i++){
+      document.getElementById("panel"+i).classList.add("d-none");
+      document.getElementById("tab"+i).classList.remove("active");
+    }
+    document.getElementById("panel"+n).classList.remove("d-none");
+    document.getElementById("tab"+n).classList.add("active");
+  }
+  window.showPanel = showPanel;
+
+  function completeMission(n){
+    state[n-1] = true;
+    updateProgress();
+    if (n < 8) showPanel(n+1);
+  }
+  window.completeMission = completeMission;
+
+  function shuffle(arr){
+    return arr.sort(() => Math.random() - 0.5);
+  }
+
+  function setupDrop(box, getDragged, onDrop){
+    box.addEventListener("dragover", (e)=>{ e.preventDefault(); box.classList.add("drag-over"); });
+    box.addEventListener("dragleave", ()=> box.classList.remove("drag-over"));
+    box.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      box.classList.remove("drag-over");
+      const dragged = getDragged();
+      if (!dragged) return;
+      onDrop(dragged, box);
+    });
+  }
+
+  // ---------- M1: Cable Map ----------
+  const m1 = activity.m1 || {
+    items: [
+      {label:"🧵 Ethernet Cable", target:"router"},
+      {label:"🧵 Ethernet Cable", target:"pc"},
+      {label:"🧵 Fibre Cable", target:"server"}
+    ]
+  };
+  let m1Dragged = null, m1Score = 0;
+  document.getElementById("m1Total").textContent = m1.items.length;
+
+  const m1Cables = document.getElementById("m1Cables");
+  shuffle(m1.items).forEach(it=>{
+    const el = document.createElement("div");
+    el.className = "card-item";
+    el.draggable = true;
+    el.textContent = it.label;
+    el.dataset.target = it.target;
+    el.dataset.done = "0";
+    el.addEventListener("dragstart", ()=> m1Dragged = el);
+    el.addEventListener("dragend", ()=> m1Dragged = null);
+    m1Cables.appendChild(el);
+  });
+
+  setupDrop(document.getElementById("m1BoxRouter"), ()=>m1Dragged, (dragged, box)=>{
+    if (dragged.dataset.done==="1") return;
+    if (dragged.dataset.target==="router"){
+      dragged.dataset.done="1"; box.appendChild(dragged); m1Score++;
+      document.getElementById("m1Score").textContent=m1Score;
+      document.getElementById("m1Msg").textContent="✅ Router connected!";
+      document.getElementById("m1Msg").className="text-center fw-bold mt-3 text-success";
+      if (m1Score===m1.items.length) document.getElementById("m1Done").classList.remove("d-none");
+    } else {
+      document.getElementById("m1Msg").textContent="❌ Try another device!";
+      document.getElementById("m1Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  });
+  setupDrop(document.getElementById("m1BoxPC"), ()=>m1Dragged, (dragged, box)=>{
+    if (dragged.dataset.done==="1") return;
+    if (dragged.dataset.target==="pc"){
+      dragged.dataset.done="1"; box.appendChild(dragged); m1Score++;
+      document.getElementById("m1Score").textContent=m1Score;
+      document.getElementById("m1Msg").textContent="✅ Computer connected!";
+      document.getElementById("m1Msg").className="text-center fw-bold mt-3 text-success";
+      if (m1Score===m1.items.length) document.getElementById("m1Done").classList.remove("d-none");
+    } else {
+      document.getElementById("m1Msg").textContent="❌ Try another device!";
+      document.getElementById("m1Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  });
+  setupDrop(document.getElementById("m1BoxServer"), ()=>m1Dragged, (dragged, box)=>{
+    if (dragged.dataset.done==="1") return;
+    if (dragged.dataset.target==="server"){
+      dragged.dataset.done="1"; box.appendChild(dragged); m1Score++;
+      document.getElementById("m1Score").textContent=m1Score;
+      document.getElementById("m1Msg").textContent="✅ Server connected!";
+      document.getElementById("m1Msg").className="text-center fw-bold mt-3 text-success";
+      if (m1Score===m1.items.length) document.getElementById("m1Done").classList.remove("d-none");
+    } else {
+      document.getElementById("m1Msg").textContent="❌ Try another device!";
+      document.getElementById("m1Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  });
+
+  // ---------- M2: Wi-Fi Fix Order ----------
+  const m2 = activity.m2 || {
+    steps: [
+      {id:"check", text:"✅ Check Wi-Fi is ON"},
+      {id:"router", text:"📡 Restart the router"},
+      {id:"reconnect", text:"🔁 Reconnect to the network"},
+      {id:"test", text:"🌐 Test a website"}
+    ],
+    correct: ["check","router","reconnect","test"]
+  };
+
+  const m2Steps = document.getElementById("m2Steps");
+  const m2Drop = document.getElementById("m2Drop");
+  let m2Dragged = null;
+
+  shuffle(m2.steps).forEach(s=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.id=s.id;
+    el.textContent=s.text;
+    el.addEventListener("dragstart",()=>m2Dragged=el);
+    el.addEventListener("dragend",()=>m2Dragged=null);
+    m2Steps.appendChild(el);
+  });
+
+  m2Drop.addEventListener("dragover",(e)=>e.preventDefault());
+  m2Drop.addEventListener("drop",(e)=>{
+    e.preventDefault();
+    if (!m2Dragged) return;
+    const hint=m2Drop.querySelector(".hint"); if (hint) hint.remove();
+    m2Drop.appendChild(m2Dragged);
+  });
+
+  function getM2Order(){
+    return Array.from(m2Drop.querySelectorAll(".card-item")).map(x=>x.dataset.id);
+  }
+  window.checkM2 = () => {
+    const order = getM2Order();
+    if (order.length !== m2.correct.length){
+      document.getElementById("m2Msg").textContent="👀 Drag all steps first!";
+      document.getElementById("m2Msg").className="text-center fw-bold mt-3 text-warning";
+      return;
+    }
+    if (JSON.stringify(order) === JSON.stringify(m2.correct)){
+      document.getElementById("m2Msg").textContent="🎉 Wi-Fi fixed!";
+      document.getElementById("m2Msg").className="text-center fw-bold mt-3 text-success";
+      document.getElementById("m2Done").classList.remove("d-none");
+    } else {
+      document.getElementById("m2Msg").textContent="❌ Not quite — try again!";
+      document.getElementById("m2Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  window.resetM2 = () => window.location.reload();
+
+  // ---------- M3: Packet Run ----------
+  const m3 = activity.m3 || { target: 3 };
+  document.getElementById("m3Target").textContent = m3.target;
+  let m3Count = 0;
+  window.sendPacket = async () => {
+    if (m3Count >= m3.target) return;
+    const packet = document.getElementById("m3Packet");
+    packet.classList.remove("d-none");
+    packet.classList.remove("move");
+    void packet.offsetWidth;
+    packet.classList.add("move");
+    document.getElementById("m3Msg").textContent="📦 Packet is travelling...";
+    setTimeout(()=>{
+      m3Count++;
+      document.getElementById("m3DoneCount").textContent=m3Count;
+      document.getElementById("m3Msg").textContent="✅ Delivered!";
+      if (m3Count >= m3.target){
+        document.getElementById("m3Done").classList.remove("d-none");
+      }
+    }, 1150);
+  };
+
+  // ---------- M4: Network Quiz ----------
+  const m4 = activity.m4 || {
+    questions: [
+      {q:"What device shares internet in a building?", choices:["Monitor","Router","Printer"], a:"Router"},
+      {q:"What do networks help computers do?", choices:["Talk to each other","Cook food","Grow plants"], a:"Talk to each other"},
+      {q:"What does Wi-Fi give you?", choices:["Wireless internet","A new keyboard","A TV remote"], a:"Wireless internet"}
+    ]
+  };
+  let m4Index=0, m4Score=0;
+  document.getElementById("m4Total").textContent = m4.questions.length;
+
+  function renderM4(){
+    const item=m4.questions[m4Index];
+    document.getElementById("m4Q").textContent=item.q;
+    const box=document.getElementById("m4Choices");
+    box.innerHTML="";
+    item.choices.forEach(ch=>{
+      const btn=document.createElement("button");
+      btn.className="btn btn-outline-primary";
+      btn.textContent=ch;
+      btn.onclick=()=>answerM4(ch);
+      box.appendChild(btn);
+    });
+    document.getElementById("m4Msg").textContent="";
+  }
+  function answerM4(choice){
+    const item=m4.questions[m4Index];
+    if (choice===item.a){
+      m4Score++;
+      document.getElementById("m4Score").textContent=m4Score;
+      document.getElementById("m4Msg").textContent="✅ Correct!";
+      document.getElementById("m4Msg").className="text-center fw-bold mt-3 text-success";
+      setTimeout(()=>{
+        m4Index++;
+        if (m4Index>=m4.questions.length){
+          document.getElementById("m4Done").classList.remove("d-none");
+          return;
+        }
+        renderM4();
+      }, 420);
+    } else {
+      document.getElementById("m4Msg").textContent="❌ Try again!";
+      document.getElementById("m4Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  renderM4();
+
+  // ---------- M5: Cloud vs Local ----------
+  const m5 = activity.m5 || {
+    items: [
+      {label:"📺 Watching YouTube", type:"cloud"},
+      {label:"🎮 Online Game", type:"cloud"},
+      {label:"📝 Typing in Word (offline)", type:"local"},
+      {label:"📁 Files on your USB", type:"local"}
+    ]
+  };
+  let m5Dragged=null, m5Score=0;
+  document.getElementById("m5Total").textContent = m5.items.length;
+
+  const m5Cards=document.getElementById("m5Cards");
+  shuffle(m5.items).forEach(it=>{
+    const el=document.createElement("div");
+    el.className="card-item"; el.draggable=true;
+    el.dataset.type=it.type; el.dataset.done="0";
+    el.textContent=it.label;
+    el.addEventListener("dragstart",()=>m5Dragged=el);
+    el.addEventListener("dragend",()=>m5Dragged=null);
+    m5Cards.appendChild(el);
+  });
+
+  function dropM5(want, box, msg){
+    setupDrop(box, ()=>m5Dragged, (dragged, b)=>{
+      if (dragged.dataset.done==="1") return;
+      if (dragged.dataset.type===want){
+        dragged.dataset.done="1"; b.appendChild(dragged); m5Score++;
+        document.getElementById("m5Score").textContent=m5Score;
+        document.getElementById("m5Msg").textContent="✅ Correct!";
+        document.getElementById("m5Msg").className="text-center fw-bold mt-3 text-success";
+        if (m5Score===m5.items.length) document.getElementById("m5Done").classList.remove("d-none");
+      } else {
+        document.getElementById("m5Msg").textContent="❌ Try again!";
+        document.getElementById("m5Msg").className="text-center fw-bold mt-3 text-danger";
+      }
+    });
+  }
+  dropM5("cloud", document.getElementById("m5Cloud"));
+  dropM5("local", document.getElementById("m5Local"));
+
+  // ---------- M6: Cloud Build Order ----------
+  const m6 = activity.m6 || {
+    steps: [
+      {id:"users", text:"👧🧒 Users"},
+      {id:"internet", text:"🌐 Internet"},
+      {id:"servers", text:"🗄️ Cloud Servers"},
+      {id:"app", text:"📱 App"}
+    ],
+    correct: ["users","internet","servers","app"]
+  };
+
+  const m6Items=document.getElementById("m6Items");
+  const m6Drop=document.getElementById("m6Drop");
+  let m6Dragged=null;
+
+  shuffle(m6.steps).forEach(s=>{
+    const el=document.createElement("div");
+    el.className="card-item"; el.draggable=true;
+    el.dataset.id=s.id; el.textContent=s.text;
+    el.addEventListener("dragstart",()=>m6Dragged=el);
+    el.addEventListener("dragend",()=>m6Dragged=null);
+    m6Items.appendChild(el);
+  });
+
+  m6Drop.addEventListener("dragover",(e)=>e.preventDefault());
+  m6Drop.addEventListener("drop",(e)=>{
+    e.preventDefault();
+    if (!m6Dragged) return;
+    const hint=m6Drop.querySelector(".hint"); if (hint) hint.remove();
+    m6Drop.appendChild(m6Dragged);
+  });
+
+  function getM6Order(){
+    return Array.from(m6Drop.querySelectorAll(".card-item")).map(x=>x.dataset.id);
+  }
+  window.checkM6 = () => {
+    const order=getM6Order();
+    if (order.length !== m6.correct.length){
+      document.getElementById("m6Msg").textContent="👀 Drag all items first!";
+      document.getElementById("m6Msg").className="text-center fw-bold mt-3 text-warning";
+      return;
+    }
+    if (JSON.stringify(order)===JSON.stringify(m6.correct)){
+      document.getElementById("m6Msg").textContent="🎉 Cloud system built!";
+      document.getElementById("m6Msg").className="text-center fw-bold mt-3 text-success";
+      document.getElementById("m6Done").classList.remove("d-none");
+    } else {
+      document.getElementById("m6Msg").textContent="❌ Try another order!";
+      document.getElementById("m6Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  window.resetM6 = () => window.location.reload();
+
+  // ---------- M7: Scale Up Scenario Quiz ----------
+  const m7 = activity.m7 || {
+    questions: [
+      {q:"1,000 kids are logging in at once. What should a Cloud Engineer do?",
+       choices:["Add more cloud servers (scale up)","Turn off the internet","Delete the app"], a:"Add more cloud servers (scale up)"},
+      {q:"The app is slow in Nigeria and UK. What helps?",
+       choices:["Use servers closer to users","Put the laptop in rice","Close your eyes"], a:"Use servers closer to users"},
+    ]
+  };
+  let m7Index=0, m7Score=0;
+  document.getElementById("m7Total").textContent=m7.questions.length;
+
+  function renderM7(){
+    const item=m7.questions[m7Index];
+    document.getElementById("m7Q").textContent=item.q;
+    const box=document.getElementById("m7Choices");
+    box.innerHTML="";
+    item.choices.forEach(ch=>{
+      const btn=document.createElement("button");
+      btn.className="btn btn-outline-primary";
+      btn.textContent=ch;
+      btn.onclick=()=>answerM7(ch);
+      box.appendChild(btn);
+    });
+    document.getElementById("m7Msg").textContent="";
+  }
+  function answerM7(choice){
+    const item=m7.questions[m7Index];
+    if (choice===item.a){
+      m7Score++;
+      document.getElementById("m7Score").textContent=m7Score;
+      document.getElementById("m7Msg").textContent="✅ Great cloud thinking!";
+      document.getElementById("m7Msg").className="text-center fw-bold mt-3 text-success";
+      setTimeout(()=>{
+        m7Index++;
+        if (m7Index>=m7.questions.length){
+          document.getElementById("m7Done").classList.remove("d-none");
+          return;
+        }
+        renderM7();
+      }, 450);
+    } else {
+      document.getElementById("m7Msg").textContent="❌ Try again!";
+      document.getElementById("m7Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  renderM7();
+
+  // ---------- M8: Final Mix Sort ----------
+  const m8 = activity.m8 || {
+    items: [
+      {label:"Fix Wi-Fi in a school", type:"net"},
+      {label:"Set up routers and switches", type:"net"},
+      {label:"Keep an app online 24/7", type:"cloud"},
+      {label:"Add more servers for many users", type:"cloud"},
+    ]
+  };
+  let m8Dragged=null, m8Score=0;
+  document.getElementById("m8Total").textContent=m8.items.length;
+
+  const m8Cards=document.getElementById("m8Cards");
+  shuffle(m8.items).forEach(it=>{
+    const el=document.createElement("div");
+    el.className="card-item"; el.draggable=true;
+    el.dataset.type=it.type; el.dataset.done="0";
+    el.textContent="🧩 " + it.label;
+    el.addEventListener("dragstart",()=>m8Dragged=el);
+    el.addEventListener("dragend",()=>m8Dragged=null);
+    m8Cards.appendChild(el);
+  });
+
+  function dropM8(want, box){
+    setupDrop(box, ()=>m8Dragged, (dragged, b)=>{
+      if (dragged.dataset.done==="1") return;
+      if (dragged.dataset.type===want){
+        dragged.dataset.done="1"; b.appendChild(dragged); m8Score++;
+        document.getElementById("m8Score").textContent=m8Score;
+        document.getElementById("m8Msg").textContent="✅ Correct!";
+        document.getElementById("m8Msg").className="text-center fw-bold mt-3 text-success";
+        if (m8Score===m8.items.length) document.getElementById("m8Done").classList.remove("d-none");
+      } else {
+        document.getElementById("m8Msg").textContent="❌ Try again!";
+        document.getElementById("m8Msg").className="text-center fw-bold mt-3 text-danger";
+      }
+    });
+  }
+  dropM8("net", document.getElementById("m8Net"));
+  dropM8("cloud", document.getElementById("m8Cloud"));
+
+  // ---------- FINAL: MARK COMPLETE ----------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // INIT
+  updateProgress();
+</script>

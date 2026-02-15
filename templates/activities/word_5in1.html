@@ -1,0 +1,493 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">📝 Microsoft Word — 5 Missions</h2>
+    <p class="text-muted mb-0">Complete all 5 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/5 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badge1" class="badge bg-secondary">✍️ Story Writer</span>
+      <span id="badge2" class="badge bg-secondary">🎨 Format Pro</span>
+      <span id="badge3" class="badge bg-secondary">🖼️ Picture Inserter</span>
+      <span id="badge4" class="badge bg-secondary">💾 Save Smart</span>
+      <span id="badge5" class="badge bg-secondary">🖨️ Print Ready</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item">
+      <button class="nav-link active" id="tab1" onclick="showPanel(1)">1️⃣ Type Story</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tab2" onclick="showPanel(2)">2️⃣ Font/Size/Colour</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tab3" onclick="showPanel(3)">3️⃣ Insert Picture</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tab4" onclick="showPanel(4)">4️⃣ Save File</button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" id="tab5" onclick="showPanel(5)">5️⃣ Print Preview Quiz</button>
+    </li>
+  </ul>
+
+  <!-- PANEL 1 -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1 — Type a Short Story</h5>
+          <p id="storyPrompt" class="text-muted small mb-2"></p>
+          <div class="small fw-bold">Words: <span id="wordCount">0</span></div>
+          <div class="small fw-bold">Checks: <span id="storyChecks">0</span>/2</div>
+
+          <button id="done1" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">
+            ✅ Story Complete
+          </button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">📝 Your Document</div>
+          <textarea id="storyBox" class="form-control" rows="10" placeholder="Type here..."></textarea>
+          <div id="storyMsg" class="fw-bold mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2 -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2 — Change Font/Size/Colour</h5>
+          <div class="small text-muted">Do all 3:</div>
+          <div id="formatTargets" class="small text-muted mt-1"></div>
+          <div class="small fw-bold mt-2">Done: <span id="formatDone">0</span>/3</div>
+
+          <button id="done2" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">
+            ✅ Formatting Complete
+          </button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🎨 Word Formatting Playground</div>
+
+          <div class="d-flex gap-2 flex-wrap mb-3">
+            <button class="btn btn-outline-secondary" onclick="applySize(32)">Make Title Size 32</button>
+            <button class="btn btn-outline-secondary" onclick="applyBold()">Make One Word Bold</button>
+            <button class="btn btn-outline-secondary" onclick="applyColor('blue')">Make Text Blue</button>
+          </div>
+
+          <div class="doc-area">
+            <div id="titleLine" class="title-line">My Word Title</div>
+            <div id="bodyLine" class="body-line">This is my document text.</div>
+          </div>
+
+          <div id="formatMsg" class="fw-bold mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3 -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3 — Insert a Picture</h5>
+          <p id="picInstruction" class="text-muted small mb-2"></p>
+          <div class="small fw-bold">Inserted: <span id="picDone">0</span>/1</div>
+
+          <button id="done3" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(3)">
+            ✅ Picture Inserted
+          </button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🖼️ Choose a picture</div>
+          <div id="picChoices" class="d-flex gap-2 flex-wrap"></div>
+
+          <div class="mt-3">
+            <div class="fw-bold">Document Preview</div>
+            <div id="picPreview" class="preview-box text-muted">No picture inserted yet.</div>
+          </div>
+
+          <div id="picMsg" class="fw-bold mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4 -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4 — Save the File</h5>
+          <div class="text-muted small">Click the steps in the correct order:</div>
+
+          <div class="small fw-bold mt-2">Steps: <span id="saveDone">0</span>/<span id="saveTotal">0</span></div>
+
+          <button id="done4" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">
+            ✅ Saved Correctly
+          </button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">💾 Save Steps</div>
+          <div id="saveSteps" class="d-flex gap-2 flex-wrap"></div>
+
+          <div class="mt-3">
+            <div class="fw-bold">Your sequence:</div>
+            <div id="saveSeq" class="seq-box text-muted">None yet…</div>
+          </div>
+
+          <div id="saveMsg" class="fw-bold mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5 -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5 — Print Preview Quiz</h5>
+          <div class="small fw-bold">Score: <span id="printScore">0</span>/<span id="printTotal">0</span></div>
+
+          <button id="done5" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(5)">
+            ✅ Print Quiz Complete
+          </button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Question</div>
+          <div id="printQ" class="q-box"></div>
+          <div id="printOpts" class="d-flex gap-2 flex-wrap mt-3"></div>
+          <div id="printMsg" class="fw-bold mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 5 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .doc-area{border:1px solid #eee;border-radius:18px;padding:14px;background:#fff;}
+  .title-line{font-weight:900;font-size:20px;margin-bottom:10px;}
+  .body-line{font-weight:700;color:#444;}
+  .preview-box{border:1px dashed #dee2e6;border-radius:16px;padding:14px;background:#f8f9fa;min-height:70px;}
+  .seq-box{border:1px dashed #dee2e6;border-radius:16px;padding:12px;background:#f8f9fa;}
+  .step-btn{border:1px solid #eee;border-radius:14px;padding:10px 12px;background:#fff;font-weight:900;cursor:pointer;}
+  .step-btn.used{opacity:.6}
+  .q-box{border:1px solid #eee;border-radius:16px;padding:14px;background:#f8f9fa;font-weight:900;min-height:80px;display:flex;align-items:center;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // ---------- Tabs ----------
+  function showPanel(n){
+    for(let i=1;i<=5;i++){
+      document.getElementById("tab"+i).classList.remove("active");
+      document.getElementById("panel"+i).classList.add("d-none");
+    }
+    document.getElementById("tab"+n).classList.add("active");
+    document.getElementById("panel"+n).classList.remove("d-none");
+  }
+  window.showPanel = showPanel;
+
+  // ---------- Progress ----------
+  const state = {1:false,2:false,3:false,4:false,5:false};
+  function badgeOn(n){ document.getElementById("badge"+n).className = "badge bg-success"; }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/5)*100) + "%";
+
+    if(done === 5){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(n){
+    state[n] = true;
+    badgeOn(n);
+    updateProgress();
+    if(n < 5) showPanel(n+1);
+  }
+  window.completeMission = completeMission;
+
+  // ---------- Mission 1 ----------
+  const m1 = activity.missions?.story || {};
+  document.getElementById("storyPrompt").textContent = m1.prompt || "Write a short story.";
+  const minWords = m1.min_words ?? 20;
+  const requiredWords = (m1.required_words || []).map(w => (w+"").toLowerCase());
+
+  function countWords(text){ return (text.trim().match(/\S+/g) || []).length; }
+
+  document.getElementById("storyBox").addEventListener("input", () => {
+    const text = document.getElementById("storyBox").value || "";
+    const wc = countWords(text);
+    document.getElementById("wordCount").textContent = wc;
+
+    const lower = text.toLowerCase();
+    const hasRequired = requiredWords.every(w => lower.includes(w));
+    const okWords = wc >= minWords;
+
+    let checks = 0;
+    if(okWords) checks++;
+    if(hasRequired) checks++;
+    document.getElementById("storyChecks").textContent = checks;
+
+    if(okWords && hasRequired){
+      document.getElementById("storyMsg").textContent = "✅ Great story!";
+      document.getElementById("storyMsg").className = "fw-bold mt-2 text-success";
+      document.getElementById("done1").classList.remove("d-none");
+    } else {
+      document.getElementById("done1").classList.add("d-none");
+      document.getElementById("storyMsg").textContent = "Keep going… add a title and more words.";
+      document.getElementById("storyMsg").className = "fw-bold mt-2 text-muted";
+    }
+  });
+
+  // ---------- Mission 2 ----------
+  const targets = activity.missions?.format?.targets || [
+    {label:"Make the title BIG (32)", type:"size", value:"32"},
+    {label:"Make one word BOLD", type:"bold", value:"true"},
+    {label:"Change text colour to BLUE", type:"color", value:"blue"}
+  ];
+  document.getElementById("formatTargets").innerHTML = targets.map(t => "• " + t.label).join("<br>");
+
+  let formatDone = {size:false, bold:false, color:false};
+  function updateFormat(){
+    const done = Object.values(formatDone).filter(Boolean).length;
+    document.getElementById("formatDone").textContent = done;
+    if(done === 3){
+      document.getElementById("formatMsg").textContent = "✅ Perfect formatting!";
+      document.getElementById("formatMsg").className = "fw-bold mt-2 text-success";
+      document.getElementById("done2").classList.remove("d-none");
+    }
+  }
+
+  function applySize(px){
+    document.getElementById("titleLine").style.fontSize = px + "px";
+    if(px >= 32) formatDone.size = true;
+    updateFormat();
+  }
+  window.applySize = applySize;
+
+  function applyBold(){
+    const el = document.getElementById("bodyLine");
+    if(el.dataset.bolded === "1") return;
+    const parts = el.textContent.split(" ");
+    if(parts.length){
+      parts[0] = parts[0].toUpperCase();
+      el.textContent = parts.join(" ");
+      el.style.fontWeight = "900";
+      el.dataset.bolded = "1";
+      formatDone.bold = true;
+      updateFormat();
+    }
+  }
+  window.applyBold = applyBold;
+
+  function applyColor(c){
+    document.getElementById("bodyLine").style.color = c;
+    if(c === "blue") formatDone.color = true;
+    updateFormat();
+  }
+  window.applyColor = applyColor;
+
+  // ---------- Mission 3 ----------
+  const m3 = activity.missions?.picture || {};
+  document.getElementById("picInstruction").textContent = m3.instruction || "Click the correct picture to insert it.";
+  const picChoices = m3.choices || [
+    {id:"cat", label:"🐱 Cat", is_correct:true},
+    {id:"car", label:"🚗 Car", is_correct:false},
+    {id:"book", label:"📚 Book", is_correct:false}
+  ];
+  let picDone = 0;
+
+  const picChoicesEl = document.getElementById("picChoices");
+  picChoices.forEach(ch => {
+    const btn = document.createElement("button");
+    btn.className = "btn btn-outline-primary";
+    btn.textContent = ch.label;
+
+    btn.onclick = () => {
+      if(ch.is_correct){
+        picDone = 1;
+        document.getElementById("picDone").textContent = "1";
+        document.getElementById("picPreview").textContent = "✅ Inserted: " + ch.label;
+        document.getElementById("picMsg").textContent = "✅ Great! Picture inserted.";
+        document.getElementById("picMsg").className = "fw-bold mt-2 text-success";
+        document.getElementById("done3").classList.remove("d-none");
+      } else {
+        document.getElementById("picMsg").textContent = "❌ Try again!";
+        document.getElementById("picMsg").className = "fw-bold mt-2 text-danger";
+      }
+    };
+
+    picChoicesEl.appendChild(btn);
+  });
+
+  // ---------- Mission 4 ----------
+  const m4 = activity.missions?.save || {};
+  const steps = m4.save_steps || ["File","Save As","Homework","MyStory.docx","Save"];
+  document.getElementById("saveTotal").textContent = steps.length;
+
+  const shuffled = [...steps].sort(() => Math.random() - 0.5);
+  const saveStepsEl = document.getElementById("saveSteps");
+  const seqEl = document.getElementById("saveSeq");
+
+  const picked = [];
+  function renderSeq(){
+    seqEl.textContent = picked.length ? picked.join(" → ") : "None yet…";
+    document.getElementById("saveDone").textContent = picked.length;
+  }
+  renderSeq();
+
+  shuffled.forEach(s => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "step-btn";
+    b.textContent = s;
+
+    b.onclick = () => {
+      if(b.classList.contains("used")) return;
+      b.classList.add("used");
+      picked.push(s);
+      renderSeq();
+
+      const idx = picked.length - 1;
+      if(picked[idx] !== steps[idx]){
+        document.getElementById("saveMsg").textContent = "❌ Wrong order — refresh page and try again.";
+        document.getElementById("saveMsg").className = "fw-bold mt-2 text-danger";
+        return;
+      } else {
+        document.getElementById("saveMsg").textContent = "✅ Good step!";
+        document.getElementById("saveMsg").className = "fw-bold mt-2 text-success";
+      }
+
+      if(picked.length === steps.length){
+        document.getElementById("saveMsg").textContent = "✅ Saved perfectly!";
+        document.getElementById("saveMsg").className = "fw-bold mt-2 text-success";
+        document.getElementById("done4").classList.remove("d-none");
+      }
+    };
+
+    saveStepsEl.appendChild(b);
+  });
+
+  // ---------- Mission 5 ----------
+  const m5 = activity.missions?.print || {};
+  const qs = m5.questions || [
+    {q:"What should you click first to print?", options:["Home","File","Insert"], answer:"File"},
+    {q:"What page shows how your document will look on paper?", options:["Print Preview","Spell Check","Undo"], answer:"Print Preview"},
+    {q:"Should you print without asking an adult?", options:["Yes","No"], answer:"No"}
+  ];
+  document.getElementById("printTotal").textContent = qs.length;
+
+  let qi = 0;
+  let score = 0;
+
+  const qEl = document.getElementById("printQ");
+  const optsEl = document.getElementById("printOpts");
+
+  function renderQ(){
+    document.getElementById("printMsg").textContent = "";
+    optsEl.innerHTML = "";
+    const q = qs[qi];
+    qEl.textContent = q.q;
+
+    q.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "btn btn-outline-primary";
+      btn.textContent = opt;
+      btn.onclick = () => {
+        if(opt === q.answer){
+          score++;
+          document.getElementById("printScore").textContent = score;
+          document.getElementById("printMsg").textContent = "✅ Correct!";
+          document.getElementById("printMsg").className = "fw-bold mt-2 text-success";
+
+          setTimeout(() => {
+            qi++;
+            if(qi >= qs.length){
+              qEl.textContent = "✅ Quiz finished!";
+              optsEl.innerHTML = "";
+              document.getElementById("done5").classList.remove("d-none");
+              return;
+            }
+            renderQ();
+          }, 450);
+
+        } else {
+          document.getElementById("printMsg").textContent = "❌ Try again!";
+          document.getElementById("printMsg").className = "fw-bold mt-2 text-danger";
+        }
+      };
+      optsEl.appendChild(btn);
+    });
+  }
+  renderQ();
+
+  // ---------- FINAL: MARK COMPLETE ----------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

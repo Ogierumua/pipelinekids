@@ -1,0 +1,419 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🧑🏾‍🔧 Careers Challenge: Engineers + Data Engineers</h2>
+    <p class="text-muted mb-0">Complete all 8 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/8 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badgeEng" class="badge bg-secondary">🛠️ System Builder</span>
+      <span id="badgeData" class="badge bg-secondary">📊 Data Pipeline Hero</span>
+      <span id="badgeTeam" class="badge bg-secondary">🤝 Team Player</span>
+      <span id="badgePro" class="badge bg-secondary">🏆 Career Explorer</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap" id="tabsRow"></ul>
+
+  <!-- PANELS -->
+  <div id="panels"></div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 You did it! You finished all 8 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .cardish{background:#fff;border:1px solid #eee;border-radius:18px;padding:14px;box-shadow:0 10px 25px rgba(0,0,0,.04);}
+  .dropbox{min-height:140px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;}
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+  .draggable{background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;cursor:grab;user-select:none;display:inline-flex;gap:8px;align-items:center;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .muted{color:#6c757d;}
+  .qbox{padding:12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;font-weight:900;min-height:78px;display:flex;align-items:center;}
+  .choiceBtn{border:1px solid #eee;border-radius:14px;padding:10px 12px;background:#fff;font-weight:900;cursor:pointer;}
+  .choiceBtn:hover{background:#f8f9fa;}
+  .doneBtn{display:block;width:100%;}
+  .smallcap{font-size:12px;color:#6c757d;font-weight:800;}
+  .zone{min-height:150px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+  const missions = activity.missions || [];
+  const badgeRules = activity.ui?.badge_rules || {};
+  const total = activity.ui?.total_missions || missions.length || 8;
+
+  const state = {};
+  missions.forEach(m => state[m.key] = false);
+
+  // -------------------- Helpers --------------------
+  function badgeOn(id){ const el=document.getElementById(id); if(el) el.className="badge bg-success"; }
+
+  function updateBadges(){
+    const doneKeys = Object.keys(state).filter(k => state[k]);
+    Object.entries(badgeRules).forEach(([badgeId, reqKeys]) => {
+      const ok = reqKeys.every(k => doneKeys.includes(k));
+      if(ok) badgeOn(badgeId);
+    });
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/total)*100) + "%";
+    updateBadges();
+
+    if (done === total){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(key){
+    state[key] = true;
+    updateProgress();
+    // auto move to next tab
+    const idx = missions.findIndex(m => m.key === key);
+    const next = missions[idx+1];
+    if(next) showPanel(next.key);
+  }
+
+  // -------------------- Tabs + Panels --------------------
+  const tabsRow = document.getElementById("tabsRow");
+  const panels = document.getElementById("panels");
+
+  function showPanel(key){
+    missions.forEach(m => {
+      const p = document.getElementById("panel_"+m.key);
+      const t = document.getElementById("tab_"+m.key);
+      if(p) p.classList.add("d-none");
+      if(t) t.classList.remove("active");
+    });
+    document.getElementById("panel_"+key)?.classList.remove("d-none");
+    document.getElementById("tab_"+key)?.classList.add("active");
+  }
+  window.showPanel = showPanel;
+
+  // Build UI shells
+  missions.forEach((m, i) => {
+    // tab
+    const li = document.createElement("li");
+    li.className = "nav-item";
+    li.innerHTML = `<button class="nav-link ${i===0?"active":""}" id="tab_${m.key}" onclick="showPanel('${m.key}')">${i+1}</button>`;
+    tabsRow.appendChild(li);
+
+    // panel
+    const div = document.createElement("div");
+    div.className = "panel " + (i===0 ? "" : "d-none");
+    div.id = "panel_"+m.key;
+    div.innerHTML = `
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="cardish h-100">
+            <div class="fw-bold mb-1">🎯 Mission ${i+1}</div>
+            <div class="muted small mb-2">${m.title || ""}</div>
+            <div id="msg_${m.key}" class="fw-bold mt-2"></div>
+            <button id="doneBtn_${m.key}" class="btn btn-success mt-3 d-none doneBtn" onclick="completeMission('${m.key}')">
+              ✅ Mission Complete
+            </button>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="cardish" id="body_${m.key}"></div>
+        </div>
+      </div>
+    `;
+    panels.appendChild(div);
+  });
+
+  // -------------------- Mission Implementations --------------------
+  function setMsg(key, text, kind){
+    const el = document.getElementById("msg_"+key);
+    el.textContent = text;
+    el.className = "fw-bold mt-2 " + (kind==="ok"?"text-success":kind==="bad"?"text-danger":kind==="warn"?"text-warning":"");
+  }
+  function showDone(key){
+    document.getElementById("doneBtn_"+key).classList.remove("d-none");
+  }
+
+  // M1: match pairs (click to connect)
+  function renderMatch(key, pairs){
+    const body = document.getElementById("body_"+key);
+    body.innerHTML = `
+      <div class="grid2">
+        <div>
+          <div class="fw-bold mb-2">Left</div>
+          <div id="left_${key}" class="d-flex flex-column gap-2"></div>
+        </div>
+        <div>
+          <div class="fw-bold mb-2">Right</div>
+          <div id="right_${key}" class="d-flex flex-column gap-2"></div>
+        </div>
+      </div>
+      <div class="smallcap mt-3">Tap one on the left, then tap the correct one on the right.</div>
+      <div class="mt-2"><span class="fw-bold">Correct:</span> <span id="score_${key}">0</span>/${pairs.length}</div>
+    `;
+
+    const left = body.querySelector("#left_"+key);
+    const right = body.querySelector("#right_"+key);
+
+    // shuffle rights
+    const r = [...pairs].sort(()=>Math.random()-0.5);
+
+    let pickedLeft = null;
+    let score = 0;
+
+    pairs.forEach((p, idx) => {
+      const b = document.createElement("div");
+      b.className="choiceBtn";
+      b.textContent = p.left;
+      b.dataset.val = p.left;
+      b.onclick = () => {
+        pickedLeft = p;
+        setMsg(key, `✅ Selected: ${p.left} — now pick the match`, "warn");
+      };
+      left.appendChild(b);
+    });
+
+    r.forEach((p) => {
+      const b = document.createElement("div");
+      b.className="choiceBtn";
+      b.textContent = p.right;
+      b.dataset.val = p.right;
+      b.onclick = () => {
+        if(!pickedLeft){ setMsg(key, "Pick a LEFT card first!", "warn"); return; }
+        if(b.dataset.locked==="1"){ return; }
+
+        if(pickedLeft.right === p.right){
+          b.dataset.locked="1";
+          score++;
+          body.querySelector("#score_"+key).textContent = score;
+          setMsg(key, "🎉 Correct match!", "ok");
+          pickedLeft = null;
+          if(score === pairs.length){ showDone(key); }
+        } else {
+          setMsg(key, "❌ Not that one. Try again!", "bad");
+        }
+      };
+      right.appendChild(b);
+    });
+  }
+
+  // M2: drag items into two systems
+  function renderSystemsDrag(key, systems, items){
+    const body = document.getElementById("body_"+key);
+    body.innerHTML = `
+      <div class="fw-bold mb-2">Drag the items into the correct system</div>
+      <div id="items_${key}" class="zone mb-3"></div>
+      <div class="grid2">
+        ${systems.map(s => `<div class="dropbox" id="box_${key}_${s.id}">${s.name}<div class="smallcap mt-1">Drop here</div></div>`).join("")}
+      </div>
+      <div class="mt-2"><span class="fw-bold">Correct:</span> <span id="score_${key}">0</span>/${items.length}</div>
+    `;
+
+    let dragged = null;
+    let score = 0;
+
+    const itemsEl = body.querySelector("#items_"+key);
+    items.forEach(it => {
+      const el = document.createElement("div");
+      el.className="draggable";
+      el.draggable=true;
+      el.textContent="🧩 "+it.label;
+      el.dataset.system=it.system;
+      el.dataset.done="0";
+      el.addEventListener("dragstart", ()=> dragged=el);
+      el.addEventListener("dragend", ()=> dragged=null);
+      itemsEl.appendChild(el);
+    });
+
+    systems.forEach(s => {
+      const box = body.querySelector("#box_"+key+"_"+s.id);
+      box.addEventListener("dragover", e=>{e.preventDefault(); box.classList.add("drag-over");});
+      box.addEventListener("dragleave", ()=> box.classList.remove("drag-over"));
+      box.addEventListener("drop", e=>{
+        e.preventDefault(); box.classList.remove("drag-over");
+        if(!dragged || dragged.dataset.done==="1") return;
+
+        if(dragged.dataset.system === s.id){
+          dragged.dataset.done="1";
+          box.appendChild(dragged);
+          score++;
+          body.querySelector("#score_"+key).textContent = score;
+          setMsg(key, "✅ Correct!", "ok");
+          if(score === items.length) showDone(key);
+        } else {
+          setMsg(key, "❌ Wrong system — try again!", "bad");
+        }
+      });
+    });
+  }
+
+  // M3: pipeline order drag into drop zone
+  function renderOrderBlocks(key, blocks, correct){
+    const body = document.getElementById("body_"+key);
+    body.innerHTML = `
+      <div class="fw-bold mb-2">Drag the blocks into the correct order</div>
+      <div id="tray_${key}" class="zone mb-3"></div>
+      <div class="dropbox" id="drop_${key}">👇 Drop blocks here in order</div>
+      <div class="mt-3 d-flex gap-2">
+        <button class="btn btn-primary" id="check_${key}">Check</button>
+        <button class="btn btn-outline-secondary" id="reset_${key}">Reset</button>
+      </div>
+    `;
+
+    let dragged=null;
+    const tray = body.querySelector("#tray_"+key);
+    const drop = body.querySelector("#drop_"+key);
+
+    blocks.forEach(b=>{
+      const el=document.createElement("div");
+      el.className="draggable";
+      el.draggable=true;
+      el.dataset.id=b.id;
+      el.textContent=b.text;
+      el.addEventListener("dragstart", ()=> dragged=el);
+      el.addEventListener("dragend", ()=> dragged=null);
+      tray.appendChild(el);
+    });
+
+    drop.addEventListener("dragover", e=>{e.preventDefault(); drop.classList.add("drag-over");});
+    drop.addEventListener("dragleave", ()=> drop.classList.remove("drag-over"));
+    drop.addEventListener("drop", e=>{
+      e.preventDefault(); drop.classList.remove("drag-over");
+      if(!dragged) return;
+      drop.appendChild(dragged);
+    });
+
+    body.querySelector("#check_"+key).onclick = ()=>{
+      const order = Array.from(drop.querySelectorAll(".draggable")).map(x=>x.dataset.id);
+      if(order.length !== correct.length){
+        setMsg(key, "👀 Drop all blocks first!", "warn"); return;
+      }
+      const ok = JSON.stringify(order) === JSON.stringify(correct);
+      if(ok){ setMsg(key, "🎉 Perfect pipeline!", "ok"); showDone(key); }
+      else { setMsg(key, "❌ Not quite. Try again!", "bad"); }
+    };
+
+    body.querySelector("#reset_"+key).onclick = ()=>{
+      // move back
+      Array.from(drop.querySelectorAll(".draggable")).forEach(el=> tray.appendChild(el));
+      setMsg(key, "", "");
+    };
+  }
+
+  // M4/M6/M8: quiz engine
+  function renderQuiz(key, questions, optionsKey="options", answerKey="answer_index"){
+    const body = document.getElementById("body_"+key);
+    let idx=0, score=0;
+
+    body.innerHTML = `
+      <div class="fw-bold mb-2">Answer the questions</div>
+      <div id="q_${key}" class="qbox"></div>
+      <div id="opts_${key}" class="d-flex flex-column gap-2 mt-3"></div>
+      <div class="mt-3"><span class="fw-bold">Score:</span> <span id="score_${key}">0</span>/${questions.length}</div>
+    `;
+
+    function showQ(){
+      body.querySelector("#q_"+key).textContent = questions[idx].prompt || questions[idx].text || "";
+      const optsEl = body.querySelector("#opts_"+key);
+      optsEl.innerHTML = "";
+      (questions[idx][optionsKey] || []).forEach((opt, oi)=>{
+        const b=document.createElement("button");
+        b.className="choiceBtn";
+        b.type="button";
+        b.textContent=opt;
+        b.onclick = ()=>{
+          if(oi === questions[idx][answerKey]){
+            score++;
+            body.querySelector("#score_"+key).textContent = score;
+            setMsg(key, "✅ Correct!", "ok");
+            setTimeout(next, 350);
+          } else {
+            setMsg(key, "❌ Try again!", "bad");
+          }
+        };
+        optsEl.appendChild(b);
+      });
+    }
+
+    function next(){
+      idx++;
+      if(idx >= questions.length){
+        showDone(key);
+        setMsg(key, "🏁 Quiz finished!", "ok");
+        return;
+      }
+      setMsg(key, "", "");
+      showQ();
+    }
+
+    showQ();
+  }
+
+  // M5/M7: match pairs again
+  // reuse renderMatch
+
+  // -------------------- Render All --------------------
+  missions.forEach(m=>{
+    if(m.key==="m1_match_types") renderMatch(m.key, m.pairs||[]);
+    else if(m.key==="m2_system_parts") renderSystemsDrag(m.key, m.systems||[], m.items||[]);
+    else if(m.key==="m3_pipeline_order") renderOrderBlocks(m.key, m.blocks||[], m.correct_order||[]);
+    else if(m.key==="m4_clean_the_data") renderQuiz(m.key, m.questions||[]);
+    else if(m.key==="m5_jobs_to_tools") renderMatch(m.key, m.pairs||[]);
+    else if(m.key==="m6_fix_the_failure") renderQuiz(m.key, m.scenarios||[], "options", "answer_index");
+    else if(m.key==="m7_team_roles") {
+      // turn roles into pairs
+      const pairs = (m.roles||[]).map(r=>({left:r.role, right:r.job}));
+      renderMatch(m.key, pairs);
+    }
+    else if(m.key==="m8_career_quiz") renderQuiz(m.key, m.questions||[]);
+  });
+
+  // -------------------- Finish lesson (award XP) --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

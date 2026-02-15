@@ -1,0 +1,386 @@
+{{ lesson.activity_json|json_script:"cp-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold" id="title">⚙️ Control Panel Playground</h2>
+    <p class="text-muted mb-0" id="subtitle">Complete 12 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/<span id="totalCount">12</span></div>
+    </div>
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <!-- BADGES -->
+    <div id="badgesRow" class="d-flex justify-content-center gap-2 mt-3 flex-wrap"></div>
+  </div>
+
+  <!-- TABS -->
+  <ul id="tabsRow" class="nav nav-pills justify-content-center gap-2 mb-3"></ul>
+
+  <!-- PANEL -->
+  <div class="row g-3">
+
+    <!-- LEFT: FAKE CONTROL PANEL -->
+    <div class="col-lg-7">
+      <div class="bg-white border rounded-4 shadow-sm p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="fw-bold">🪟 Fake Control Panel (Safe Practice)</div>
+          <span id="viewBadge" class="badge text-bg-secondary">View: Category</span>
+        </div>
+
+        <div class="cp-grid" id="cpGrid"></div>
+
+        <div class="mt-3 p-3 bg-light rounded-4">
+          <div class="fw-bold mb-1">⚙️ Settings Area</div>
+          <div id="settingsBox" class="text-muted small">Click a Control Panel icon to open it.</div>
+
+          <!-- Sliders -->
+          <div id="sliderBox" class="d-none mt-3">
+            <div class="d-flex justify-content-between small">
+              <span id="sliderLabel" class="fw-bold">Slider</span>
+              <span class="text-muted">Value: <span id="sliderVal">0</span></span>
+            </div>
+            <input id="slider" type="range" class="form-range" min="0" max="100" value="0">
+            <button class="btn btn-outline-primary w-100" onclick="submitSlider()">✅ Submit slider</button>
+          </div>
+
+          <!-- Choices -->
+          <div id="choiceBox" class="d-none mt-3">
+            <div class="fw-bold small mb-2">Choose one:</div>
+            <div id="choiceBtns" class="d-flex flex-wrap gap-2"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: MISSION LIST -->
+    <div class="col-lg-5">
+      <div class="bg-white border rounded-4 shadow-sm p-3">
+        <div class="fw-bold mb-2">🎯 Missions</div>
+        <div id="missionsList"></div>
+
+        <div id="finalBox" class="text-center mt-3 d-none">
+          <div class="fw-bold fs-5 text-success">🎉 All missions complete!</div>
+          <div class="text-muted">XP will be awarded and the next lesson will unlock.</div>
+          <a id="nextBtn" class="btn btn-success mt-2 d-none" href="#">Next lesson →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+  .d-none{display:none!important;}
+  .cp-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+  }
+  .cp-icon{
+    border:1px solid #eee;
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
+    font-weight:900;
+    cursor:pointer;
+    user-select:none;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .cp-icon:hover{background:#f8f9fa;}
+  .cp-icon small{color:#6c757d;font-weight:800;}
+  .mission{
+    border:1px solid #eee;
+    border-radius:16px;
+    padding:10px 12px;
+    margin-bottom:10px;
+    background:#fff;
+  }
+  .mission.done{border-color:#198754; box-shadow:0 0 0 3px rgba(25,135,84,.12);}
+  .mission-title{font-weight:900;}
+  .mission-hint{color:#6c757d;font-weight:700;font-size:13px;}
+  .btn-mini{padding:8px 10px;border-radius:12px;font-weight:900;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("cp-data").textContent || "{}");
+
+  // Header
+  document.getElementById("title").textContent = activity.title || "⚙️ Control Panel Playground";
+  document.getElementById("subtitle").textContent = activity.subtitle || "";
+  document.getElementById("totalCount").textContent = (activity.missions || []).length;
+
+  // State
+  const missions = activity.missions || [];
+  const done = {};
+  missions.forEach(m => done[m.id] = false);
+
+  let currentMissionId = missions[0]?.id || null;
+  let openedPanels = new Set();
+  let currentSliderMission = null;
+
+  // Badges
+  const badges = activity.badges || [];
+  const badgesRow = document.getElementById("badgesRow");
+  badges.forEach(b => {
+    const el = document.createElement("span");
+    el.id = b.id;
+    el.className = "badge bg-secondary";
+    el.textContent = b.label;
+    badgesRow.appendChild(el);
+  });
+
+  // Tabs
+  const tabs = activity.tabs || [];
+  const tabsRow = document.getElementById("tabsRow");
+
+  function showTab(tabId){
+    tabs.forEach(t => {
+      const panel = document.querySelectorAll("[data-tab]");
+      panel.forEach(x => x.classList.add("d-none"));
+      const btn = document.getElementById("tabBtn_" + t.id);
+      if (btn) btn.classList.remove("active");
+    });
+
+    document.querySelectorAll(`[data-tab="${tabId}"]`).forEach(x => x.classList.remove("d-none"));
+    document.getElementById("tabBtn_" + tabId)?.classList.add("active");
+  }
+
+  tabs.forEach((t, idx) => {
+    const li = document.createElement("li");
+    li.className = "nav-item";
+
+    const btn = document.createElement("button");
+    btn.className = "nav-link" + (idx===0 ? " active" : "");
+    btn.id = "tabBtn_" + t.id;
+    btn.textContent = t.label;
+    btn.onclick = () => showTab(t.id);
+
+    li.appendChild(btn);
+    tabsRow.appendChild(li);
+  });
+
+  // Render missions
+  const missionsList = document.getElementById("missionsList");
+
+  function renderMissions(){
+    missionsList.innerHTML = "";
+    missions.forEach((m, idx) => {
+      const box = document.createElement("div");
+      box.className = "mission" + (done[m.id] ? " done" : "");
+      box.dataset.tab = tabForIndex(idx+1);
+
+      box.innerHTML = `
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <div class="mission-title">Mission ${idx+1}: ${m.label}</div>
+            <div class="mission-hint">${m.hint || ""}</div>
+          </div>
+          <button class="btn btn-outline-primary btn-mini" onclick="startMission('${m.id}')">
+            ${done[m.id] ? "✅" : "▶"}
+          </button>
+        </div>
+      `;
+      missionsList.appendChild(box);
+    });
+  }
+
+  function tabForIndex(i){
+    for (const t of tabs){
+      if (i >= t.from && i <= t.to) return t.id;
+    }
+    return tabs[0]?.id || "basics";
+  }
+
+  // Control Panel icons (safe fake)
+  const cpGrid = document.getElementById("cpGrid");
+  const icons = [
+    {id:"Control Panel", key:"open_cp", emoji:"⚙️", hint:"Open"},
+    {id:"View", key:"view_mode", emoji:"🧩", hint:"Category/Icons"},
+    {id:"Sound", key:"sound", emoji:"🔊", hint:"Speakers"},
+    {id:"Mouse", key:"mouse", emoji:"🖱️", hint:"Pointer"},
+    {id:"Display", key:"display", emoji:"🖥️", hint:"Screen"},
+    {id:"Users", key:"users", emoji:"👤", hint:"Accounts"},
+    {id:"Devices", key:"devices", emoji:"🖨️", hint:"Printers"}
+  ];
+
+  icons.forEach(ic => {
+    const el = document.createElement("div");
+    el.className = "cp-icon";
+    el.innerHTML = `<span>${ic.emoji} ${ic.id}</span> <small>${ic.hint}</small>`;
+    el.onclick = () => openPanel(ic.key, ic.id);
+    cpGrid.appendChild(el);
+  });
+
+  function openPanel(key, label){
+    openedPanels.add(key);
+
+    document.getElementById("settingsBox").innerHTML =
+      `<div class="fw-bold">✅ Opened: ${label}</div><div class="text-muted small">Great! Now complete your mission.</div>`;
+
+    // Mission checks for "tap" types
+    const m = missions.find(x => x.id === key);
+    if (m && m.type === "tap"){
+      markDone(m.id);
+    }
+
+    // If "volume" slider mission expects sound opened first, it still works independently.
+  }
+
+  // Mission runner
+  function startMission(id){
+    currentMissionId = id;
+    const m = missions.find(x => x.id === id);
+    if (!m) return;
+
+    // Hide boxes
+    document.getElementById("sliderBox").classList.add("d-none");
+    document.getElementById("choiceBox").classList.add("d-none");
+
+    // Tap missions: remind user to click icon
+    if (m.type === "tap"){
+      document.getElementById("settingsBox").innerHTML =
+        `<div class="fw-bold">🎯 Your mission:</div>
+         <div class="text-muted small">${m.label}</div>
+         <div class="small mt-2">Hint: ${m.hint || ""}</div>`;
+      return;
+    }
+
+    // Slider missions
+    if (m.type === "slider"){
+      currentSliderMission = m;
+      const slider = document.getElementById("slider");
+      slider.min = m.min ?? 0;
+      slider.max = m.max ?? 100;
+      slider.value = m.min ?? 0;
+      document.getElementById("sliderVal").textContent = slider.value;
+      document.getElementById("sliderLabel").textContent = m.label;
+
+      slider.oninput = () => document.getElementById("sliderVal").textContent = slider.value;
+
+      document.getElementById("sliderBox").classList.remove("d-none");
+      document.getElementById("settingsBox").innerHTML =
+        `<div class="fw-bold">🎯 Slider mission:</div>
+         <div class="text-muted small">${m.hint || ""}</div>`;
+      return;
+    }
+
+    // Choice missions
+    if (m.type === "choice"){
+      const choiceBtns = document.getElementById("choiceBtns");
+      choiceBtns.innerHTML = "";
+
+      (m.options || []).forEach(opt => {
+        const b = document.createElement("button");
+        b.className = "btn btn-outline-primary btn-mini";
+        b.textContent = opt;
+        b.onclick = () => submitChoice(m, opt);
+        choiceBtns.appendChild(b);
+      });
+
+      document.getElementById("choiceBox").classList.remove("d-none");
+      document.getElementById("settingsBox").innerHTML =
+        `<div class="fw-bold">🎯 Choose:</div>
+         <div class="text-muted small">${m.hint || ""}</div>`;
+      return;
+    }
+  }
+  window.startMission = startMission;
+
+  function submitChoice(m, selected){
+    if (done[m.id]) return;
+
+    if (selected === m.answer){
+      document.getElementById("settingsBox").innerHTML =
+        `<div class="fw-bold text-success">✅ Correct!</div><div class="text-muted small">Nice choice.</div>`;
+      markDone(m.id);
+    } else {
+      document.getElementById("settingsBox").innerHTML =
+        `<div class="fw-bold text-danger">❌ Try again</div><div class="text-muted small">Think about the hint.</div>`;
+    }
+  }
+
+  function submitSlider(){
+    if (!currentSliderMission) return;
+    const m = currentSliderMission;
+    if (done[m.id]) return;
+
+    const val = Number(document.getElementById("slider").value);
+    const target = Number(m.target);
+    const tol = Number(m.tolerance ?? 0);
+
+    if (Math.abs(val - target) <= tol){
+      document.getElementById("settingsBox").innerHTML =
+        `<div class="fw-bold text-success">✅ Perfect!</div><div class="text-muted small">You set it correctly.</div>`;
+      markDone(m.id);
+    } else {
+      document.getElementById("settingsBox").innerHTML =
+        `<div class="fw-bold text-danger">❌ Not quite</div><div class="text-muted small">Try closer to ${target}.</div>`;
+    }
+  }
+  window.submitSlider = submitSlider;
+
+  // Mark done + progress + badges + unlock
+  function markDone(id){
+    done[id] = true;
+    renderMissions();
+    updateProgress();
+    updateBadges();
+  }
+
+  function updateProgress(){
+    const total = missions.length;
+    const count = Object.values(done).filter(Boolean).length;
+
+    document.getElementById("doneCount").textContent = count;
+    document.getElementById("progressBar").style.width = Math.round((count/total)*100) + "%";
+
+    if (count === total){
+      document.getElementById("finalBox").classList.remove("d-none");
+      finishLesson();
+    }
+  }
+
+  function updateBadges(){
+    const count = Object.values(done).filter(Boolean).length;
+    (badges || []).forEach(b => {
+      if (count >= (b.unlock_after || 999)){
+        const el = document.getElementById(b.id);
+        if (el) el.className = "badge bg-success";
+      }
+    });
+  }
+
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok && data.next_url){
+      const nextBtn = document.getElementById("nextBtn");
+      nextBtn.href = data.next_url;
+      nextBtn.classList.remove("d-none");
+    }
+  }
+
+  // INIT
+  renderMissions();
+  updateProgress();
+  updateBadges();
+
+  // Show first tab
+  if (tabs.length) showTab(tabs[0].id);
+</script>

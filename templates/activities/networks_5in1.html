@@ -1,0 +1,490 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🌐 5-in-1 Challenge: Internet + Apps + Networks</h2>
+    <p class="text-muted mb-0">Complete all 5 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/5 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badgeInternet" class="badge bg-secondary">🌍 Internet Explorer</span>
+      <span id="badgeApps" class="badge bg-secondary">📱 App Detective</span>
+      <span id="badgeFlow" class="badge bg-secondary">📦 Data Mover</span>
+      <span id="badgeServer" class="badge bg-secondary">🏢 Server Spotter</span>
+      <span id="badgeStorage" class="badge bg-secondary">🗄️ Storage Master</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">🌍 Internet</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">📱 Apps</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">📦 Data Flow</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">🏢 Server</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">🗄️ Storage</button></li>
+  </ul>
+
+  <!-- PANEL 1: INTERNET MATCH -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1</h5>
+          <p class="text-muted small mb-2">Match the meaning of “Internet”.</p>
+          <div class="small fw-bold">Correct: <span id="m1Score">0</span>/1</div>
+          <button id="m1DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">
+            ✅ Internet Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">Pick the best meaning:</div>
+          <div class="list-group">
+            <button class="list-group-item list-group-item-action" onclick="m1Answer('wrong')">
+              The internet is a computer game
+            </button>
+            <button class="list-group-item list-group-item-action" onclick="m1Answer('right')">
+              The internet is many computers connected together
+            </button>
+            <button class="list-group-item list-group-item-action" onclick="m1Answer('wrong')">
+              The internet is only Wi-Fi
+            </button>
+          </div>
+          <div id="m1Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: APP PARTS DRAG -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2</h5>
+          <p class="text-muted small mb-2">Drag app parts into the app box.</p>
+          <div class="small fw-bold">Placed: <span id="m2Score">0</span>/<span id="m2Total">0</span></div>
+          <button id="m2DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">
+            ✅ App Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="row g-3">
+            <div class="col-md-5">
+              <div class="fw-bold mb-2">🧩 Pieces</div>
+              <div id="m2Pieces" class="zone"></div>
+            </div>
+            <div class="col-md-7">
+              <div class="fw-bold mb-2">📱 App Box</div>
+              <div id="m2Box" class="dropbox">Drop pieces here 👇</div>
+              <div id="m2Msg" class="text-center fw-bold mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: DATA FLOW ORDER -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3</h5>
+          <p class="text-muted small mb-2">Put the data flow in the correct order.</p>
+          <div class="small fw-bold">Correct: <span id="m3Score">0</span>/1</div>
+          <button id="m3DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(3)">
+            ✅ Data Flow Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">Drag into the order box:</div>
+
+          <div id="m3Tray" class="zone mb-2"></div>
+          <div id="m3Order" class="dropbox">Drop here in the right order 👇</div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-primary" onclick="m3Check()">✅ Check Order</button>
+            <button class="btn btn-outline-secondary" onclick="m3Reset()">🔄 Reset</button>
+          </div>
+
+          <div id="m3Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4: SERVER VS COMPUTER MATCH -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4</h5>
+          <p class="text-muted small mb-2">Choose which one is a server.</p>
+          <div class="small fw-bold">Correct: <span id="m4Score">0</span>/1</div>
+          <button id="m4DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">
+            ✅ Server Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">Pick the best answer:</div>
+          <div class="list-group">
+            <button class="list-group-item list-group-item-action" onclick="m4Answer('wrong')">
+              A server is a mouse 🖱️
+            </button>
+            <button class="list-group-item list-group-item-action" onclick="m4Answer('right')">
+              A server is a powerful computer that helps many users 🏢
+            </button>
+            <button class="list-group-item list-group-item-action" onclick="m4Answer('wrong')">
+              A server is a keyboard ⌨️
+            </button>
+          </div>
+          <div id="m4Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5: STORAGE SORT -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5</h5>
+          <p class="text-muted small mb-2">Drag items into Memory or Storage.</p>
+          <div class="small fw-bold">Correct: <span id="m5Score">0</span>/<span id="m5Total">0</span></div>
+          <button id="m5DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(5)">
+            ✅ Storage Mission Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Drag Cards</div>
+          <div id="m5Cards" class="zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div id="boxMemory" class="dropbox">⚡ Memory (fast, temporary)</div>
+            </div>
+            <div class="col-md-6">
+              <div id="boxStorage" class="dropbox">🗄️ Storage (keeps files)</div>
+            </div>
+          </div>
+
+          <div id="m5Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 5 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+  .zone{
+    min-height:160px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .piece{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:8px 10px;font-weight:900;
+    cursor:grab;user-select:none;
+  }
+  .dropbox{
+    min-height:140px;border:3px dashed #6c757d;border-radius:16px;padding:12px;background:#f8f9fa;font-weight:900;
+  }
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TABS --------------------
+  function showPanel(n){
+    for(let i=1;i<=5;i++){
+      document.getElementById("panel"+i).classList.add("d-none");
+      document.getElementById("tab"+i).classList.remove("active");
+    }
+    document.getElementById("panel"+n).classList.remove("d-none");
+    document.getElementById("tab"+n).classList.add("active");
+  }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS + BADGES --------------------
+  const state = {1:false,2:false,3:false,4:false,5:false};
+
+  function badgeOn(id){
+    document.getElementById(id).className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/5)*100) + "%";
+
+    if (done === 5){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(n){
+    state[n] = true;
+
+    if (n===1){ badgeOn("badgeInternet"); showPanel(2); }
+    if (n===2){ badgeOn("badgeApps"); showPanel(3); }
+    if (n===3){ badgeOn("badgeFlow"); showPanel(4); }
+    if (n===4){ badgeOn("badgeServer"); showPanel(5); }
+    if (n===5){ badgeOn("badgeStorage"); }
+
+    updateProgress();
+  }
+  window.completeMission = completeMission;
+
+  // -------------------- M1 INTERNET --------------------
+  function m1Answer(which){
+    const msg = document.getElementById("m1Msg");
+    if (which === "right"){
+      msg.className = "text-center fw-bold mt-3 text-success";
+      msg.textContent = "✅ Correct! Internet = connected computers!";
+      document.getElementById("m1Score").textContent = "1";
+      document.getElementById("m1DoneBtn").classList.remove("d-none");
+    } else {
+      msg.className = "text-center fw-bold mt-3 text-danger";
+      msg.textContent = "❌ Not quite — try again!";
+    }
+  }
+  window.m1Answer = m1Answer;
+
+  // -------------------- M2 APPS DRAG --------------------
+  const m2Pieces = activity.mission2?.pieces || ["Buttons","Pictures","Text","Instructions"];
+  document.getElementById("m2Total").textContent = m2Pieces.length;
+
+  let m2Dragged=null, m2Score=0;
+
+  const m2PiecesEl = document.getElementById("m2Pieces");
+  const m2Box = document.getElementById("m2Box");
+
+  m2Pieces.forEach(p=>{
+    const el = document.createElement("div");
+    el.className="piece";
+    el.draggable=true;
+    el.textContent="🧩 "+p;
+    el.dataset.done="0";
+    el.addEventListener("dragstart",()=>m2Dragged=el);
+    el.addEventListener("dragend",()=>m2Dragged=null);
+    m2PiecesEl.appendChild(el);
+  });
+
+  m2Box.addEventListener("dragover",(e)=>{e.preventDefault();m2Box.classList.add("drag-over");});
+  m2Box.addEventListener("dragleave",()=>m2Box.classList.remove("drag-over"));
+  m2Box.addEventListener("drop",(e)=>{
+    e.preventDefault();
+    m2Box.classList.remove("drag-over");
+    if(!m2Dragged) return;
+    if(m2Dragged.dataset.done==="1") return;
+
+    m2Dragged.dataset.done="1";
+    m2Box.appendChild(m2Dragged);
+    m2Score++;
+    document.getElementById("m2Score").textContent=m2Score;
+
+    document.getElementById("m2Msg").className="text-center fw-bold mt-2 text-success";
+    document.getElementById("m2Msg").textContent="✅ Nice! Apps are made of parts.";
+
+    if(m2Score===m2Pieces.length){
+      document.getElementById("m2DoneBtn").classList.remove("d-none");
+    }
+  });
+
+  // -------------------- M3 DATA FLOW ORDER --------------------
+  const correctFlow = activity.mission3?.flow || ["Your Device","Internet","Server","Your Screen"];
+
+  const m3Tray = document.getElementById("m3Tray");
+  const m3Order = document.getElementById("m3Order");
+  let m3Dragged=null;
+
+  function renderM3(){
+    m3Tray.innerHTML="";
+    m3Order.innerHTML="Drop here in the right order 👇";
+    const shuffled=[...correctFlow].sort(()=>Math.random()-0.5);
+
+    shuffled.forEach(x=>{
+      const el=document.createElement("div");
+      el.className="piece";
+      el.draggable=true;
+      el.textContent="📦 "+x;
+      el.dataset.val=x;
+      el.addEventListener("dragstart",()=>m3Dragged=el);
+      el.addEventListener("dragend",()=>m3Dragged=null);
+      m3Tray.appendChild(el);
+    });
+  }
+  renderM3();
+
+  m3Order.addEventListener("dragover",(e)=>e.preventDefault());
+  m3Order.addEventListener("drop",(e)=>{
+    e.preventDefault();
+    if(!m3Dragged) return;
+    if(m3Order.textContent.includes("Drop here")) m3Order.innerHTML="";
+    m3Order.appendChild(m3Dragged);
+  });
+
+  function m3GetOrder(){
+    return Array.from(m3Order.querySelectorAll(".piece")).map(x=>x.dataset.val);
+  }
+
+  function m3Check(){
+    const got=m3GetOrder();
+    const msg=document.getElementById("m3Msg");
+
+    if(got.length!==correctFlow.length){
+      msg.className="text-center fw-bold mt-3 text-warning";
+      msg.textContent="👀 Put all blocks in the order box first!";
+      return;
+    }
+
+    const ok = JSON.stringify(got)===JSON.stringify(correctFlow);
+    if(ok){
+      msg.className="text-center fw-bold mt-3 text-success";
+      msg.textContent="✅ Correct! Data travels and comes back!";
+      document.getElementById("m3Score").textContent="1";
+      document.getElementById("m3DoneBtn").classList.remove("d-none");
+    } else {
+      msg.className="text-center fw-bold mt-3 text-danger";
+      msg.textContent="❌ Not quite — try again!";
+    }
+  }
+  function m3Reset(){ renderM3(); document.getElementById("m3Msg").textContent=""; }
+  window.m3Check=m3Check;
+  window.m3Reset=m3Reset;
+
+  // -------------------- M4 SERVER --------------------
+  function m4Answer(which){
+    const msg=document.getElementById("m4Msg");
+    if(which==="right"){
+      msg.className="text-center fw-bold mt-3 text-success";
+      msg.textContent="✅ Yes! Servers help many people at once!";
+      document.getElementById("m4Score").textContent="1";
+      document.getElementById("m4DoneBtn").classList.remove("d-none");
+    } else {
+      msg.className="text-center fw-bold mt-3 text-danger";
+      msg.textContent="❌ Try again!";
+    }
+  }
+  window.m4Answer=m4Answer;
+
+  // -------------------- M5 STORAGE SORT --------------------
+  const m5Cards = activity.mission5?.cards || [
+    {"label":"RAM","type":"memory"},
+    {"label":"SSD / Hard Drive","type":"storage"},
+    {"label":"USB Flash","type":"storage"},
+    {"label":"Memory (fast)","type":"memory"},
+    {"label":"Cloud Drive","type":"storage"},
+  ];
+
+  document.getElementById("m5Total").textContent = m5Cards.length;
+
+  let m5Dragged=null, m5Score=0;
+
+  const m5CardsEl=document.getElementById("m5Cards");
+  const boxMemory=document.getElementById("boxMemory");
+  const boxStorage=document.getElementById("boxStorage");
+
+  m5Cards.sort(()=>Math.random()-0.5).forEach(c=>{
+    const el=document.createElement("div");
+    el.className="piece";
+    el.draggable=true;
+    el.textContent=(c.type==="memory"?"⚡ ":"🗄️ ")+c.label;
+    el.dataset.type=c.type;
+    el.dataset.done="0";
+    el.addEventListener("dragstart",()=>m5Dragged=el);
+    el.addEventListener("dragend",()=>m5Dragged=null);
+    m5CardsEl.appendChild(el);
+  });
+
+  function m5Drop(box,want){
+    box.addEventListener("dragover",(e)=>{e.preventDefault();box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault();
+      box.classList.remove("drag-over");
+      if(!m5Dragged) return;
+      if(m5Dragged.dataset.done==="1") return;
+
+      if(m5Dragged.dataset.type===want){
+        m5Dragged.dataset.done="1";
+        box.appendChild(m5Dragged);
+        m5Score++;
+        document.getElementById("m5Score").textContent=m5Score;
+        document.getElementById("m5Msg").className="text-center fw-bold mt-3 text-success";
+        document.getElementById("m5Msg").textContent="✅ Correct!";
+        if(m5Score===m5Cards.length){
+          document.getElementById("m5DoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("m5Msg").className="text-center fw-bold mt-3 text-danger";
+        document.getElementById("m5Msg").textContent="❌ Wrong box — try again!";
+      }
+    });
+  }
+  m5Drop(boxMemory,"memory");
+  m5Drop(boxStorage,"storage");
+
+  // -------------------- FINAL: MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

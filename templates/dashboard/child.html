@@ -13,13 +13,20 @@
 
   <div class="bg-white p-3 rounded shadow-sm">
     <p>{{ completed }} / {{ total }} lessons completed</p>
+
     <div class="w-full bg-gray-200 rounded-full h-4">
       <div class="bg-green-400 h-4 rounded-full" style="width:{{ progress_pct }}%"></div>
     </div>
 
     <div class="mt-3 d-flex gap-2">
-      <a class="btn btn-primary" href="{% url 'lesson_list' child.id %}">Open Lessons</a>
-      <a class="btn btn-outline-success" href="{% url 'download_certificate' child.id %}">Download Certificate</a>
+      <!-- ✅ FIX: modules first (avoids needing module_key here) -->
+      <a class="btn btn-primary" href="{% url 'modules_home' child.id %}">
+        Open Lessons
+      </a>
+
+      <a class="btn btn-outline-success" href="{% url 'download_certificate' child.id %}">
+        Download Certificate
+      </a>
     </div>
   </div>
 {% endif %}

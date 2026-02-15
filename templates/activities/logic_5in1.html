@@ -1,0 +1,516 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🧠 5-in-1 Logic Mission: Instructions & Steps</h2>
+    <p class="text-muted mb-0">Complete all 5 mini-games to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/5 complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badge1" class="badge bg-secondary">Badge 1</span>
+      <span id="badge2" class="badge bg-secondary">Badge 2</span>
+      <span id="badge3" class="badge bg-secondary">Badge 3</span>
+      <span id="badge4" class="badge bg-secondary">Badge 4</span>
+      <span id="badge5" class="badge bg-secondary">Badge 5</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">1️⃣ Order Steps</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">2️⃣ Next Step</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">3️⃣ Fix Mistake</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">4️⃣ Robot Steps</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">5️⃣ Quiz</button></li>
+  </ul>
+
+  <!-- PANEL 1: ORDER STEPS -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mini-Game 1</h5>
+          <div id="a1Prompt" class="text-muted small mb-2"></div>
+          <div class="small fw-bold">Placed: <span id="a1Placed">0</span>/<span id="a1Total">0</span></div>
+          <button id="a1DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completePart(1)">
+            ✅ Mini-Game 1 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="fw-bold mb-2">🧩 Steps</div>
+              <div id="a1Pool" class="zone"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="fw-bold mb-2">✅ Correct Order</div>
+              <div id="a1Drop" class="zone">
+                <div class="hint">Drag steps here in the right order 👇</div>
+              </div>
+              <div id="a1Msg" class="fw-bold text-center mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL 2: NEXT STEP -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mini-Game 2</h5>
+          <div id="a2Prompt" class="text-muted small mb-2"></div>
+          <button id="a2DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completePart(2)">
+            ✅ Mini-Game 2 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Question</div>
+          <div id="a2Q" class="scenario"></div>
+          <div id="a2Options" class="d-flex flex-column gap-2 mt-3"></div>
+          <div id="a2Msg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: FIX MISTAKE -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mini-Game 3</h5>
+          <div id="a3Prompt" class="text-muted small mb-2"></div>
+          <button id="a3DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completePart(3)">
+            ✅ Mini-Game 3 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">📋 Instructions</div>
+          <div id="a3List" class="scenario"></div>
+          <div class="fw-bold mt-3">Which step is wrong?</div>
+          <div id="a3Options" class="d-flex flex-wrap gap-2 mt-2"></div>
+          <div id="a3Msg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4: ROBOT INSTRUCTIONS -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mini-Game 4</h5>
+          <div id="a4Prompt" class="text-muted small mb-2"></div>
+          <div class="small fw-bold">Steps: <span id="a4Count">0</span>/<span id="a4Target">0</span></div>
+          <button id="a4DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completePart(4)">
+            ✅ Mini-Game 4 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🤖 Build the robot steps</div>
+
+          <div class="d-flex gap-2 flex-wrap mb-3" id="a4Buttons"></div>
+
+          <div class="fw-bold">Your sequence</div>
+          <div id="a4Seq" class="zone" style="min-height:80px;"></div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-outline-secondary" onclick="a4Reset()">🔄 Reset</button>
+            <button class="btn btn-primary" onclick="a4Check()">✅ Check</button>
+          </div>
+
+          <div id="a4Msg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5: QUIZ -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mini-Game 5</h5>
+          <div id="a5Prompt" class="text-muted small mb-2"></div>
+          <div class="small fw-bold">Score: <span id="a5Score">0</span>/<span id="a5Total">0</span></div>
+          <button id="a5DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completePart(5)">
+            ✅ Mini-Game 5 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Question</div>
+          <div id="a5Q" class="scenario"></div>
+          <div id="a5Options" class="d-flex flex-column gap-2 mt-3"></div>
+          <div id="a5Msg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 You finished the whole 5-in-1 mission!</div>
+    <div class="text-muted">XP will be awarded and the next lesson will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .zone{
+    min-height:220px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .hint{color:#6c757d;font-weight:800;font-size:13px;}
+  .cardx{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;
+    cursor:grab;user-select:none;
+  }
+  .scenario{
+    margin-top:6px;padding:14px 12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;
+    font-weight:900;min-height:90px;display:flex;align-items:center;
+  }
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // ---------- BADGES ----------
+  const badges = activity.badges || {};
+  document.getElementById("badge1").textContent = badges.b1 || "Badge 1";
+  document.getElementById("badge2").textContent = badges.b2 || "Badge 2";
+  document.getElementById("badge3").textContent = badges.b3 || "Badge 3";
+  document.getElementById("badge4").textContent = badges.b4 || "Badge 4";
+  document.getElementById("badge5").textContent = badges.b5 || "Badge 5";
+
+  function badgeOn(n){
+    const el = document.getElementById("badge"+n);
+    el.className = "badge bg-success";
+  }
+
+  // ---------- TABS ----------
+  function setActiveTab(n){
+    [1,2,3,4,5].forEach(x => document.getElementById("tab"+x).classList.remove("active"));
+    document.getElementById("tab"+n).classList.add("active");
+  }
+  function showPanel(n){
+    [1,2,3,4,5].forEach(x => document.getElementById("panel"+x).classList.add("d-none"));
+    document.getElementById("panel"+n).classList.remove("d-none");
+    setActiveTab(n);
+  }
+  window.showPanel = showPanel;
+
+  // ---------- PROGRESS ----------
+  const state = {1:false,2:false,3:false,4:false,5:false};
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/5)*100) + "%";
+
+    if (done === 5){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completePart(n){
+    state[n] = true;
+    badgeOn(n);
+    updateProgress();
+    if (n < 5) showPanel(n+1);
+  }
+  window.completePart = completePart;
+
+  // ============================================================
+  // A1: ORDER STEPS
+  // ============================================================
+  const a1 = activity.a1_order_steps || {};
+  document.getElementById("a1Prompt").textContent = a1.prompt || "Put the steps in the correct order.";
+
+  const pool = document.getElementById("a1Pool");
+  const drop = document.getElementById("a1Drop");
+
+  const a1Steps = (a1.steps || []).slice();
+  const a1Correct = (a1.correct_order || []).slice();
+
+  // shuffle
+  a1Steps.sort(() => Math.random() - 0.5);
+
+  document.getElementById("a1Total").textContent = a1Correct.length;
+  let a1Placed = 0;
+  let a1Dragged = null;
+
+  a1Steps.forEach(s => {
+    const el = document.createElement("div");
+    el.className = "cardx";
+    el.draggable = true;
+    el.textContent = s.text;
+    el.dataset.id = s.id;
+
+    el.addEventListener("dragstart", () => a1Dragged = el);
+    el.addEventListener("dragend", () => a1Dragged = null);
+
+    pool.appendChild(el);
+  });
+
+  drop.addEventListener("dragover", (e)=> e.preventDefault());
+  drop.addEventListener("drop", (e)=>{
+    e.preventDefault();
+    if (!a1Dragged) return;
+
+    const hint = drop.querySelector(".hint");
+    if (hint) hint.remove();
+
+    drop.appendChild(a1Dragged);
+    a1Placed++;
+    document.getElementById("a1Placed").textContent = a1Placed;
+
+    if (a1Placed === a1Correct.length){
+      checkA1();
+    }
+  });
+
+  function checkA1(){
+    const ids = Array.from(drop.querySelectorAll(".cardx")).map(x => x.dataset.id);
+    const ok = JSON.stringify(ids) === JSON.stringify(a1Correct);
+
+    if (ok){
+      document.getElementById("a1Msg").textContent = "✅ Perfect order!";
+      document.getElementById("a1Msg").className = "fw-bold text-center mt-2 text-success";
+      document.getElementById("a1DoneBtn").classList.remove("d-none");
+    } else {
+      document.getElementById("a1Msg").textContent = "❌ Not quite. Try again: drag them back and reorder.";
+      document.getElementById("a1Msg").className = "fw-bold text-center mt-2 text-danger";
+    }
+  }
+
+  // allow dragging back
+  pool.addEventListener("dragover", (e)=> e.preventDefault());
+  pool.addEventListener("drop", (e)=>{
+    e.preventDefault();
+    if (!a1Dragged) return;
+    pool.appendChild(a1Dragged);
+    // do not decrease count (simple MVP)
+  });
+
+  // ============================================================
+  // A2: NEXT STEP
+  // ============================================================
+  const a2 = activity.a2_next_step || {};
+  document.getElementById("a2Prompt").textContent = a2.prompt || "Choose the correct next step.";
+  document.getElementById("a2Q").textContent = a2.question || "";
+
+  const a2Options = document.getElementById("a2Options");
+  (a2.options || []).forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "btn btn-outline-primary";
+    btn.textContent = opt.text;
+    btn.onclick = () => {
+      if (opt.correct){
+        document.getElementById("a2Msg").textContent = "✅ Correct!";
+        document.getElementById("a2Msg").className = "fw-bold text-center mt-3 text-success";
+        document.getElementById("a2DoneBtn").classList.remove("d-none");
+      } else {
+        document.getElementById("a2Msg").textContent = "❌ Try again!";
+        document.getElementById("a2Msg").className = "fw-bold text-center mt-3 text-danger";
+      }
+    };
+    a2Options.appendChild(btn);
+  });
+
+  // ============================================================
+  // A3: FIX MISTAKE
+  // ============================================================
+  const a3 = activity.a3_fix_mistake || {};
+  document.getElementById("a3Prompt").textContent = a3.prompt || "Fix the instructions.";
+  document.getElementById("a3List").textContent = (a3.wrong_steps || []).join("   •   ");
+
+  const a3Options = document.getElementById("a3Options");
+  (a3.options || []).forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "btn btn-outline-secondary";
+    btn.textContent = opt.text;
+    btn.onclick = () => {
+      if (opt.correct){
+        document.getElementById("a3Msg").textContent = "✅ Yes! " + (a3.explain || "");
+        document.getElementById("a3Msg").className = "fw-bold text-center mt-3 text-success";
+        document.getElementById("a3DoneBtn").classList.remove("d-none");
+      } else {
+        document.getElementById("a3Msg").textContent = "❌ Not that one. Try again!";
+        document.getElementById("a3Msg").className = "fw-bold text-center mt-3 text-danger";
+      }
+    };
+    a3Options.appendChild(btn);
+  });
+
+  // ============================================================
+  // A4: ROBOT INSTRUCTIONS
+  // ============================================================
+  const a4 = activity.a4_robot_instructions || {};
+  document.getElementById("a4Prompt").textContent = a4.prompt || "Build instructions for the robot.";
+  document.getElementById("a4Target").textContent = a4.target_length || 4;
+
+  const a4Buttons = document.getElementById("a4Buttons");
+  const a4SeqEl = document.getElementById("a4Seq");
+
+  let a4Seq = [];
+
+  (a4.choices || []).forEach(ch => {
+    const btn = document.createElement("button");
+    btn.className = "btn btn-outline-primary";
+    btn.textContent = ch.text;
+    btn.onclick = () => {
+      if (a4Seq.length >= (a4.target_length || 4)) return;
+      a4Seq.push(ch.id);
+      renderA4();
+    };
+    a4Buttons.appendChild(btn);
+  });
+
+  function renderA4(){
+    a4SeqEl.innerHTML = "";
+    a4Seq.forEach((id, idx) => {
+      const chip = document.createElement("div");
+      chip.className = "cardx";
+      chip.textContent = (idx+1) + ") " + id.toUpperCase();
+      a4SeqEl.appendChild(chip);
+    });
+    document.getElementById("a4Count").textContent = a4Seq.length;
+  }
+
+  function a4Reset(){
+    a4Seq = [];
+    document.getElementById("a4Msg").textContent = "";
+    renderA4();
+  }
+  window.a4Reset = a4Reset;
+
+  function a4Check(){
+    const targetLen = a4.target_length || 4;
+    if (a4Seq.length !== targetLen){
+      document.getElementById("a4Msg").textContent = "⚠️ Add exactly " + targetLen + " steps.";
+      document.getElementById("a4Msg").className = "fw-bold text-center mt-3 text-warning";
+      return;
+    }
+
+    const ok = JSON.stringify(a4Seq) === JSON.stringify(a4.correct_sequence || []);
+    if (ok){
+      document.getElementById("a4Msg").textContent = "✅ Robot reached the treasure!";
+      document.getElementById("a4Msg").className = "fw-bold text-center mt-3 text-success";
+      document.getElementById("a4DoneBtn").classList.remove("d-none");
+    } else {
+      document.getElementById("a4Msg").textContent = "❌ Not quite. Reset and try again!";
+      document.getElementById("a4Msg").className = "fw-bold text-center mt-3 text-danger";
+    }
+  }
+  window.a4Check = a4Check;
+
+  // ============================================================
+  // A5: QUIZ (multi question)
+  // ============================================================
+  const a5 = activity.a5_quiz || {};
+  document.getElementById("a5Prompt").textContent = a5.prompt || "Quick quiz!";
+  const qList = a5.questions || [];
+  document.getElementById("a5Total").textContent = qList.length;
+
+  let qIndex = 0;
+  let score = 0;
+
+  const a5Q = document.getElementById("a5Q");
+  const a5Options = document.getElementById("a5Options");
+
+  function renderQ(){
+    document.getElementById("a5Msg").textContent = "";
+    a5Options.innerHTML = "";
+
+    if (qIndex >= qList.length){
+      document.getElementById("a5DoneBtn").classList.remove("d-none");
+      a5Q.textContent = "✅ Quiz finished!";
+      return;
+    }
+
+    const q = qList[qIndex];
+    a5Q.textContent = q.q;
+
+    (q.options || []).forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "btn btn-outline-primary";
+      btn.textContent = opt.text;
+      btn.onclick = () => {
+        if (opt.correct){
+          score++;
+          document.getElementById("a5Score").textContent = score;
+          document.getElementById("a5Msg").textContent = "✅ Correct!";
+          document.getElementById("a5Msg").className = "fw-bold text-center mt-3 text-success";
+          setTimeout(()=>{ qIndex++; renderQ(); }, 350);
+        } else {
+          document.getElementById("a5Msg").textContent = "❌ Try again!";
+          document.getElementById("a5Msg").className = "fw-bold text-center mt-3 text-danger";
+        }
+      };
+      a5Options.appendChild(btn);
+    });
+  }
+
+  renderQ();
+
+  // ---------- FINAL: MARK COMPLETE ----------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

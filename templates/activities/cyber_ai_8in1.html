@@ -1,0 +1,796 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🛡️ + 🤖 Cybersecurity & AI Playground</h2>
+    <p class="text-muted mb-0">Finish all 8 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/8 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="b1" class="badge bg-secondary">🕵️ Spot the Scam</span>
+      <span id="b2" class="badge bg-secondary">🔐 Password Pro</span>
+      <span id="b3" class="badge bg-secondary">🤫 Secret Keeper</span>
+      <span id="b4" class="badge bg-secondary">🤖 AI Finder</span>
+      <span id="b5" class="badge bg-secondary">🧱 AI Builder</span>
+      <span id="b6" class="badge bg-secondary">🔗 Link Checker</span>
+      <span id="b7" class="badge bg-secondary">✅ True/False</span>
+      <span id="b8" class="badge bg-secondary">🛡️ Cyber Hero</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">1) Scam</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">2) Password</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">3) Secrets</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">4) AI/Not AI</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">5) AI Steps</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab6" onclick="showPanel(6)">6) Links</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab7" onclick="showPanel(7)">7) Quiz</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab8" onclick="showPanel(8)">8) Final</button></li>
+  </ul>
+
+  <!-- PANEL 1: SPOT THE SCAM -->
+  <div id="p1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1: Spot the Scam</h5>
+          <p class="text-muted small mb-2">Is this message safe or a scam?</p>
+
+          <div class="small fw-bold">Correct: <span id="m1Score">0</span>/<span id="m1Total">0</span></div>
+
+          <button id="m1DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">
+            ✅ Mission 1 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">📩 Message</div>
+
+          <div id="m1MsgBox" class="big-box"></div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-primary flex-grow-1" onclick="m1Answer('safe')">✅ Safe</button>
+            <button class="btn btn-outline-danger flex-grow-1" onclick="m1Answer('scam')">🚫 Scam</button>
+          </div>
+
+          <div id="m1Feedback" class="text-center fw-bold mt-3"></div>
+
+          <div class="mt-3 small text-muted">
+            Tip: scams often rush you, ask for passwords, or promise “free prizes”.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: PASSWORD BUILDER -->
+  <div id="p2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2: Password Pro</h5>
+          <p class="text-muted small mb-2">Make a strong password.</p>
+
+          <div class="small fw-bold">Rules met: <span id="m2Met">0</span>/4</div>
+
+          <button id="m2DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">
+            ✅ Mission 2 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🔐 Type a password</div>
+          <input id="pwInput" class="form-control form-control-lg" placeholder="Try: SuperLion9!" />
+
+          <div class="mt-3">
+            <div id="ruleLen" class="rule">⬜ At least 8 characters</div>
+            <div id="ruleUpper" class="rule">⬜ Has a capital letter (A–Z)</div>
+            <div id="ruleNum" class="rule">⬜ Has a number (0–9)</div>
+            <div id="ruleSym" class="rule">⬜ Has a symbol (! @ # ?)</div>
+          </div>
+
+          <div id="m2Feedback" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: SECRETS DRAG -->
+  <div id="p3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3: Secret Keeper</h5>
+          <p class="text-muted small mb-2">Drag items into the correct box.</p>
+
+          <div class="small fw-bold">Correct: <span id="m3Score">0</span>/<span id="m3Total">0</span></div>
+
+          <button id="m3DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(3)">
+            ✅ Mission 3 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Drag the cards</div>
+
+          <div id="m3Cards" class="cards-zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div id="boxSecret" class="dropbox">
+                🤫 Keep Secret (don’t share)
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div id="boxShare" class="dropbox">
+                🙂 OK to Share (safe info)
+              </div>
+            </div>
+          </div>
+
+          <div id="m3Feedback" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4: AI vs NOT AI -->
+  <div id="p4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4: AI Finder</h5>
+          <p class="text-muted small mb-2">Drag tools into AI or Not AI.</p>
+
+          <div class="small fw-bold">Correct: <span id="m4Score">0</span>/<span id="m4Total">0</span></div>
+
+          <button id="m4DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">
+            ✅ Mission 4 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div id="m4Cards" class="cards-zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div id="boxAI" class="dropbox">🤖 AI (learns from examples)</div>
+            </div>
+            <div class="col-md-6">
+              <div id="boxNotAI" class="dropbox">🧰 Not AI (normal tool)</div>
+            </div>
+          </div>
+
+          <div id="m4Feedback" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5: AI STEPS ORDER -->
+  <div id="p5" class="panel d-none">
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5: Build AI Steps</h5>
+          <p class="text-muted small mb-2">Drag steps into the correct order.</p>
+
+          <button id="m5CheckBtn" class="btn btn-primary w-100 mt-2" onclick="m5Check()">✅ Check Order</button>
+
+          <button id="m5DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(5)">
+            ✅ Mission 5 Complete
+          </button>
+
+          <div id="m5Feedback" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="fw-bold mb-2">🧱 Blocks</div>
+              <div id="m5Blocks" class="cards-zone"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="fw-bold mb-2">📦 Drop Zone</div>
+              <div id="m5Drop" class="dropbox" style="min-height:220px;">
+                Drop steps here in order 👇
+              </div>
+            </div>
+          </div>
+
+          <div class="small text-muted mt-2">Tip: Data → Train → Test → Use</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PANEL 6: LINK CHECKER -->
+  <div id="p6" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 6: Link Checker</h5>
+          <p class="text-muted small mb-2">Pick the safest link.</p>
+
+          <div class="small fw-bold">Correct: <span id="m6Score">0</span>/<span id="m6Total">0</span></div>
+
+          <button id="m6DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(6)">
+            ✅ Mission 6 Complete
+          </button>
+
+          <div id="m6Feedback" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🔗 Choose a link</div>
+
+          <div id="m6Prompt" class="big-box"></div>
+
+          <div id="m6Links" class="d-grid gap-2 mt-3"></div>
+
+          <div class="small text-muted mt-3">
+            Tip: real links match the real website name (not weird spelling).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7: TRUE/FALSE QUIZ -->
+  <div id="p7" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 7: Quick Quiz</h5>
+          <p class="text-muted small mb-2">True or False?</p>
+
+          <div class="small fw-bold">Correct: <span id="m7Score">0</span>/<span id="m7Total">0</span></div>
+
+          <button id="m7DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(7)">
+            ✅ Mission 7 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">✅ / ❌ Statement</div>
+
+          <div id="m7Statement" class="big-box"></div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-primary flex-grow-1" onclick="m7Answer(true)">✅ True</button>
+            <button class="btn btn-outline-danger flex-grow-1" onclick="m7Answer(false)">❌ False</button>
+          </div>
+
+          <div id="m7Feedback" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 8: FINAL DECISION -->
+  <div id="p8" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 8: Cyber Hero</h5>
+          <p class="text-muted small mb-2">Pick the best safe action.</p>
+
+          <button id="m8DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(8)">
+            ✅ Mission 8 Complete
+          </button>
+
+          <div id="m8Feedback" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧠 What should you do?</div>
+          <div id="m8Scenario" class="big-box"></div>
+
+          <div id="m8Choices" class="d-grid gap-2 mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL UNLOCK -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Incredible! You finished all 8 missions!</div>
+    <div class="text-muted">XP will be awarded and the next lesson will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .big-box{
+    padding:16px 14px;border-radius:18px;background:#f8f9fa;border:1px solid #eee;
+    font-weight:900;min-height:96px;display:flex;align-items:center;
+  }
+
+  .rule{font-weight:900;margin:8px 0;}
+  .rule.ok{color:#198754;}
+  .rule.bad{color:#dc3545;}
+
+  .cards-zone{
+    min-height:150px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .card-item{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;cursor:grab;user-select:none;
+  }
+  .dropbox{
+    min-height:150px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;
+  }
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+
+  .pick-btn{
+    border:1px solid #eee;border-radius:16px;padding:12px 12px;background:#fff;font-weight:900;text-align:left;
+  }
+  .pick-btn:hover{background:#f8f9fa;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data")?.textContent || "{}");
+
+  // -------------------- NAV --------------------
+  function setActiveTab(n){
+    for (let i=1;i<=8;i++){
+      document.getElementById("tab"+i).classList.remove("active");
+      document.getElementById("p"+i).classList.add("d-none");
+    }
+    document.getElementById("tab"+n).classList.add("active");
+    document.getElementById("p"+n).classList.remove("d-none");
+  }
+  function showPanel(n){ setActiveTab(n); }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS --------------------
+  const state = {1:false,2:false,3:false,4:false,5:false,6:false,7:false,8:false};
+
+  function badgeOn(i){
+    const el = document.getElementById("b"+i);
+    if (el) el.className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/8)*100) + "%";
+
+    if (done === 8){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(i){
+    state[i] = true;
+    badgeOn(i);
+    updateProgress();
+    if (i < 8) setActiveTab(i+1);
+  }
+  window.completeMission = completeMission;
+
+  // -------------------- MISSION 1: Scam --------------------
+  const m1 = activity.m1 || [
+    { text:"🎁 ‘You won a FREE iPhone! Click now!’", answer:"scam" },
+    { text:"🏫 ‘Your teacher shared homework in your class app.’", answer:"safe" },
+    { text:"🔐 ‘Send me your password to fix your account.’", answer:"scam" }
+  ];
+  let m1Index = 0, m1Score = 0;
+  document.getElementById("m1Total").textContent = m1.length;
+  function m1Render(){
+    document.getElementById("m1MsgBox").textContent = m1[m1Index].text;
+    document.getElementById("m1Feedback").textContent = "";
+  }
+  function m1Answer(choice){
+    const expected = m1[m1Index].answer;
+    if (choice === expected){
+      m1Score++;
+      document.getElementById("m1Score").textContent = m1Score;
+      document.getElementById("m1Feedback").className = "text-center fw-bold mt-3 text-success";
+      document.getElementById("m1Feedback").textContent = "✅ Correct!";
+      setTimeout(()=>{
+        m1Index++;
+        if (m1Index >= m1.length){
+          document.getElementById("m1DoneBtn").classList.remove("d-none");
+          return;
+        }
+        m1Render();
+      }, 450);
+    } else {
+      document.getElementById("m1Feedback").className = "text-center fw-bold mt-3 text-danger";
+      document.getElementById("m1Feedback").textContent = "❌ Try again!";
+    }
+  }
+  window.m1Answer = m1Answer;
+  m1Render();
+
+  // -------------------- MISSION 2: Password --------------------
+  const pwInput = document.getElementById("pwInput");
+  function updatePw(){
+    const v = (pwInput.value || "");
+    const okLen = v.length >= (activity.m2?.min_len ?? 8);
+    const okUpper = /[A-Z]/.test(v);
+    const okNum = /[0-9]/.test(v);
+    const okSym = /[!@#?$%^&*()_+\-=\[\]{};':"\\|,.<>\/]/.test(v);
+
+    const rules = [
+      ["ruleLen", okLen],
+      ["ruleUpper", okUpper],
+      ["ruleNum", okNum],
+      ["ruleSym", okSym],
+    ];
+
+    let met = 0;
+    rules.forEach(([id, ok])=>{
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove("ok","bad");
+      el.textContent = (ok ? "✅ " : "⬜ ") + el.textContent.replace(/^(\✅|\⬜)\s/, "");
+      if (ok){ el.classList.add("ok"); met++; }
+      else { el.classList.add("bad"); }
+    });
+
+    document.getElementById("m2Met").textContent = met;
+
+    if (met === 4){
+      document.getElementById("m2Feedback").className = "text-center fw-bold mt-3 text-success";
+      document.getElementById("m2Feedback").textContent = "🎉 Strong password!";
+      document.getElementById("m2DoneBtn").classList.remove("d-none");
+    } else {
+      document.getElementById("m2Feedback").className = "text-center fw-bold mt-3 text-muted";
+      document.getElementById("m2Feedback").textContent = "Keep improving it 👀";
+    }
+  }
+  pwInput.addEventListener("input", updatePw);
+  updatePw();
+
+  // -------------------- MISSION 3: Secrets drag --------------------
+  const m3items = (activity.m3?.items || [
+    {label:"Password", type:"secret"},
+    {label:"Home address", type:"secret"},
+    {label:"Favourite colour", type:"share"},
+    {label:"Pet name", type:"share"},
+    {label:"School ID number", type:"secret"},
+  ]);
+
+  let m3Dragged = null, m3Score = 0;
+  document.getElementById("m3Total").textContent = m3items.length;
+
+  const m3Cards = document.getElementById("m3Cards");
+  m3items.forEach(it=>{
+    const el = document.createElement("div");
+    el.className = "card-item";
+    el.draggable = true;
+    el.dataset.type = it.type;
+    el.dataset.done = "0";
+    el.textContent = (it.type==="secret" ? "🤫 " : "🙂 ") + it.label;
+    el.addEventListener("dragstart", ()=> m3Dragged = el);
+    el.addEventListener("dragend", ()=> m3Dragged = null);
+    m3Cards.appendChild(el);
+  });
+
+  function setupDrop(boxId, wantType){
+    const box = document.getElementById(boxId);
+    box.addEventListener("dragover",(e)=>{e.preventDefault(); box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if (!m3Dragged || m3Dragged.dataset.done==="1") return;
+
+      if (m3Dragged.dataset.type === wantType){
+        m3Dragged.dataset.done="1";
+        box.appendChild(m3Dragged);
+        m3Score++;
+        document.getElementById("m3Score").textContent = m3Score;
+        document.getElementById("m3Feedback").className = "text-center fw-bold mt-3 text-success";
+        document.getElementById("m3Feedback").textContent = "✅ Correct!";
+        if (m3Score === m3items.length){
+          document.getElementById("m3DoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("m3Feedback").className = "text-center fw-bold mt-3 text-danger";
+        document.getElementById("m3Feedback").textContent = "❌ Try again!";
+      }
+    });
+  }
+  setupDrop("boxSecret","secret");
+  setupDrop("boxShare","share");
+
+  // -------------------- MISSION 4: AI vs Not AI --------------------
+  const m4items = (activity.m4?.items || [
+    {label:"Voice assistant", type:"ai"},
+    {label:"YouTube recommendations", type:"ai"},
+    {label:"Calculator", type:"not"},
+    {label:"Stopwatch", type:"not"},
+    {label:"Face unlock", type:"ai"},
+  ]);
+
+  let m4Dragged=null, m4Score=0;
+  document.getElementById("m4Total").textContent = m4items.length;
+
+  const m4Cards = document.getElementById("m4Cards");
+  m4items.forEach(it=>{
+    const el = document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.type=it.type;
+    el.dataset.done="0";
+    el.textContent = (it.type==="ai" ? "🤖 " : "🧰 ") + it.label;
+    el.addEventListener("dragstart",()=>m4Dragged=el);
+    el.addEventListener("dragend",()=>m4Dragged=null);
+    m4Cards.appendChild(el);
+  });
+
+  function setupDrop2(boxId, wantType){
+    const box=document.getElementById(boxId);
+    box.addEventListener("dragover",(e)=>{e.preventDefault(); box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if (!m4Dragged || m4Dragged.dataset.done==="1") return;
+
+      if (m4Dragged.dataset.type === wantType){
+        m4Dragged.dataset.done="1";
+        box.appendChild(m4Dragged);
+        m4Score++;
+        document.getElementById("m4Score").textContent=m4Score;
+        document.getElementById("m4Feedback").className="text-center fw-bold mt-3 text-success";
+        document.getElementById("m4Feedback").textContent="✅ Correct!";
+        if (m4Score===m4items.length){
+          document.getElementById("m4DoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("m4Feedback").className="text-center fw-bold mt-3 text-danger";
+        document.getElementById("m4Feedback").textContent="❌ Try again!";
+      }
+    });
+  }
+  setupDrop2("boxAI","ai");
+  setupDrop2("boxNotAI","not");
+
+  // -------------------- MISSION 5: AI order --------------------
+  const m5correct = (activity.m5?.order || ["data","train","test","use"]);
+  const m5blocksData = (activity.m5?.blocks || [
+    {id:"data", label:"📦 Collect Data"},
+    {id:"train", label:"🏋️ Train AI"},
+    {id:"test", label:"🧪 Test AI"},
+    {id:"use", label:"✅ Use it safely"},
+  ]);
+
+  let m5Dragged=null;
+
+  const m5Blocks = document.getElementById("m5Blocks");
+  const m5Drop = document.getElementById("m5Drop");
+
+  // shuffle blocks
+  m5blocksData.sort(()=>Math.random()-0.5);
+
+  m5blocksData.forEach(b=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.id=b.id;
+    el.textContent=b.label;
+    el.addEventListener("dragstart",()=>m5Dragged=el);
+    el.addEventListener("dragend",()=>m5Dragged=null);
+    m5Blocks.appendChild(el);
+  });
+
+  m5Drop.addEventListener("dragover",(e)=>{e.preventDefault(); m5Drop.classList.add("drag-over");});
+  m5Drop.addEventListener("dragleave",()=>m5Drop.classList.remove("drag-over"));
+  m5Drop.addEventListener("drop",(e)=>{
+    e.preventDefault(); m5Drop.classList.remove("drag-over");
+    if (!m5Dragged) return;
+    m5Drop.appendChild(m5Dragged);
+  });
+
+  function m5GetOrder(){
+    return Array.from(m5Drop.querySelectorAll(".card-item")).map(x=>x.dataset.id);
+  }
+  function m5Check(){
+    const got = m5GetOrder();
+    if (got.length !== m5correct.length){
+      document.getElementById("m5Feedback").className="text-center fw-bold mt-3 text-danger";
+      document.getElementById("m5Feedback").textContent="👀 Drag all blocks first!";
+      return;
+    }
+    if (JSON.stringify(got)===JSON.stringify(m5correct)){
+      document.getElementById("m5Feedback").className="text-center fw-bold mt-3 text-success";
+      document.getElementById("m5Feedback").textContent="🎉 Correct order!";
+      document.getElementById("m5DoneBtn").classList.remove("d-none");
+    } else {
+      document.getElementById("m5Feedback").className="text-center fw-bold mt-3 text-danger";
+      document.getElementById("m5Feedback").textContent="❌ Not quite — try again!";
+    }
+  }
+  window.m5Check = m5Check;
+
+  // -------------------- MISSION 6: Link checker --------------------
+  const m6 = (activity.m6 || [
+    {prompt:"You want the real school portal. Which link looks safest?",
+     options:[
+      {text:"https://school-portal.com/login", ok:true},
+      {text:"http://sch00l-portal.com/freeprize", ok:false},
+      {text:"https://school-portal.com.login-now.badsite.net", ok:false},
+     ]
+    },
+    {prompt:"You want a real game website. Which link looks safest?",
+     options:[
+      {text:"https://coolgame.com", ok:true},
+      {text:"https://coo1game.com", ok:false},
+      {text:"http://coolgame.com-win-prize.net", ok:false},
+     ]
+    },
+  ]);
+
+  let m6Index=0, m6Score=0;
+  document.getElementById("m6Total").textContent = m6.length;
+
+  function m6Render(){
+    document.getElementById("m6Feedback").textContent="";
+    document.getElementById("m6Prompt").textContent = m6[m6Index].prompt;
+    const wrap = document.getElementById("m6Links");
+    wrap.innerHTML = "";
+    m6[m6Index].options.forEach(opt=>{
+      const btn = document.createElement("button");
+      btn.className = "pick-btn";
+      btn.type="button";
+      btn.textContent = opt.text;
+      btn.onclick = ()=>m6Pick(opt.ok);
+      wrap.appendChild(btn);
+    });
+  }
+
+  function m6Pick(ok){
+    if (ok){
+      m6Score++;
+      document.getElementById("m6Score").textContent=m6Score;
+      document.getElementById("m6Feedback").className="text-center fw-bold mt-3 text-success";
+      document.getElementById("m6Feedback").textContent="✅ Safe choice!";
+      setTimeout(()=>{
+        m6Index++;
+        if (m6Index>=m6.length){
+          document.getElementById("m6DoneBtn").classList.remove("d-none");
+          return;
+        }
+        m6Render();
+      }, 500);
+    } else {
+      document.getElementById("m6Feedback").className="text-center fw-bold mt-3 text-danger";
+      document.getElementById("m6Feedback").textContent="❌ That link looks suspicious!";
+    }
+  }
+  m6Render();
+
+  // -------------------- MISSION 7: True/False --------------------
+  const m7 = (activity.m7 || [
+    {text:"It’s OK to share your password with friends.", answer:false},
+    {text:"AI can learn from many examples.", answer:true},
+    {text:"If a link looks weird, ask an adult.", answer:true},
+    {text:"Scammers sometimes rush you to click fast.", answer:true},
+  ]);
+  let m7Index=0, m7Score=0;
+  document.getElementById("m7Total").textContent=m7.length;
+
+  function m7Render(){
+    document.getElementById("m7Feedback").textContent="";
+    document.getElementById("m7Statement").textContent = m7[m7Index].text;
+  }
+  function m7Answer(val){
+    const expected = m7[m7Index].answer;
+    if (val===expected){
+      m7Score++;
+      document.getElementById("m7Score").textContent=m7Score;
+      document.getElementById("m7Feedback").className="text-center fw-bold mt-3 text-success";
+      document.getElementById("m7Feedback").textContent="✅ Correct!";
+      setTimeout(()=>{
+        m7Index++;
+        if (m7Index>=m7.length){
+          document.getElementById("m7DoneBtn").classList.remove("d-none");
+          return;
+        }
+        m7Render();
+      }, 450);
+    } else {
+      document.getElementById("m7Feedback").className="text-center fw-bold mt-3 text-danger";
+      document.getElementById("m7Feedback").textContent="❌ Try again!";
+    }
+  }
+  window.m7Answer = m7Answer;
+  m7Render();
+
+  // -------------------- MISSION 8: Final decision --------------------
+  const m8 = (activity.m8 || {
+    scenario:"You get a message: ‘Your account is locked! Click fast and type your password!’",
+    choices:[
+      {text:"Click fast and type password", ok:false},
+      {text:"Stop. Think. Check. Ask a parent/teacher", ok:true},
+      {text:"Reply: ‘Here is my password’", ok:false},
+    ]
+  });
+
+  document.getElementById("m8Scenario").textContent = m8.scenario;
+
+  const m8Choices = document.getElementById("m8Choices");
+  m8Choices.innerHTML="";
+  m8.choices.forEach(c=>{
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="pick-btn";
+    btn.textContent=c.text;
+    btn.onclick=()=>{
+      if (c.ok){
+        document.getElementById("m8Feedback").className="text-center fw-bold mt-3 text-success";
+        document.getElementById("m8Feedback").textContent="🎉 Yes! You are a Cyber Hero!";
+        document.getElementById("m8DoneBtn").classList.remove("d-none");
+      } else {
+        document.getElementById("m8Feedback").className="text-center fw-bold mt-3 text-danger";
+        document.getElementById("m8Feedback").textContent="❌ Not safe — try again!";
+      }
+    };
+    m8Choices.appendChild(btn);
+  });
+
+  // -------------------- FINAL: mark complete --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

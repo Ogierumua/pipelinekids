@@ -1,17 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Lessons for {{ child.name }}</h2>
-<ul class="list-group">
-  {% for lesson in lessons %}
-    <a class="list-group-item d-flex justify-content-between align-items-center"
-       href="{% url 'lesson_detail' child.id lesson.id %}">
-      <span>{{ lesson.order }}. {{ lesson.title }}</span>
-      {% if lesson.id in completed_ids %}
-        <span class="badge bg-success">Done</span>
-      {% else %}
-        <span class="badge bg-secondary">To do</span>
-      {% endif %}
-    </a>
-  {% endfor %}
-</ul>
+
+<div class="container my-4">
+
+  <!-- Back to modules -->
+  <a href="{% url 'modules_home' child.id %}" class="text-decoration-none">
+    ← Back to modules
+  </a>
+
+  <h3 class="fw-bold mt-2">
+    {{ module_title }} — {{ child.name }}
+  </h3>
+
+  <div class="list-group mt-4">
+    {% for lesson in lessons %}
+      <a
+        href="{% url 'lesson_detail' child.id module_key lesson.id %}"
+        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+      >
+        {{ lesson.order }}. {{ lesson.title }}
+
+        {% if lesson.id in completed_ids %}
+          <span class="badge bg-success">Done</span>
+        {% else %}
+          <span class="badge bg-secondary">To do</span>
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+
+</div>
+
 {% endblock %}

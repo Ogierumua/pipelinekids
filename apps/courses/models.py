@@ -2,6 +2,21 @@ from django.db import models
 import re
 
 class Lesson(models.Model):
+    # ✅ NEW: Modules (to avoid long list of missions)
+    MODULE_CHOICES = [
+        ("computer_basics", "Computer Basics"),
+        ("systems_logic", "Systems Logic & Critical Thinking"),
+        ("careers", "Careers"),
+        ("logic5", "5-in-1: Logic Mission"),
+
+    ]
+
+    module = models.CharField(
+        max_length=40,
+        choices=MODULE_CHOICES,
+        default="computer_basics"
+    )
+
     title = models.CharField(max_length=200)
     content = models.TextField(blank=True)
     youtube_url = models.URLField(blank=True, null=True)
@@ -21,6 +36,31 @@ class Lesson(models.Model):
             ("triple", "3-in-1 Digital Skills"),
             ("foundations3", "3-in-1: Digital Foundations"),
             ("files3", "3-in-1: Files & Folders"),
+            ("word5", "5-in-1: Microsoft Word"),
+            ("excel8", "8-in-1: Excel Basics"),
+            ("ppt10", "10-in-1: Microsoft PowerPoint Playground"),
+            ("cp12", "12-in-1: Control Panel Playground"),
+            ("safety12", "12-in-1: Safety + Good/Not Good"),
+            ("jobs8", "8-in-1: Jobs That Use Computers"),
+            ("logic5", "5-in-1: Logic & Critical Thinking"),
+            ("logic5", "5-in-1: IPO + Decisions + Loops + Data"),
+            ("sys5", "5-in-1: Systems + Memory + Storage"),
+            ("net5", "5-in-1: Internet + Apps + Networks"),
+            ("teams8", "8-in-1: Speed + Safety + Tech Teams"),
+            ("career8", "8-in-1: Engineers + Data Engineers"),
+            ("netcloud8", "8-in-1: Network + Cloud Engineers"),
+            ("cyberai8", "8-in-1: Cybersecurity + AI Engineers"),
+            ("teamtools8", "8-in-1: Teams + Tools Playground"),
+            ("project8", "8-in-1: Projects + Ethics + Paths"),
+
+
+
+            
+            
+
+
+
+
 
 
         ],

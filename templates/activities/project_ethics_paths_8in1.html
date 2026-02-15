@@ -1,0 +1,738 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🏗️ Level: Projects + Ethics + Learning Paths</h2>
+    <p class="text-muted mb-0">Complete all 8 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/8 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badgeBuilder" class="badge bg-secondary">🏗️ Project Builder</span>
+      <span id="badgePlanner" class="badge bg-secondary">🧭 Smart Planner</span>
+      <span id="badgeTester" class="badge bg-secondary">🐛 Bug Hunter</span>
+      <span id="badgeEthics" class="badge bg-secondary">🛡️ Ethics Hero</span>
+      <span id="badgePrivacy" class="badge bg-secondary">🔒 Privacy Protector</span>
+      <span id="badgePaths" class="badge bg-secondary">🗺️ Path Explorer</span>
+      <span id="badgePrep" class="badge bg-secondary">🚀 Ready For Next</span>
+      <span id="badgeFinal" class="badge bg-secondary">🏆 Mission Master</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">1) Build Steps</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">2) Order</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">3) Match Roles</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">4) Ethics</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">5) Privacy</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab6" onclick="showPanel(6)">6) Learning Paths</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab7" onclick="showPanel(7)">7) Prep Checklist</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab8" onclick="showPanel(8)">8) Final Scenario</button></li>
+  </ul>
+
+  <!-- PANEL 1 -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1: Build Steps</h5>
+          <p class="text-muted small mb-2">Tap each step once. Learn the full flow!</p>
+          <div class="small fw-bold">Tapped: <span id="tapCount">0</span>/<span id="tapTarget">0</span></div>
+
+          <button id="done1" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">
+            ✅ Mission 1 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🏗️ Tap the steps</div>
+          <div id="stepsWrap" class="chips"></div>
+          <div class="text-muted small mt-2">Tip: Projects go from idea → plan → design → build → test → launch → improve.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2 -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2: Order Matters</h5>
+          <p class="text-muted small mb-2">Drag steps into the correct order.</p>
+          <div class="small fw-bold">Placed: <span id="orderPlaced">0</span>/<span id="orderTarget">0</span></div>
+
+          <button id="done2" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">
+            ✅ Mission 2 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+
+          <div class="row g-3">
+            <div class="col-md-5">
+              <div class="fw-bold mb-2">🧩 Cards</div>
+              <div id="orderCards" class="zone"></div>
+            </div>
+            <div class="col-md-7">
+              <div class="fw-bold mb-2">✅ Correct Order</div>
+              <div id="orderSlots" class="slots"></div>
+              <div id="orderMsg" class="fw-bold text-center mt-2"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3 -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3: Match Roles</h5>
+          <p class="text-muted small mb-2">Drag each role to what they do.</p>
+          <div class="small fw-bold">Correct: <span id="roleScore">0</span>/<span id="roleTotal">0</span></div>
+
+          <button id="done3" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(3)">
+            ✅ Mission 3 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div id="roleCards" class="zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6"><div id="boxBuild" class="dropbox">🏗️ Builds the product</div></div>
+            <div class="col-md-6"><div id="boxLook" class="dropbox">🎨 Makes it look nice</div></div>
+            <div class="col-md-6"><div id="boxTest" class="dropbox">🐛 Finds bugs</div></div>
+            <div class="col-md-6"><div id="boxPlan" class="dropbox">🧭 Keeps team organised</div></div>
+          </div>
+
+          <div id="roleMsg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4 -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4: Ethics (Good vs Bad)</h5>
+          <p class="text-muted small mb-2">Choose if it’s ✅ good or ❌ bad.</p>
+          <div class="small fw-bold">Correct: <span id="ethScore">0</span>/<span id="ethTotal">0</span></div>
+
+          <button id="done4" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">
+            ✅ Mission 4 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Scenario</div>
+          <div id="ethText" class="scenario"></div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-success flex-grow-1" onclick="answerEthics('good')">✅ Good</button>
+            <button class="btn btn-danger flex-grow-1" onclick="answerEthics('bad')">❌ Bad</button>
+          </div>
+
+          <div id="ethMsg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5 -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5: Privacy Check</h5>
+          <p class="text-muted small mb-2">Tick safe choices. You must get all right.</p>
+          <div class="small fw-bold">Correct picks: <span id="privScore">0</span>/<span id="privTotal">0</span></div>
+
+          <button id="checkPrivacyBtn" class="btn btn-primary w-100 mt-3" onclick="checkPrivacy()">Check</button>
+
+          <button id="done5" class="btn btn-success w-100 mt-2 d-none" onclick="completeMission(5)">
+            ✅ Mission 5 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🔒 What is safe to share online?</div>
+          <div id="privacyList" class="list-group"></div>
+          <div id="privMsg" class="fw-bold text-center mt-3"></div>
+          <div class="text-muted small mt-2">Tip: Never share passwords, home address, or private school details.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 6 -->
+  <div id="panel6" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 6: Choose Your Path</h5>
+          <p class="text-muted small mb-2">Pick the right path for each interest.</p>
+          <div class="small fw-bold">Correct: <span id="pathScore">0</span>/<span id="pathTotal">0</span></div>
+
+          <button id="done6" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(6)">
+            ✅ Mission 6 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Question</div>
+          <div id="pathQ" class="scenario"></div>
+
+          <div class="d-flex gap-2 mt-3 flex-wrap" id="pathBtns"></div>
+
+          <div id="pathMsg" class="fw-bold text-center mt-3"></div>
+          <div class="text-muted small mt-2">Paths: Data • Networks • Cloud • Cybersecurity • AI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7 -->
+  <div id="panel7" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 7: Ready Checklist</h5>
+          <p class="text-muted small mb-2">Tick all the “ready” habits to pass.</p>
+
+          <button class="btn btn-primary w-100 mt-3" onclick="checkPrep()">Check</button>
+
+          <button id="done7" class="btn btn-success w-100 mt-2 d-none" onclick="completeMission(7)">
+            ✅ Mission 7 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🚀 Prep habits</div>
+          <div id="prepList" class="list-group"></div>
+          <div id="prepMsg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 8 -->
+  <div id="panel8" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 8: Final Scenario</h5>
+          <p class="text-muted small mb-2">Choose the best action.</p>
+          <div class="small fw-bold">Correct: <span id="finalScore">0</span>/1</div>
+
+          <button id="done8" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(8)">
+            ✅ Mission 8 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Scenario</div>
+          <div id="finalText" class="scenario"></div>
+
+          <div id="finalBtns" class="d-flex gap-2 mt-3 flex-wrap"></div>
+          <div id="finalMsg" class="fw-bold text-center mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 8 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .chips{display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{border:1px solid #eee;background:#fff;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;user-select:none;}
+  .chip.on{border-color:#198754;box-shadow:0 0 0 3px rgba(25,135,84,.12);}
+
+  .zone{
+    min-height:160px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .card-item{background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;cursor:grab;user-select:none;}
+  .slots{display:flex;flex-direction:column;gap:10px;}
+  .slot{border:2px dashed #6c757d;border-radius:14px;padding:10px;background:#fff;min-height:46px;font-weight:900;}
+  .slot.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+  .dropbox{min-height:120px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;font-weight:900;}
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+
+  .scenario{
+    margin-top:6px;padding:14px 12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;
+    font-weight:900;min-height:90px;display:flex;align-items:center;
+  }
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TABS --------------------
+  function setActiveTab(idx){
+    for(let i=1;i<=8;i++){ document.getElementById("tab"+i).classList.remove("active"); }
+    document.getElementById("tab"+idx).classList.add("active");
+  }
+  function showPanel(idx){
+    for(let i=1;i<=8;i++){ document.getElementById("panel"+i).classList.add("d-none"); }
+    document.getElementById("panel"+idx).classList.remove("d-none");
+    setActiveTab(idx);
+  }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS + BADGES --------------------
+  const state = {1:false,2:false,3:false,4:false,5:false,6:false,7:false,8:false};
+
+  function badgeOn(id){
+    const el = document.getElementById(id);
+    el.className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/8)*100) + "%";
+
+    if (done === 8){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(idx){
+    state[idx] = true;
+
+    if (idx===1) badgeOn("badgeBuilder");
+    if (idx===2) badgeOn("badgePlanner");
+    if (idx===3) badgeOn("badgeTester");
+    if (idx===4) badgeOn("badgeEthics");
+    if (idx===5) badgeOn("badgePrivacy");
+    if (idx===6) badgeOn("badgePaths");
+    if (idx===7) badgeOn("badgePrep");
+    if (idx===8) badgeOn("badgeFinal");
+
+    updateProgress();
+
+    // auto move next
+    if (idx < 8) showPanel(idx+1);
+  }
+  window.completeMission = completeMission;
+
+  // -------------------- MISSION 1: TAP STEPS --------------------
+  const steps = activity.m1?.steps || ["Idea","Plan","Design","Build","Test","Launch","Improve"];
+  const stepsWrap = document.getElementById("stepsWrap");
+  document.getElementById("tapTarget").textContent = steps.length;
+
+  let tapped = 0;
+  steps.forEach(s=>{
+    const el = document.createElement("div");
+    el.className = "chip";
+    el.textContent = "✅ " + s;
+    el.dataset.on = "0";
+    el.onclick = ()=>{
+      if (el.dataset.on === "1") return;
+      el.dataset.on = "1";
+      el.classList.add("on");
+      tapped++;
+      document.getElementById("tapCount").textContent = tapped;
+      if (tapped === steps.length){
+        document.getElementById("done1").classList.remove("d-none");
+      }
+    };
+    stepsWrap.appendChild(el);
+  });
+
+  // -------------------- MISSION 2: ORDER DRAG --------------------
+  const orderCorrect = activity.m2?.correct || ["Idea","Plan","Design","Build","Test","Launch"];
+  const orderCardsData = activity.m2?.cards || ["Build","Idea","Test","Design","Launch","Plan"];
+
+  const orderCards = document.getElementById("orderCards");
+  const orderSlots = document.getElementById("orderSlots");
+  document.getElementById("orderTarget").textContent = orderCorrect.length;
+
+  let dragged = null;
+  let placed = 0;
+
+  // slots
+  orderCorrect.forEach((want, idx)=>{
+    const slot = document.createElement("div");
+    slot.className = "slot";
+    slot.dataset.want = want;
+    slot.dataset.done = "0";
+    slot.innerHTML = `Step ${idx+1}: <span class="text-muted">${want}</span>`;
+
+    slot.addEventListener("dragover", (e)=>{ e.preventDefault(); slot.classList.add("drag-over"); });
+    slot.addEventListener("dragleave", ()=> slot.classList.remove("drag-over"));
+    slot.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      slot.classList.remove("drag-over");
+      if (!dragged) return;
+      if (slot.dataset.done === "1") return;
+
+      const got = dragged.dataset.value;
+      const want = slot.dataset.want;
+
+      if (got === want){
+        slot.dataset.done = "1";
+        slot.innerHTML = `✅ Step ${idx+1}: ${want}`;
+        dragged.remove();
+        placed++;
+        document.getElementById("orderPlaced").textContent = placed;
+        document.getElementById("orderMsg").textContent = "✅ Correct!";
+        document.getElementById("orderMsg").className = "fw-bold text-center mt-2 text-success";
+
+        if (placed === orderCorrect.length){
+          document.getElementById("done2").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("orderMsg").textContent = "❌ Try again!";
+        document.getElementById("orderMsg").className = "fw-bold text-center mt-2 text-danger";
+      }
+    });
+
+    orderSlots.appendChild(slot);
+  });
+
+  // cards
+  orderCardsData.forEach(v=>{
+    const card = document.createElement("div");
+    card.className = "card-item";
+    card.draggable = true;
+    card.dataset.value = v;
+    card.textContent = "🧩 " + v;
+    card.addEventListener("dragstart", ()=> dragged = card);
+    card.addEventListener("dragend", ()=> dragged = null);
+    orderCards.appendChild(card);
+  });
+
+  // -------------------- MISSION 3: ROLES MATCH --------------------
+  const roles = activity.m3?.cards || [
+    {label:"Developer", type:"build"},
+    {label:"Designer", type:"look"},
+    {label:"Tester", type:"test"},
+    {label:"Project Manager", type:"plan"},
+  ];
+  document.getElementById("roleTotal").textContent = roles.length;
+
+  let roleDragged = null;
+  let roleScore = 0;
+
+  const roleCards = document.getElementById("roleCards");
+  roles.sort(()=>Math.random()-0.5).forEach(r=>{
+    const el = document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.type=r.type;
+    el.dataset.done="0";
+    el.textContent="👤 " + r.label;
+    el.addEventListener("dragstart", ()=> roleDragged = el);
+    el.addEventListener("dragend", ()=> roleDragged = null);
+    roleCards.appendChild(el);
+  });
+
+  function setupRoleBox(boxId, wantType){
+    const box = document.getElementById(boxId);
+    box.addEventListener("dragover",(e)=>{e.preventDefault(); box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if(!roleDragged) return;
+      if(roleDragged.dataset.done==="1") return;
+
+      if(roleDragged.dataset.type===wantType){
+        roleDragged.dataset.done="1";
+        box.appendChild(roleDragged);
+        roleScore++;
+        document.getElementById("roleScore").textContent=roleScore;
+        document.getElementById("roleMsg").textContent="✅ Correct!";
+        document.getElementById("roleMsg").className="fw-bold text-center mt-3 text-success";
+
+        if(roleScore===roles.length){
+          document.getElementById("done3").classList.remove("d-none");
+        }
+      }else{
+        document.getElementById("roleMsg").textContent="❌ Try again!";
+        document.getElementById("roleMsg").className="fw-bold text-center mt-3 text-danger";
+      }
+    });
+  }
+  setupRoleBox("boxBuild","build");
+  setupRoleBox("boxLook","look");
+  setupRoleBox("boxTest","test");
+  setupRoleBox("boxPlan","plan");
+
+  // -------------------- MISSION 4: ETHICS QUIZ --------------------
+  const ethicsQ = activity.m4?.questions || [
+    {text:"A kids app asks for your home address and shares it with others.", answer:"bad"},
+    {text:"An app blocks rude comments and keeps kids safe.", answer:"good"},
+    {text:"A game tricks you into clicking ads all the time.", answer:"bad"},
+  ];
+  let ethIdx=0, ethScore=0;
+  document.getElementById("ethTotal").textContent = ethicsQ.length;
+  document.getElementById("ethText").textContent = ethicsQ[0].text;
+
+  function nextEth(){
+    ethIdx++;
+    document.getElementById("ethMsg").textContent="";
+    if(ethIdx>=ethicsQ.length){
+      document.getElementById("done4").classList.remove("d-none");
+      return;
+    }
+    document.getElementById("ethText").textContent = ethicsQ[ethIdx].text;
+  }
+  function answerEthics(choice){
+    const expected = ethicsQ[ethIdx].answer;
+    if(choice===expected){
+      ethScore++;
+      document.getElementById("ethScore").textContent=ethScore;
+      document.getElementById("ethMsg").textContent="✅ Correct!";
+      document.getElementById("ethMsg").className="fw-bold text-center mt-3 text-success";
+      setTimeout(nextEth, 450);
+    }else{
+      document.getElementById("ethMsg").textContent="❌ Try again!";
+      document.getElementById("ethMsg").className="fw-bold text-center mt-3 text-danger";
+    }
+  }
+  window.answerEthics = answerEthics;
+
+  // -------------------- MISSION 5: PRIVACY CHECKLIST --------------------
+  const privacyItems = activity.m5?.items || [
+    {text:"Your favourite colour", safe:true},
+    {text:"Your password", safe:false},
+    {text:"Your home address", safe:false},
+    {text:"Your nickname (not full name)", safe:true},
+    {text:"Your school gate code", safe:false},
+  ];
+  const privacyList = document.getElementById("privacyList");
+  privacyItems.forEach((it, idx)=>{
+    const row = document.createElement("label");
+    row.className="list-group-item d-flex gap-2 align-items-center";
+    row.innerHTML = `
+      <input class="form-check-input" type="checkbox" data-safe="${it.safe ? "1":"0"}">
+      <span class="fw-semibold">${it.text}</span>
+    `;
+    privacyList.appendChild(row);
+  });
+
+  document.getElementById("privTotal").textContent = privacyItems.filter(x=>x.safe).length;
+
+  function checkPrivacy(){
+    const checks = Array.from(privacyList.querySelectorAll("input[type=checkbox]"));
+    let correct=0;
+    let wrong=false;
+
+    checks.forEach(ch=>{
+      const should = ch.dataset.safe==="1";
+      const is = ch.checked;
+      if(should && is) correct++;
+      if(!should && is) wrong=true;
+      if(should && !is) wrong=true;
+    });
+
+    document.getElementById("privScore").textContent = correct;
+
+    if(!wrong){
+      document.getElementById("privMsg").textContent = "✅ Perfect! You are safe!";
+      document.getElementById("privMsg").className = "fw-bold text-center mt-3 text-success";
+      document.getElementById("done5").classList.remove("d-none");
+    }else{
+      document.getElementById("privMsg").textContent = "❌ Check again: only tick SAFE items.";
+      document.getElementById("privMsg").className = "fw-bold text-center mt-3 text-danger";
+    }
+  }
+  window.checkPrivacy = checkPrivacy;
+
+  // -------------------- MISSION 6: PATH QUESTIONS --------------------
+  const pathQs = activity.m6?.questions || [
+    {text:"I love building tables and tracking XP data.", answer:"Data"},
+    {text:"I want to connect computers like Lagos to London!", answer:"Networks"},
+    {text:"I want to run apps on big servers online.", answer:"Cloud"},
+    {text:"I want to stop hackers and protect accounts.", answer:"Cybersecurity"},
+  ];
+  const pathOptions = activity.m6?.options || ["Data","Networks","Cloud","Cybersecurity","AI"];
+
+  let pathIdx=0, pathScore=0;
+  document.getElementById("pathTotal").textContent = pathQs.length;
+  document.getElementById("pathQ").textContent = pathQs[0].text;
+
+  const pathBtns = document.getElementById("pathBtns");
+  function renderPathBtns(){
+    pathBtns.innerHTML="";
+    pathOptions.forEach(opt=>{
+      const b = document.createElement("button");
+      b.className="btn btn-outline-primary";
+      b.textContent = opt;
+      b.onclick = ()=> answerPath(opt);
+      pathBtns.appendChild(b);
+    });
+  }
+  renderPathBtns();
+
+  function nextPath(){
+    pathIdx++;
+    document.getElementById("pathMsg").textContent="";
+    if(pathIdx>=pathQs.length){
+      document.getElementById("done6").classList.remove("d-none");
+      return;
+    }
+    document.getElementById("pathQ").textContent = pathQs[pathIdx].text;
+  }
+
+  function answerPath(choice){
+    const expected = pathQs[pathIdx].answer;
+    if(choice===expected){
+      pathScore++;
+      document.getElementById("pathScore").textContent = pathScore;
+      document.getElementById("pathMsg").textContent = "✅ Correct!";
+      document.getElementById("pathMsg").className = "fw-bold text-center mt-3 text-success";
+      setTimeout(nextPath, 450);
+    }else{
+      document.getElementById("pathMsg").textContent = "❌ Try again!";
+      document.getElementById("pathMsg").className = "fw-bold text-center mt-3 text-danger";
+    }
+  }
+  window.answerPath = answerPath;
+
+  // -------------------- MISSION 7: PREP CHECKLIST --------------------
+  const prepItems = activity.m7?.items || [
+    {text:"Practice small missions daily", good:true},
+    {text:"Give up when you see a bug", good:false},
+    {text:"Ask questions when stuck", good:true},
+    {text:"Copy answers without learning", good:false},
+    {text:"Finish one lesson before jumping to 10", good:true},
+  ];
+  const prepList = document.getElementById("prepList");
+  prepItems.forEach(it=>{
+    const row = document.createElement("label");
+    row.className="list-group-item d-flex gap-2 align-items-center";
+    row.innerHTML = `
+      <input class="form-check-input" type="checkbox" data-good="${it.good ? "1":"0"}">
+      <span class="fw-semibold">${it.text}</span>
+    `;
+    prepList.appendChild(row);
+  });
+
+  function checkPrep(){
+    const checks = Array.from(prepList.querySelectorAll("input[type=checkbox]"));
+    let wrong=false;
+    checks.forEach(ch=>{
+      const should = ch.dataset.good==="1";
+      const is = ch.checked;
+      if(should && !is) wrong=true;
+      if(!should && is) wrong=true;
+    });
+
+    if(!wrong){
+      document.getElementById("prepMsg").textContent = "✅ You are READY!";
+      document.getElementById("prepMsg").className = "fw-bold text-center mt-3 text-success";
+      document.getElementById("done7").classList.remove("d-none");
+    }else{
+      document.getElementById("prepMsg").textContent = "❌ Check again: tick good habits only.";
+      document.getElementById("prepMsg").className = "fw-bold text-center mt-3 text-danger";
+    }
+  }
+  window.checkPrep = checkPrep;
+
+  // -------------------- MISSION 8: FINAL SCENARIO --------------------
+  const final = activity.m8?.scenario || {
+    text:"Your class app is almost ready. Someone says: “Let’s launch fast and ignore testing and safety.” What is the best answer?",
+    options:[
+      {t:"Launch now, fix later", ok:false},
+      {t:"Test + protect kids first, then launch", ok:true},
+      {t:"Add ads everywhere for money", ok:false},
+    ]
+  };
+
+  document.getElementById("finalText").textContent = final.text;
+
+  let finalDone = false;
+  const finalBtns = document.getElementById("finalBtns");
+  final.options.forEach(opt=>{
+    const b = document.createElement("button");
+    b.className = "btn btn-outline-primary";
+    b.textContent = opt.t;
+    b.onclick = ()=>{
+      if(finalDone) return;
+      if(opt.ok){
+        finalDone = true;
+        document.getElementById("finalScore").textContent = "1";
+        document.getElementById("finalMsg").textContent = "✅ Perfect! Safe + smart = real engineer.";
+        document.getElementById("finalMsg").className = "fw-bold text-center mt-3 text-success";
+        document.getElementById("done8").classList.remove("d-none");
+      }else{
+        document.getElementById("finalMsg").textContent = "❌ Not the best choice. Try again!";
+        document.getElementById("finalMsg").className = "fw-bold text-center mt-3 text-danger";
+      }
+    };
+    finalBtns.appendChild(b);
+  });
+
+  // -------------------- FINAL: MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

@@ -4,18 +4,20 @@ from .models import Lesson
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ("order", "title", "activity_type", "xp")
-
-    # ✅ keep the row clickable using "title"
+    list_display = ("order", "title", "module", "activity_type", "xp")
     list_display_links = ("title",)
 
-    # ✅ now order can be editable
-    list_editable = ("order", "activity_type", "xp")
+    # Allow quick edits from the list view
+    list_editable = ("order", "module", "activity_type", "xp")
 
-    ordering = ("order",)
+    list_filter = ("module", "activity_type")
+    search_fields = ("title",)
+
+    ordering = ("module", "order")
 
     fields = (
         "title",
+        "module",          # ✅ THIS WAS MISSING
         "content",
         "youtube_url",
         "order",
@@ -23,5 +25,3 @@ class LessonAdmin(admin.ModelAdmin):
         "activity_type",
         "activity_json",
     )
-
-

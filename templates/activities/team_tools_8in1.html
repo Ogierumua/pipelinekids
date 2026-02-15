@@ -1,0 +1,787 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">👥🧰 Teams + Tools Playground</h2>
+    <p class="text-muted mb-0">Complete all 8 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/8 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="b1" class="badge bg-secondary">👤 Role Finder</span>
+      <span id="b2" class="badge bg-secondary">🧰 Tool Matcher</span>
+      <span id="b3" class="badge bg-secondary">🧲 Workflow Builder</span>
+      <span id="b4" class="badge bg-secondary">💬 Team Communicator</span>
+      <span id="b5" class="badge bg-secondary">🐛 Bug Hunter</span>
+      <span id="b6" class="badge bg-secondary">🛡️ Safety Guard</span>
+      <span id="b7" class="badge bg-secondary">📦 Data Helper</span>
+      <span id="b8" class="badge bg-secondary">🏁 Project Hero</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">1) Roles</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">2) Tools</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">3) Workflow</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">4) Communication</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">5) Bugs</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab6" onclick="showPanel(6)">6) Security</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab7" onclick="showPanel(7)">7) Data</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab8" onclick="showPanel(8)">8) Final</button></li>
+  </ul>
+
+  <!-- =========================
+       PANEL 1: ROLES MATCH
+       ========================= -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1: Match Roles</h5>
+          <p class="text-muted small mb-2">Drag each role into the correct job description.</p>
+          <div class="small fw-bold">Correct: <span id="m1Score">0</span>/<span id="m1Total">0</span></div>
+          <button id="m1Btn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">✅ Mission 1 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Drag Roles</div>
+          <div id="m1Roles" class="cards-zone mb-3"></div>
+
+          <div id="m1Targets" class="row g-3"></div>
+          <div id="m1Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PANEL 2: TOOLS MATCH
+       ========================= -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2: Match Tools</h5>
+          <p class="text-muted small mb-2">Drag each tool to what it is used for.</p>
+          <div class="small fw-bold">Correct: <span id="m2Score">0</span>/<span id="m2Total">0</span></div>
+          <button id="m2Btn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">✅ Mission 2 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧰 Drag Tools</div>
+          <div id="m2Tools" class="cards-zone mb-3"></div>
+
+          <div id="m2Targets" class="row g-3"></div>
+          <div id="m2Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PANEL 3: WORKFLOW ORDER
+       ========================= -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3: Build the Workflow</h5>
+          <p class="text-muted small mb-2">Drag steps into the correct order.</p>
+          <div class="small fw-bold">Placed: <span id="m3Placed">0</span>/<span id="m3Total">0</span></div>
+          <button id="m3CheckBtn" class="btn btn-primary w-100 mt-3" onclick="checkWorkflow()">Check Order</button>
+          <button id="m3Btn" class="btn btn-success w-100 mt-2 d-none" onclick="completeMission(3)">✅ Mission 3 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">📌 Steps</div>
+          <div id="m3Tray" class="cards-zone mb-3"></div>
+
+          <div class="fw-bold mb-2">✅ Order Box</div>
+          <div id="m3Drop" class="dropbox big-drop">
+            <div class="hint">Drop steps here 👇</div>
+          </div>
+
+          <div id="m3Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PANEL 4: COMMUNICATION QUIZ
+       ========================= -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4: Communication</h5>
+          <p class="text-muted small mb-2">Pick the best way to communicate.</p>
+          <div class="small fw-bold">Correct: <span id="m4Score">0</span>/<span id="m4Total">0</span></div>
+          <button id="m4Btn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">✅ Mission 4 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Scenario</div>
+          <div id="m4Q" class="scenario"></div>
+          <div id="m4Choices" class="mt-3 d-grid gap-2"></div>
+          <div id="m4Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PANEL 5: BUG HUNTER
+       ========================= -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5: Bug Hunter</h5>
+          <p class="text-muted small mb-2">Click the bug in the code window.</p>
+          <div class="small fw-bold">Found: <span id="m5Found">0</span>/<span id="m5Total">0</span></div>
+          <button id="m5Btn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(5)">✅ Mission 5 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧾 Code Window</div>
+          <div id="codeBox" class="codebox"></div>
+          <div id="m5Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PANEL 6: SECURITY SORT
+       ========================= -->
+  <div id="panel6" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 6: Security</h5>
+          <p class="text-muted small mb-2">Drag SAFE actions into the Safe box.</p>
+          <div class="small fw-bold">Correct: <span id="m6Score">0</span>/<span id="m6Total">0</span></div>
+          <button id="m6Btn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(6)">✅ Mission 6 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🛡️ Drag Actions</div>
+          <div id="m6Cards" class="cards-zone mb-3"></div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div id="safeBox" class="dropbox">✅ SAFE</div>
+            </div>
+            <div class="col-md-6">
+              <div id="unsafeBox" class="dropbox">⚠️ NOT SAFE</div>
+            </div>
+          </div>
+
+          <div id="m6Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PANEL 7: DATA PIPELINE MINI
+       ========================= -->
+  <div id="panel7" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 7: Data Helper</h5>
+          <p class="text-muted small mb-2">Connect data steps in the correct order.</p>
+          <div class="small fw-bold">Correct: <span id="m7Score">0</span>/3</div>
+          <button id="m7Btn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(7)">✅ Mission 7 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">📦 Pick the correct order</div>
+          <div id="m7Line" class="d-flex flex-wrap gap-2"></div>
+          <div class="mt-3">
+            <button class="btn btn-outline-primary" onclick="m7Choose('collect')">📥 Collect</button>
+            <button class="btn btn-outline-primary" onclick="m7Choose('clean')">🧼 Clean</button>
+            <button class="btn btn-outline-primary" onclick="m7Choose('store')">🗄️ Store</button>
+          </div>
+          <div id="m7Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       PANEL 8: FINAL SCENARIO
+       ========================= -->
+  <div id="panel8" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🏁 Mission 8: Final Scenario</h5>
+          <p class="text-muted small mb-2">Choose the best team for the job.</p>
+          <div class="small fw-bold">Correct: <span id="m8Score">0</span>/<span id="m8Total">0</span></div>
+          <button id="m8Btn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(8)">✅ Mission 8 Complete</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Final Challenge</div>
+          <div id="m8Q" class="scenario"></div>
+          <div id="m8Choices" class="mt-3 d-grid gap-2"></div>
+          <div id="m8Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL COMPLETE -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 8 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .cards-zone{min-height:130px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;display:flex;gap:10px;flex-wrap:wrap;}
+  .card-item{background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;cursor:grab;user-select:none;}
+  .dropbox{min-height:120px;border:3px dashed #6c757d;border-radius:16px;padding:12px;background:#f8f9fa;font-weight:900;}
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+  .big-drop{min-height:160px;}
+  .hint{color:#6c757d;font-weight:800;font-size:13px;}
+
+  .scenario{margin-top:6px;padding:14px 12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;font-weight:900;min-height:90px;display:flex;align-items:center;}
+
+  .codebox{border:1px solid #eee;border-radius:16px;padding:12px;background:#0b1020;color:#e9ecef;font-family:ui-monospace,Consolas,monospace;min-height:180px;}
+  .code-line{padding:4px 0;}
+  .bug{display:inline-block;padding:0 6px;border-radius:10px;background:#dc3545;color:#fff;font-weight:900;cursor:pointer;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TABS --------------------
+  function setActiveTab(n){
+    for (let i=1;i<=8;i++) document.getElementById("tab"+i).classList.remove("active");
+    document.getElementById("tab"+n).classList.add("active");
+  }
+  function showPanel(n){
+    for (let i=1;i<=8;i++) document.getElementById("panel"+i).classList.add("d-none");
+    document.getElementById("panel"+n).classList.remove("d-none");
+    setActiveTab(n);
+  }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS + BADGES --------------------
+  const state = {1:false,2:false,3:false,4:false,5:false,6:false,7:false,8:false};
+
+  function badgeOn(n){
+    document.getElementById("b"+n).className = "badge bg-success";
+  }
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/8)*100) + "%";
+
+    if (done === 8){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+  function completeMission(n){
+    state[n] = true;
+    badgeOn(n);
+    updateProgress();
+    if (n < 8) showPanel(n+1);
+  }
+  window.completeMission = completeMission;
+
+  // -------------------- MISSION 1: ROLES MATCH --------------------
+  const roles = activity.m1?.roles || [
+    {id:"dev", label:"👨🏽‍💻 Developer", target:"writes"},
+    {id:"design", label:"🎨 Designer", target:"looks"},
+    {id:"test", label:"🐛 Tester", target:"bugs"},
+    {id:"pm", label:"🧭 Project Manager", target:"plan"},
+  ];
+  const roleTargets = activity.m1?.targets || [
+    {id:"writes", text:"Writes code to build the app"},
+    {id:"looks", text:"Makes it beautiful and easy"},
+    {id:"bugs", text:"Finds mistakes and problems"},
+    {id:"plan", text:"Plans tasks and helps team"},
+  ];
+
+  document.getElementById("m1Total").textContent = roles.length;
+
+  let m1Dragged = null;
+  let m1Score = 0;
+
+  const m1RolesEl = document.getElementById("m1Roles");
+  roles.forEach(r=>{
+    const el = document.createElement("div");
+    el.className = "card-item";
+    el.draggable = true;
+    el.dataset.target = r.target;
+    el.dataset.done = "0";
+    el.textContent = r.label;
+    el.addEventListener("dragstart", ()=> m1Dragged = el);
+    el.addEventListener("dragend", ()=> m1Dragged = null);
+    m1RolesEl.appendChild(el);
+  });
+
+  const m1TargetsEl = document.getElementById("m1Targets");
+  roleTargets.forEach(t=>{
+    const col = document.createElement("div");
+    col.className = "col-md-6";
+    const box = document.createElement("div");
+    box.className = "dropbox";
+    box.dataset.want = t.id;
+    box.innerHTML = "📌 " + t.text;
+
+    box.addEventListener("dragover", (e)=>{ e.preventDefault(); box.classList.add("drag-over"); });
+    box.addEventListener("dragleave", ()=> box.classList.remove("drag-over"));
+    box.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      box.classList.remove("drag-over");
+      if (!m1Dragged) return;
+      if (m1Dragged.dataset.done === "1") return;
+
+      if (m1Dragged.dataset.target === box.dataset.want){
+        m1Dragged.dataset.done = "1";
+        box.appendChild(m1Dragged);
+        m1Score++;
+        document.getElementById("m1Score").textContent = m1Score;
+        document.getElementById("m1Msg").textContent = "✅ Correct!";
+        document.getElementById("m1Msg").className = "text-center fw-bold mt-3 text-success";
+        if (m1Score === roles.length) document.getElementById("m1Btn").classList.remove("d-none");
+      } else {
+        document.getElementById("m1Msg").textContent = "❌ Try again!";
+        document.getElementById("m1Msg").className = "text-center fw-bold mt-3 text-danger";
+      }
+    });
+
+    col.appendChild(box);
+    m1TargetsEl.appendChild(col);
+  });
+
+  // -------------------- MISSION 2: TOOLS MATCH --------------------
+  const tools = activity.m2?.tools || [
+    {label:"🧑🏽‍💻 VS Code", target:"code"},
+    {label:"🗂️ GitHub", target:"save"},
+    {label:"📋 Trello/Jira", target:"tasks"},
+    {label:"💬 Slack/Teams", target:"chat"},
+  ];
+  const toolTargets = activity.m2?.targets || [
+    {id:"code", text:"Write code here"},
+    {id:"save", text:"Save versions / checkpoints"},
+    {id:"tasks", text:"Track work: To Do → Doing → Done"},
+    {id:"chat", text:"Message and share updates"},
+  ];
+
+  document.getElementById("m2Total").textContent = tools.length;
+
+  let m2Dragged=null, m2Score=0;
+
+  const m2ToolsEl=document.getElementById("m2Tools");
+  tools.forEach(t=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.target=t.target;
+    el.dataset.done="0";
+    el.textContent=t.label;
+    el.addEventListener("dragstart",()=>m2Dragged=el);
+    el.addEventListener("dragend",()=>m2Dragged=null);
+    m2ToolsEl.appendChild(el);
+  });
+
+  const m2TargetsEl=document.getElementById("m2Targets");
+  toolTargets.forEach(t=>{
+    const col=document.createElement("div");
+    col.className="col-md-6";
+    const box=document.createElement("div");
+    box.className="dropbox";
+    box.dataset.want=t.id;
+    box.innerHTML="🧩 "+t.text;
+
+    box.addEventListener("dragover",(e)=>{e.preventDefault();box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if(!m2Dragged) return;
+      if(m2Dragged.dataset.done==="1") return;
+
+      if(m2Dragged.dataset.target===box.dataset.want){
+        m2Dragged.dataset.done="1";
+        box.appendChild(m2Dragged);
+        m2Score++;
+        document.getElementById("m2Score").textContent=m2Score;
+        document.getElementById("m2Msg").textContent="✅ Correct!";
+        document.getElementById("m2Msg").className="text-center fw-bold mt-3 text-success";
+        if(m2Score===tools.length) document.getElementById("m2Btn").classList.remove("d-none");
+      } else {
+        document.getElementById("m2Msg").textContent="❌ Try again!";
+        document.getElementById("m2Msg").className="text-center fw-bold mt-3 text-danger";
+      }
+    });
+
+    col.appendChild(box);
+    m2TargetsEl.appendChild(col);
+  });
+
+  // -------------------- MISSION 3: WORKFLOW ORDER --------------------
+  const workflow = activity.m3?.steps || [
+    {id:"idea", label:"💡 Idea"},
+    {id:"plan", label:"🧭 Plan"},
+    {id:"build", label:"🏗️ Build"},
+    {id:"test", label:"🐛 Test"},
+    {id:"launch", label:"🚀 Launch"},
+  ];
+  const correctOrder = activity.m3?.correct || ["idea","plan","build","test","launch"];
+
+  document.getElementById("m3Total").textContent = workflow.length;
+
+  let m3Dragged=null;
+  let m3Placed=0;
+  const m3Tray=document.getElementById("m3Tray");
+  const m3Drop=document.getElementById("m3Drop");
+
+  workflow.forEach(s=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.id=s.id;
+    el.dataset.placed="0";
+    el.textContent=s.label;
+    el.addEventListener("dragstart",()=>m3Dragged=el);
+    el.addEventListener("dragend",()=>m3Dragged=null);
+    m3Tray.appendChild(el);
+  });
+
+  m3Drop.addEventListener("dragover",(e)=>e.preventDefault());
+  m3Drop.addEventListener("drop",(e)=>{
+    e.preventDefault();
+    if(!m3Dragged) return;
+
+    const hint=m3Drop.querySelector(".hint");
+    if(hint) hint.remove();
+
+    if(m3Dragged.dataset.placed!=="1"){
+      m3Dragged.dataset.placed="1";
+      m3Placed++;
+      document.getElementById("m3Placed").textContent=m3Placed;
+    }
+    m3Drop.appendChild(m3Dragged);
+  });
+
+  function getWorkflowOrder(){
+    return Array.from(document.querySelectorAll("#m3Drop .card-item")).map(x=>x.dataset.id);
+  }
+
+  function checkWorkflow(){
+    const order=getWorkflowOrder();
+    if(order.length!==correctOrder.length){
+      document.getElementById("m3Msg").textContent="👀 Drop all steps first!";
+      document.getElementById("m3Msg").className="text-center fw-bold mt-3 text-warning";
+      return;
+    }
+    const ok = JSON.stringify(order)===JSON.stringify(correctOrder);
+    if(ok){
+      document.getElementById("m3Msg").textContent="✅ Perfect workflow!";
+      document.getElementById("m3Msg").className="text-center fw-bold mt-3 text-success";
+      document.getElementById("m3Btn").classList.remove("d-none");
+    } else {
+      document.getElementById("m3Msg").textContent="❌ Not quite. Try again!";
+      document.getElementById("m3Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  window.checkWorkflow=checkWorkflow;
+
+  // -------------------- MISSION 4: COMMUNICATION QUIZ --------------------
+  const commQs = activity.m4?.questions || [
+    {q:"A tester found a bug. What should they do?", choices:["Keep quiet","Tell the team clearly","Delete the code"], answer:1},
+    {q:"You finished your task. What next?", choices:["Hide it","Update the task board","Do nothing"], answer:1},
+    {q:"You are confused about a task. Best choice?", choices:["Ask your team lead","Guess randomly","Stop working"], answer:0},
+  ];
+
+  let m4Index=0, m4Score=0;
+  document.getElementById("m4Total").textContent=commQs.length;
+
+  function renderM4(){
+    document.getElementById("m4Msg").textContent="";
+    document.getElementById("m4Q").textContent=commQs[m4Index].q;
+    const box=document.getElementById("m4Choices");
+    box.innerHTML="";
+    commQs[m4Index].choices.forEach((c,i)=>{
+      const btn=document.createElement("button");
+      btn.className="btn btn-outline-primary";
+      btn.textContent=c;
+      btn.onclick=()=>answerM4(i);
+      box.appendChild(btn);
+    });
+  }
+  function answerM4(i){
+    const expected=commQs[m4Index].answer;
+    if(i===expected){
+      m4Score++;
+      document.getElementById("m4Score").textContent=m4Score;
+      document.getElementById("m4Msg").textContent="✅ Great teamwork!";
+      document.getElementById("m4Msg").className="text-center fw-bold mt-3 text-success";
+      setTimeout(()=>{
+        m4Index++;
+        if(m4Index>=commQs.length){
+          document.getElementById("m4Btn").classList.remove("d-none");
+          return;
+        }
+        renderM4();
+      }, 450);
+    } else {
+      document.getElementById("m4Msg").textContent="❌ Try again!";
+      document.getElementById("m4Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+
+  // -------------------- MISSION 5: BUG HUNTER --------------------
+  const bugCount = activity.m5?.bugs ?? 3;
+  document.getElementById("m5Total").textContent = bugCount;
+
+  let found=0;
+  const codeBox=document.getElementById("codeBox");
+  const lines = [
+    "print('Hello PipelineKids!')",
+    "open_app('Paint')",
+    "save_file('homework.docx')",
+    "if password == '1234':",
+    "  allow_access()",
+    "show_message('Great job!')",
+  ];
+
+  function buildCode(){
+    codeBox.innerHTML="";
+    // sprinkle bugs
+    const bugLines = new Set();
+    while(bugLines.size < bugCount){
+      bugLines.add(Math.floor(Math.random()*lines.length));
+    }
+    lines.forEach((t, idx)=>{
+      const row=document.createElement("div");
+      row.className="code-line";
+      if(bugLines.has(idx)){
+        row.innerHTML = t + "  " + `<span class="bug" onclick="foundBug()">BUG</span>`;
+      } else {
+        row.textContent=t;
+      }
+      codeBox.appendChild(row);
+    });
+  }
+
+  function foundBug(){
+    found++;
+    document.getElementById("m5Found").textContent=found;
+    document.getElementById("m5Msg").textContent="✅ Bug found!";
+    document.getElementById("m5Msg").className="text-center fw-bold mt-3 text-success";
+    // remove one clicked bug
+    event.target.remove();
+    if(found>=bugCount){
+      document.getElementById("m5Btn").classList.remove("d-none");
+    }
+  }
+  window.foundBug = foundBug;
+
+  // -------------------- MISSION 6: SECURITY SORT --------------------
+  const actions = activity.m6?.actions || [
+    {label:"Use a strong password", type:"safe"},
+    {label:"Share password with friends", type:"unsafe"},
+    {label:"Log out on shared computer", type:"safe"},
+    {label:"Click unknown links", type:"unsafe"},
+  ];
+  document.getElementById("m6Total").textContent = actions.length;
+
+  let m6Dragged=null, m6Score=0;
+  const m6Cards=document.getElementById("m6Cards");
+  actions.sort(()=>Math.random()-0.5).forEach(a=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.type=a.type;
+    el.dataset.done="0";
+    el.textContent = (a.type==="safe" ? "✅ " : "⚠️ ") + a.label;
+    el.addEventListener("dragstart",()=>m6Dragged=el);
+    el.addEventListener("dragend",()=>m6Dragged=null);
+    m6Cards.appendChild(el);
+  });
+
+  function dropSetup(box, want){
+    box.addEventListener("dragover",(e)=>{e.preventDefault(); box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if(!m6Dragged) return;
+      if(m6Dragged.dataset.done==="1") return;
+
+      // allow dropping to either box, but count only if correct placement
+      const isCorrect = (m6Dragged.dataset.type === want);
+      m6Dragged.dataset.done="1";
+      box.appendChild(m6Dragged);
+
+      if(isCorrect){
+        m6Score++;
+        document.getElementById("m6Score").textContent=m6Score;
+        document.getElementById("m6Msg").textContent="✅ Correct!";
+        document.getElementById("m6Msg").className="text-center fw-bold mt-3 text-success";
+      } else {
+        document.getElementById("m6Msg").textContent="❌ Wrong box, but keep going!";
+        document.getElementById("m6Msg").className="text-center fw-bold mt-3 text-warning";
+      }
+
+      if(m6Score === actions.length){
+        document.getElementById("m6Btn").classList.remove("d-none");
+      }
+    });
+  }
+  dropSetup(document.getElementById("safeBox"), "safe");
+  dropSetup(document.getElementById("unsafeBox"), "unsafe");
+
+  // -------------------- MISSION 7: DATA ORDER MINI --------------------
+  const m7Correct = ["collect","clean","store"];
+  let m7Pick=[];
+  function renderM7(){
+    const line=document.getElementById("m7Line");
+    line.innerHTML="";
+    m7Pick.forEach(x=>{
+      const chip=document.createElement("span");
+      chip.className="badge bg-primary";
+      chip.textContent = x.toUpperCase();
+      line.appendChild(chip);
+    });
+  }
+  function m7Choose(step){
+    if(m7Pick.length>=3) return;
+    m7Pick.push(step);
+    renderM7();
+
+    if(m7Pick.length===3){
+      const ok = JSON.stringify(m7Pick)===JSON.stringify(m7Correct);
+      if(ok){
+        document.getElementById("m7Score").textContent="3";
+        document.getElementById("m7Msg").textContent="✅ Perfect! Data is organised!";
+        document.getElementById("m7Msg").className="text-center fw-bold mt-3 text-success";
+        document.getElementById("m7Btn").classList.remove("d-none");
+      } else {
+        document.getElementById("m7Msg").textContent="❌ Not quite. Try again!";
+        document.getElementById("m7Msg").className="text-center fw-bold mt-3 text-danger";
+        setTimeout(()=>{
+          m7Pick=[];
+          renderM7();
+          document.getElementById("m7Msg").textContent="";
+        }, 700);
+      }
+    }
+  }
+  window.m7Choose=m7Choose;
+
+  // -------------------- MISSION 8: FINAL SCENARIO QUIZ --------------------
+  const finals = activity.m8?.questions || [
+    {
+      q:"A school in Nigeria wants an app for students. What team do you need?",
+      choices:[
+        "Only a designer",
+        "Developer + Designer + Tester + Security",
+        "Only a tester"
+      ],
+      answer:1
+    },
+    {
+      q:"Your app stores XP and progress. Who helps most?",
+      choices:["Data Engineer", "Football Coach", "Bus Driver"],
+      answer:0
+    }
+  ];
+  document.getElementById("m8Total").textContent = finals.length;
+
+  let m8Index=0, m8Score=0;
+  function renderM8(){
+    document.getElementById("m8Msg").textContent="";
+    document.getElementById("m8Q").textContent = finals[m8Index].q;
+    const box=document.getElementById("m8Choices");
+    box.innerHTML="";
+    finals[m8Index].choices.forEach((c,i)=>{
+      const btn=document.createElement("button");
+      btn.className="btn btn-outline-primary";
+      btn.textContent=c;
+      btn.onclick=()=>answerM8(i);
+      box.appendChild(btn);
+    });
+  }
+  function answerM8(i){
+    const expected=finals[m8Index].answer;
+    if(i===expected){
+      m8Score++;
+      document.getElementById("m8Score").textContent=m8Score;
+      document.getElementById("m8Msg").textContent="✅ Correct!";
+      document.getElementById("m8Msg").className="text-center fw-bold mt-3 text-success";
+      setTimeout(()=>{
+        m8Index++;
+        if(m8Index>=finals.length){
+          document.getElementById("m8Btn").classList.remove("d-none");
+          return;
+        }
+        renderM8();
+      }, 450);
+    } else {
+      document.getElementById("m8Msg").textContent="❌ Try again!";
+      document.getElementById("m8Msg").className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+
+  // -------------------- MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+  renderM4();
+  buildCode();
+  renderM8();
+</script>

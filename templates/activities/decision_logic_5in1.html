@@ -1,0 +1,341 @@
+<div class="bg-white border rounded-4 shadow-sm p-4 mt-4" id="logic5Wrap">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h4 class="fw-bold mb-0">🎮 Playground: Think Like a Computer (5-in-1)</h4>
+    <span class="badge text-bg-primary">Earn XP</span>
+  </div>
+  <p class="text-muted mb-3">Complete all 5 activities to unlock the “Logic Star” badge ⭐</p>
+
+  <!-- Progress -->
+  <div class="mb-3">
+    <div class="d-flex justify-content-between small text-muted">
+      <span id="logic5ProgressText">0 / 5 completed</span>
+      <span id="logic5Badge" class="fw-semibold"></span>
+    </div>
+    <div class="progress" style="height: 10px;">
+      <div id="logic5ProgressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="logic5Tasks" class="d-grid gap-3"></div>
+
+  <div class="mt-3 d-flex gap-2">
+    <button class="btn btn-outline-secondary" id="logic5ResetBtn" type="button">Reset</button>
+    <button class="btn btn-primary ms-auto" id="logic5FinishBtn" type="button" disabled>
+      ✅ Finish & Unlock
+    </button>
+  </div>
+
+  <div class="small text-muted mt-2">
+    Tip: You can retry any activity until you get it right 🙂
+  </div>
+</div>
+
+<script>
+(function(){
+  // Read JSON from Django
+  const cfg = {{ lesson.activity_json|default:"{}"|safe }};
+
+  const wrap = document.getElementById("logic5Wrap");
+  const tasksEl = document.getElementById("logic5Tasks");
+  const progressText = document.getElementById("logic5ProgressText");
+  const progressBar = document.getElementById("logic5ProgressBar");
+  const badgeEl = document.getElementById("logic5Badge");
+  const finishBtn = document.getElementById("logic5FinishBtn");
+  const resetBtn = document.getElementById("logic5ResetBtn");
+
+  const state = { done: new Set() };
+
+  function setProgress(){
+    const done = state.done.size;
+    progressText.textContent = `${done} / 5 completed`;
+    progressBar.style.width = `${(done/5)*100}%`;
+
+    if (done >= 5){
+      badgeEl.textContent = "⭐ Badge Unlocked: Logic Star!";
+      finishBtn.disabled = false;
+    } else {
+      badgeEl.textContent = "";
+      finishBtn.disabled = true;
+    }
+  }
+
+  function markDone(key){
+    state.done.add(key);
+    setProgress();
+  }
+
+  function resetAll(){
+    state.done.clear();
+    tasksEl.querySelectorAll("[data-task]").forEach(el => {
+      el.classList.remove("border-success");
+      const msg = el.querySelector(".logic5-msg");
+      if (msg) { msg.textContent = ""; msg.className = "logic5-msg small"; }
+    });
+    // reset inputs
+    tasksEl.querySelectorAll("input[type=text], input[type=number]").forEach(i => i.value = "");
+    tasksEl.querySelectorAll("input[type=radio]").forEach(r => r.checked = false);
+    tasksEl.querySelectorAll("select").forEach(s => s.selectedIndex = 0);
+    setProgress();
+  }
+
+  // ---- Activity builders ----
+  function cardBase(title, subtitle, key){
+    const div = document.createElement("div");
+    div.className = "border rounded-4 p-3";
+    div.dataset.task = key;
+    div.innerHTML = `
+      <div class="fw-semibold">${title}</div>
+      <div class="text-muted small mb-2">${subtitle}</div>
+      <div class="logic5-body"></div>
+      <div class="logic5-msg small mt-2"></div>
+    `;
+    return div;
+  }
+
+  // 1) IPO Drag Order (simple dropdown order)
+  function buildIPO(){
+    const key = "ipo";
+    const c = cardBase("1) IPO Order", "Put the steps in the correct order: Input → Process → Output", key);
+    const body = c.querySelector(".logic5-body");
+
+    body.innerHTML = `
+      <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label small">Step 1</label>
+          <select class="form-select" data-k="s1">
+            <option value="">Choose...</option>
+            <option>Input</option><option>Process</option><option>Output</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small">Step 2</label>
+          <select class="form-select" data-k="s2">
+            <option value="">Choose...</option>
+            <option>Input</option><option>Process</option><option>Output</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label small">Step 3</label>
+          <select class="form-select" data-k="s3">
+            <option value="">Choose...</option>
+            <option>Input</option><option>Process</option><option>Output</option>
+          </select>
+        </div>
+        <div class="col-12 mt-2">
+          <button class="btn btn-sm btn-outline-primary" type="button">Check</button>
+        </div>
+      </div>
+    `;
+
+    const btn = body.querySelector("button");
+    btn.addEventListener("click", () => {
+      const s1 = body.querySelector('[data-k="s1"]').value;
+      const s2 = body.querySelector('[data-k="s2"]').value;
+      const s3 = body.querySelector('[data-k="s3"]').value;
+
+      const msg = c.querySelector(".logic5-msg");
+      if (s1==="Input" && s2==="Process" && s3==="Output"){
+        msg.textContent = "✅ Correct! IPO is the computer’s pattern.";
+        msg.className = "logic5-msg small text-success";
+        c.classList.add("border-success");
+        markDone(key);
+      } else {
+        msg.textContent = "❌ Not yet. Try Input → Process → Output.";
+        msg.className = "logic5-msg small text-danger";
+      }
+    });
+
+    return c;
+  }
+
+  // 2) Decisions MCQ
+  function buildDecision(){
+    const key = "decision";
+    const q = cfg.decision_question || "IF the password is correct, THEN what happens?";
+    const opts = cfg.decision_options || [
+      {text:"You can log in", correct:true},
+      {text:"The computer turns off", correct:false},
+      {text:"Nothing happens forever", correct:false}
+    ];
+
+    const c = cardBase("2) Decisions (IF / THEN)", q, key);
+    const body = c.querySelector(".logic5-body");
+
+    body.innerHTML = `
+      <div class="d-grid gap-2">
+        ${opts.map((o,i)=>`
+          <label class="border rounded-3 p-2">
+            <input type="radio" name="dec" value="${i}" class="me-2">
+            ${o.text}
+          </label>
+        `).join("")}
+        <button class="btn btn-sm btn-outline-primary mt-2" type="button">Check</button>
+      </div>
+    `;
+
+    body.querySelector("button").addEventListener("click", () => {
+      const chosen = body.querySelector('input[name="dec"]:checked');
+      const msg = c.querySelector(".logic5-msg");
+      if (!chosen){
+        msg.textContent = "Pick one answer 🙂";
+        msg.className = "logic5-msg small text-danger";
+        return;
+      }
+      const i = parseInt(chosen.value, 10);
+      if (opts[i].correct){
+        msg.textContent = "✅ Correct! That’s a decision rule.";
+        msg.className = "logic5-msg small text-success";
+        c.classList.add("border-success");
+        markDone(key);
+      } else {
+        msg.textContent = "❌ Try again. Think: IF correct… THEN…";
+        msg.className = "logic5-msg small text-danger";
+      }
+    });
+
+    return c;
+  }
+
+  // 3) Loops quick count
+  function buildLoop(){
+    const key = "loop";
+    const c = cardBase("3) Loops (Repeat)", "If we clap 5 times, how many claps is that?", key);
+    const body = c.querySelector(".logic5-body");
+
+    body.innerHTML = `
+      <div class="row g-2 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label small">Your answer</label>
+          <input type="number" class="form-control" min="0" placeholder="e.g. 5">
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-sm btn-outline-primary" type="button">Check</button>
+        </div>
+      </div>
+    `;
+
+    const input = body.querySelector("input");
+    body.querySelector("button").addEventListener("click", () => {
+      const msg = c.querySelector(".logic5-msg");
+      if (parseInt(input.value || "0", 10) === 5){
+        msg.textContent = "✅ Yes! A loop repeats a job again and again.";
+        msg.className = "logic5-msg small text-success";
+        c.classList.add("border-success");
+        markDone(key);
+      } else {
+        msg.textContent = "❌ Try again. Clap… 1,2,3,4,5!";
+        msg.className = "logic5-msg small text-danger";
+      }
+    });
+
+    return c;
+  }
+
+  // 4) Data sorting mini (choose what is DATA)
+  function buildData(){
+    const key = "data";
+    const c = cardBase("4) Data = Information", "Which one is DATA?", key);
+    const body = c.querySelector(".logic5-body");
+
+    body.innerHTML = `
+      <div class="d-grid gap-2">
+        <label class="border rounded-3 p-2"><input type="radio" name="dataq" value="a" class="me-2"> A test score (80%)</label>
+        <label class="border rounded-3 p-2"><input type="radio" name="dataq" value="b" class="me-2"> A magic spell</label>
+        <label class="border rounded-3 p-2"><input type="radio" name="dataq" value="c" class="me-2"> A flying dinosaur</label>
+        <button class="btn btn-sm btn-outline-primary mt-2" type="button">Check</button>
+      </div>
+    `;
+
+    body.querySelector("button").addEventListener("click", () => {
+      const chosen = body.querySelector('input[name="dataq"]:checked');
+      const msg = c.querySelector(".logic5-msg");
+      if (!chosen){
+        msg.textContent = "Pick one answer 🙂";
+        msg.className = "logic5-msg small text-danger";
+        return;
+      }
+      if (chosen.value === "a"){
+        msg.textContent = "✅ Correct! Data is information we can collect.";
+        msg.className = "logic5-msg small text-success";
+        c.classList.add("border-success");
+        markDone(key);
+      } else {
+        msg.textContent = "❌ Not quite. Data is real information, like numbers or words.";
+        msg.className = "logic5-msg small text-danger";
+      }
+    });
+
+    return c;
+  }
+
+  // 5) Mixed challenge: match example to IPO part
+  function buildMatch(){
+    const key = "match";
+    const c = cardBase("5) Match It!", "Match the example to Input / Process / Output", key);
+    const body = c.querySelector(".logic5-body");
+
+    body.innerHTML = `
+      <div class="row g-2">
+        <div class="col-md-6">
+          <div class="border rounded-3 p-2 mb-2">Typing your name</div>
+          <select class="form-select mb-3" data-k="m1">
+            <option value="">Choose...</option>
+            <option>Input</option><option>Process</option><option>Output</option>
+          </select>
+
+          <div class="border rounded-3 p-2 mb-2">Computer adding 2 + 2</div>
+          <select class="form-select mb-3" data-k="m2">
+            <option value="">Choose...</option>
+            <option>Input</option><option>Process</option><option>Output</option>
+          </select>
+
+          <div class="border rounded-3 p-2 mb-2">Showing “4” on screen</div>
+          <select class="form-select" data-k="m3">
+            <option value="">Choose...</option>
+            <option>Input</option><option>Process</option><option>Output</option>
+          </select>
+        </div>
+
+        <div class="col-md-6 d-flex align-items-end">
+          <button class="btn btn-sm btn-outline-primary w-100" type="button">Check</button>
+        </div>
+      </div>
+    `;
+
+    body.querySelector("button").addEventListener("click", () => {
+      const m1 = body.querySelector('[data-k="m1"]').value;
+      const m2 = body.querySelector('[data-k="m2"]').value;
+      const m3 = body.querySelector('[data-k="m3"]').value;
+
+      const msg = c.querySelector(".logic5-msg");
+      if (m1==="Input" && m2==="Process" && m3==="Output"){
+        msg.textContent = "✅ Perfect matching! You understand IPO!";
+        msg.className = "logic5-msg small text-success";
+        c.classList.add("border-success");
+        markDone(key);
+      } else {
+        msg.textContent = "❌ Try again. Typing = Input, adding = Process, showing = Output.";
+        msg.className = "logic5-msg small text-danger";
+      }
+    });
+
+    return c;
+  }
+
+  // Render all 5
+  tasksEl.appendChild(buildIPO());
+  tasksEl.appendChild(buildDecision());
+  tasksEl.appendChild(buildLoop());
+  tasksEl.appendChild(buildData());
+  tasksEl.appendChild(buildMatch());
+
+  resetBtn.addEventListener("click", resetAll);
+
+  finishBtn.addEventListener("click", async () => {
+    // Optional: auto-scroll to the “Complete lesson” button if you have it
+    alert("🎉 Great job! You finished the Playground. Now click COMPLETE LESSON to earn XP + unlock next mission!");
+  });
+
+  setProgress();
+})();
+</script>

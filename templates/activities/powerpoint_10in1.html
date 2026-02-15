@@ -1,0 +1,127 @@
+{{ lesson.activity_json|json_script:"ppt-data" }}
+
+<div class="container my-4">
+
+  <h2 class="fw-bold text-center mb-1">🟧 PowerPoint Playground</h2>
+  <p class="text-muted text-center mb-3">
+    Complete all 10 slide missions to earn XP!
+  </p>
+
+  <!-- Progress -->
+  <div class="bg-light p-3 rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between">
+      <strong>Progress</strong>
+      <strong><span id="doneCount">0</span>/10</strong>
+    </div>
+    <div class="progress mt-2">
+      <div id="progressBar" class="progress-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Badges -->
+  <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+    <span id="badgeSlide" class="badge bg-secondary">🧾 Slide Builder</span>
+    <span id="badgeDesign" class="badge bg-secondary">🎨 Designer</span>
+    <span id="badgeMotion" class="badge bg-secondary">✨ Animator</span>
+    <span id="badgeShow" class="badge bg-secondary">🎬 Presenter</span>
+    <span id="badgeSave" class="badge bg-secondary">💾 File Keeper</span>
+  </div>
+
+  <!-- Missions -->
+  <div class="row g-3">
+
+    {% for i in "12345678910"|make_list %}
+    <div class="col-md-6">
+      <div class="card shadow-sm rounded-4 p-3">
+        <h5 class="fw-bold mb-1">Mission {{ forloop.counter }}</h5>
+        <p class="text-muted small" id="missionLabel{{ forloop.counter }}"></p>
+
+        <button
+          class="btn btn-outline-primary w-100"
+          onclick="completeMission({{ forloop.counter }})"
+        >
+          ▶ Complete
+        </button>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+
+  <!-- Final -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <h4 class="fw-bold text-success">🎉 Presentation Complete!</h4>
+    <p class="text-muted">XP awarded. You’re ready for the next lesson.</p>
+    <a id="nextBtn" class="btn btn-success d-none" href="#">Next lesson →</a>
+  </div>
+
+</div>
+
+<script>
+  const data = JSON.parse(
+    document.getElementById("ppt-data").textContent
+  );
+
+  let done = Array(10).fill(false);
+
+  // Labels
+  data.missions.forEach((m, i) => {
+    document.getElementById("missionLabel" + (i + 1)).textContent = m.label;
+  });
+
+  function completeMission(n) {
+    if (done[n - 1]) return;
+
+    done[n - 1] = true;
+    document.querySelectorAll(".card")[n - 1]
+      .classList.add("border-success");
+
+    updateProgress();
+    awardBadges();
+  }
+
+  function updateProgress() {
+    const count = done.filter(Boolean).length;
+    document.getElementById("doneCount").textContent = count;
+    document.getElementById("progressBar").style.width =
+      Math.round((count / 10) * 100) + "%";
+
+    if (count === 10) {
+      document.getElementById("finalBox").classList.remove("d-none");
+      finishLesson();
+    }
+  }
+
+  function awardBadges() {
+    if (done.slice(0, 3).every(Boolean))
+      badgeOn("badgeSlide");
+    if (done.slice(3, 6).every(Boolean))
+      badgeOn("badgeDesign");
+    if (done.slice(6, 8).every(Boolean))
+      badgeOn("badgeMotion");
+    if (done[8])
+      badgeOn("badgeShow");
+    if (done[9])
+      badgeOn("badgeSave");
+  }
+
+  function badgeOn(id) {
+    document.getElementById(id).className = "badge bg-success";
+  }
+
+  async function finishLesson() {
+    const res = await fetch(
+      "/lessons/{{ child.id }}/{{ lesson.id }}/complete/",
+      {
+        method: "POST",
+        headers: { "X-CSRFToken": "{{ csrf_token }}" }
+      }
+    );
+    const data = await res.json();
+    if (data.ok && data.next_url) {
+      const btn = document.getElementById("nextBtn");
+      btn.href = data.next_url;
+      btn.classList.remove("d-none");
+    }
+  }
+</script>

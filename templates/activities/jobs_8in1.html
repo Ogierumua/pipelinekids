@@ -1,0 +1,829 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">💼 Level 1 Challenge: Jobs That Use Computers</h2>
+    <p class="text-muted mb-0">Complete all 8 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/8 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+      <span id="badge1" class="badge bg-secondary">🥉 Explorer (2)</span>
+      <span id="badge2" class="badge bg-secondary">🥈 Helper (4)</span>
+      <span id="badge3" class="badge bg-secondary">🥇 Pro (6)</span>
+      <span id="badge4" class="badge bg-secondary">🏆 Master (8)</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <ul class="nav nav-pills justify-content-center gap-2 mb-4">
+    <li class="nav-item"><button class="nav-link active" id="tab1" onclick="showPanel(1)">1️⃣ Match</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab2" onclick="showPanel(2)">2️⃣ Categories</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab3" onclick="showPanel(3)">3️⃣ Quiz</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab4" onclick="showPanel(4)">4️⃣ Who Uses This?</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab5" onclick="showPanel(5)">5️⃣ What Do They Do?</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab6" onclick="showPanel(6)">6️⃣ True / False</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab7" onclick="showPanel(7)">7️⃣ Order a Day</button></li>
+    <li class="nav-item"><button class="nav-link" id="tab8" onclick="showPanel(8)">8️⃣ Pick Your Path</button></li>
+  </ul>
+
+  <!-- PANEL 1: MATCH JOB -> TOOL -->
+  <div id="panel1" class="panel">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 1</h5>
+          <p class="text-muted small mb-2">Drag each <b>job</b> into the correct <b>tool</b> box.</p>
+          <div class="small fw-bold">Correct: <span id="m1Score">0</span>/<span id="m1Total">0</span></div>
+
+          <button id="m1DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(1)">
+            ✅ Mission 1 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Jobs</div>
+          <div id="m1Cards" class="cards-zone mb-3"></div>
+
+          <div class="fw-bold mb-2">🧰 Tools</div>
+          <div id="m1Tools" class="row g-3"></div>
+
+          <div id="m1Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: DRAG JOBS INTO CATEGORIES -->
+  <div id="panel2" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 2</h5>
+          <p class="text-muted small mb-2">Drag each job into the correct category.</p>
+          <div class="small fw-bold">Correct: <span id="m2Score">0</span>/<span id="m2Total">0</span></div>
+
+          <button id="m2DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(2)">
+            ✅ Mission 2 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Jobs</div>
+          <div id="m2Cards" class="cards-zone mb-3"></div>
+
+          <div class="fw-bold mb-2">📦 Categories</div>
+          <div id="m2Cats" class="row g-3"></div>
+
+          <div id="m2Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: QUIZ -->
+  <div id="panel3" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 3</h5>
+          <p class="text-muted small mb-2">Answer the quiz questions.</p>
+          <div class="small fw-bold">Score: <span id="m3Score">0</span>/<span id="m3Total">0</span></div>
+
+          <button id="m3DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(3)">
+            ✅ Mission 3 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Question</div>
+          <div id="m3Q" class="scenario"></div>
+
+          <div id="m3Options" class="d-flex gap-2 flex-wrap mt-3"></div>
+          <div id="m3Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4: WHO USES THIS TOOL? (CLICK) -->
+  <div id="panel4" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 4</h5>
+          <p class="text-muted small mb-2">Pick the correct job for each tool.</p>
+          <div class="small fw-bold">Correct: <span id="m4Score">0</span>/<span id="m4Total">0</span></div>
+
+          <button id="m4DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(4)">
+            ✅ Mission 4 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Tool</div>
+          <div id="m4Tool" class="scenario"></div>
+
+          <div id="m4Options" class="d-flex gap-2 flex-wrap mt-3"></div>
+          <div id="m4Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 5: WHAT DO THEY DO? (MATCH TASKS) -->
+  <div id="panel5" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 5</h5>
+          <p class="text-muted small mb-2">Drag the correct task into the job box.</p>
+          <div class="small fw-bold">Correct: <span id="m5Score">0</span>/<span id="m5Total">0</span></div>
+
+          <button id="m5DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(5)">
+            ✅ Mission 5 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Tasks</div>
+          <div id="m5Cards" class="cards-zone mb-3"></div>
+
+          <div class="fw-bold mb-2">👤 Jobs</div>
+          <div id="m5Jobs" class="row g-3"></div>
+
+          <div id="m5Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 6: TRUE/FALSE -->
+  <div id="panel6" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 6</h5>
+          <p class="text-muted small mb-2">Choose True or False.</p>
+          <div class="small fw-bold">Correct: <span id="m6Score">0</span>/<span id="m6Total">0</span></div>
+
+          <button id="m6DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(6)">
+            ✅ Mission 6 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold">Statement</div>
+          <div id="m6Stmt" class="scenario"></div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-primary flex-grow-1" onclick="m6Answer(true)">✅ True</button>
+            <button class="btn btn-outline-primary flex-grow-1" onclick="m6Answer(false)">❌ False</button>
+          </div>
+
+          <div id="m6Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7: ORDER A DAY (SEQUENCING) -->
+  <div id="panel7" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 7</h5>
+          <p class="text-muted small mb-2">Drag steps into the correct order.</p>
+          <div class="small fw-bold">Steps placed: <span id="m7Placed">0</span>/<span id="m7Total">0</span></div>
+
+          <button id="m7RunBtn" class="btn btn-primary w-100 mt-3" onclick="m7Check()">▶ RUN</button>
+          <button id="m7DoneBtn" class="btn btn-success w-100 mt-2 d-none" onclick="completeMission(7)">
+            ✅ Mission 7 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">🧩 Steps</div>
+          <div id="m7Pool" class="cards-zone mb-3"></div>
+
+          <div class="fw-bold mb-2">📌 Drop Zone (order matters)</div>
+          <div id="m7Zone" class="drop-zone">
+            <div class="hint">Drop steps here 👇</div>
+          </div>
+
+          <div id="m7Msg" class="text-center fw-bold mt-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 8: PICK YOUR PATH -->
+  <div id="panel8" class="panel d-none">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="p-3 bg-white rounded-4 shadow-sm h-100">
+          <h5 class="fw-bold mb-2">🎯 Mission 8</h5>
+          <p class="text-muted small mb-2">Pick 3 things you love. We’ll suggest careers!</p>
+          <div class="small fw-bold">Picked: <span id="m8Picked">0</span>/3</div>
+
+          <button id="m8DoneBtn" class="btn btn-success w-100 mt-3 d-none" onclick="completeMission(8)">
+            ✅ Mission 8 Complete
+          </button>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="p-3 bg-white rounded-4 shadow-sm">
+          <div class="fw-bold mb-2">❤️ Choose 3</div>
+          <div id="m8Interests" class="d-flex gap-2 flex-wrap"></div>
+
+          <div class="mt-3">
+            <div class="fw-bold">Your suggestions</div>
+            <div id="m8Suggest" class="scenario">Pick interests to see suggestions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 8 missions!</div>
+    <div class="text-muted">XP will be awarded and the next lesson will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .d-none{display:none!important;}
+
+  .cards-zone{
+    min-height:120px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .card-item{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;
+    cursor:grab;user-select:none;
+  }
+  .dropbox{
+    min-height:110px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;
+    font-weight:900;
+  }
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+  .scenario{
+    margin-top:6px;padding:14px 12px;border-radius:16px;background:#f8f9fa;border:1px solid #eee;
+    font-weight:900;min-height:90px;display:flex;align-items:center;
+  }
+
+  .drop-zone{
+    border:3px dashed #6c757d;border-radius:16px;padding:12px;background:#f8f9fa;min-height:140px;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;position:relative;
+  }
+  .hint{position:absolute;left:12px;top:10px;color:#6c757d;font-weight:800;font-size:13px;}
+  .pill-btn{
+    border:1px solid #eee;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;background:#f8f9fa;
+  }
+  .pill-btn.selected{background:#e7f1ff;border-color:#0d6efd;box-shadow:0 0 0 3px rgba(13,110,253,.12)}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- TABS --------------------
+  function showPanel(n){
+    for (let i=1;i<=8;i++){
+      document.getElementById("panel"+i).classList.add("d-none");
+      document.getElementById("tab"+i).classList.remove("active");
+    }
+    document.getElementById("panel"+n).classList.remove("d-none");
+    document.getElementById("tab"+n).classList.add("active");
+  }
+  window.showPanel = showPanel;
+
+  // -------------------- PROGRESS + BADGES --------------------
+  const state = {1:false,2:false,3:false,4:false,5:false,6:false,7:false,8:false};
+
+  function setBadge(countDone){
+    if (countDone >= 2) document.getElementById("badge1").className = "badge bg-success";
+    if (countDone >= 4) document.getElementById("badge2").className = "badge bg-success";
+    if (countDone >= 6) document.getElementById("badge3").className = "badge bg-success";
+    if (countDone >= 8) document.getElementById("badge4").className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/8)*100) + "%";
+    setBadge(done);
+
+    if (done === 8){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(n){
+    state[n] = true;
+    updateProgress();
+    if (n < 8) showPanel(n+1);
+  }
+  window.completeMission = completeMission;
+
+  function shuffle(arr){
+    return [...arr].sort(()=>Math.random()-0.5);
+  }
+
+  // -------------------- MISSION 1: MATCH JOB -> TOOL (DRAG) --------------------
+  const m1Pairs = activity.mission1?.pairs || [
+    {job:"Doctor", tool:"Patient Records"},
+    {job:"Teacher", tool:"Lesson Planner"},
+    {job:"Pilot", tool:"Flight Screen"},
+    {job:"Banker", tool:"Money System"},
+  ];
+
+  document.getElementById("m1Total").textContent = m1Pairs.length;
+
+  let m1Dragged = null;
+  let m1Score = 0;
+
+  const m1CardsEl = document.getElementById("m1Cards");
+  const m1ToolsEl = document.getElementById("m1Tools");
+
+  // tools as dropboxes
+  const m1Tools = shuffle(Array.from(new Set(m1Pairs.map(x=>x.tool))));
+  m1Tools.forEach(tool=>{
+    const col = document.createElement("div");
+    col.className = "col-md-6";
+    col.innerHTML = `<div class="dropbox" data-tool="${tool}">🧰 ${tool}</div>`;
+    m1ToolsEl.appendChild(col);
+  });
+
+  // job cards
+  shuffle(m1Pairs).forEach(p=>{
+    const el = document.createElement("div");
+    el.className = "card-item";
+    el.draggable = true;
+    el.dataset.tool = p.tool;
+    el.dataset.done = "0";
+    el.textContent = "👤 " + p.job;
+    el.addEventListener("dragstart", ()=> m1Dragged = el);
+    el.addEventListener("dragend", ()=> m1Dragged = null);
+    m1CardsEl.appendChild(el);
+  });
+
+  document.querySelectorAll("#m1Tools .dropbox").forEach(box=>{
+    box.addEventListener("dragover", (e)=>{e.preventDefault(); box.classList.add("drag-over");});
+    box.addEventListener("dragleave", ()=> box.classList.remove("drag-over"));
+    box.addEventListener("drop", (e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if (!m1Dragged || m1Dragged.dataset.done==="1") return;
+
+      const want = m1Dragged.dataset.tool;
+      const got = box.dataset.tool;
+
+      if (want === got){
+        m1Dragged.dataset.done="1";
+        box.appendChild(m1Dragged);
+        m1Score++;
+        document.getElementById("m1Score").textContent = m1Score;
+        document.getElementById("m1Msg").textContent = "✅ Correct!";
+        document.getElementById("m1Msg").className = "text-center fw-bold mt-3 text-success";
+
+        if (m1Score === m1Pairs.length){
+          document.getElementById("m1DoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("m1Msg").textContent = "❌ Try another tool!";
+        document.getElementById("m1Msg").className = "text-center fw-bold mt-3 text-danger";
+      }
+    });
+  });
+
+  // -------------------- MISSION 2: JOB -> CATEGORY (DRAG) --------------------
+  const m2Jobs = activity.mission2?.jobs || [
+    {job:"Nurse", cat:"Health"},
+    {job:"Teacher", cat:"Education"},
+    {job:"Police", cat:"Safety"},
+    {job:"Farmer", cat:"Farming"},
+    {job:"Artist", cat:"Creative"},
+    {job:"Banker", cat:"Money"},
+    {job:"Driver", cat:"Transport"},
+    {job:"Data Engineer", cat:"Tech"},
+  ];
+  const m2Cats = activity.mission2?.categories || ["Health","Education","Safety","Farming","Creative","Money","Transport","Tech"];
+
+  document.getElementById("m2Total").textContent = m2Jobs.length;
+
+  let m2Dragged=null, m2Score=0;
+  const m2CardsEl=document.getElementById("m2Cards");
+  const m2CatsEl=document.getElementById("m2Cats");
+
+  m2Cats.forEach(cat=>{
+    const col=document.createElement("div");
+    col.className="col-md-6";
+    col.innerHTML = `<div class="dropbox" data-cat="${cat}">📦 ${cat}</div>`;
+    m2CatsEl.appendChild(col);
+  });
+
+  shuffle(m2Jobs).forEach(p=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.cat=p.cat;
+    el.dataset.done="0";
+    el.textContent="💼 "+p.job;
+    el.addEventListener("dragstart", ()=>m2Dragged=el);
+    el.addEventListener("dragend", ()=>m2Dragged=null);
+    m2CardsEl.appendChild(el);
+  });
+
+  document.querySelectorAll("#m2Cats .dropbox").forEach(box=>{
+    box.addEventListener("dragover",(e)=>{e.preventDefault(); box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if(!m2Dragged || m2Dragged.dataset.done==="1") return;
+
+      const want=m2Dragged.dataset.cat;
+      const got=box.dataset.cat;
+
+      if(want===got){
+        m2Dragged.dataset.done="1";
+        box.appendChild(m2Dragged);
+        m2Score++;
+        document.getElementById("m2Score").textContent=m2Score;
+        document.getElementById("m2Msg").textContent="✅ Great!";
+        document.getElementById("m2Msg").className="text-center fw-bold mt-3 text-success";
+        if(m2Score===m2Jobs.length){
+          document.getElementById("m2DoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("m2Msg").textContent="❌ Wrong category — try again!";
+        document.getElementById("m2Msg").className="text-center fw-bold mt-3 text-danger";
+      }
+    });
+  });
+
+  // -------------------- MISSION 3: QUIZ (MCQ) --------------------
+  const m3 = activity.mission3?.questions || [
+    {q:"Who uses computers to mark tests and track progress?", options:["Teacher","Farmer","Pilot"], answer:"Teacher"},
+    {q:"Who uses computers to keep money safe?", options:["Banker","Artist","Driver"], answer:"Banker"},
+    {q:"Who uses computers to check patient records?", options:["Doctor","Chef","Builder"], answer:"Doctor"},
+    {q:"Who uses computers to plan routes?", options:["Driver","Painter","Singer"], answer:"Driver"},
+    {q:"Who protects computers from hackers?", options:["Cybersecurity","Dancer","Nurse"], answer:"Cybersecurity"},
+  ];
+  document.getElementById("m3Total").textContent = m3.length;
+
+  let m3i=0, m3Score=0;
+  const m3QEl=document.getElementById("m3Q");
+  const m3OptEl=document.getElementById("m3Options");
+  const m3Msg=document.getElementById("m3Msg");
+
+  function m3Render(){
+    m3Msg.textContent="";
+    m3QEl.textContent = "🧠 " + m3[m3i].q;
+    m3OptEl.innerHTML="";
+    m3[m3i].options.forEach(opt=>{
+      const b=document.createElement("button");
+      b.className="btn btn-outline-primary";
+      b.textContent=opt;
+      b.onclick=()=>m3Answer(opt);
+      m3OptEl.appendChild(b);
+    });
+  }
+  function m3Answer(choice){
+    if(choice===m3[m3i].answer){
+      m3Score++;
+      document.getElementById("m3Score").textContent=m3Score;
+      m3Msg.textContent="✅ Correct!";
+      m3Msg.className="text-center fw-bold mt-3 text-success";
+      setTimeout(()=>{
+        m3i++;
+        if(m3i>=m3.length){
+          document.getElementById("m3DoneBtn").classList.remove("d-none");
+          m3QEl.textContent="🎉 Quiz finished!";
+          m3OptEl.innerHTML="";
+          return;
+        }
+        m3Render();
+      },350);
+    } else {
+      m3Msg.textContent="❌ Try again!";
+      m3Msg.className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  m3Render();
+
+  // -------------------- MISSION 4: WHO USES THIS TOOL? (CLICK) --------------------
+  const m4 = activity.mission4?.items || [
+    {tool:"📷 CCTV screen", answer:"Police", options:["Teacher","Police","Farmer"]},
+    {tool:"🩺 Patient record", answer:"Doctor", options:["Doctor","Artist","Driver"]},
+    {tool:"✈️ Flight dashboard", answer:"Pilot", options:["Pilot","Banker","Nurse"]},
+    {tool:"🛒 Checkout system", answer:"Shop Worker", options:["Shop Worker","Chef","Builder"]},
+  ];
+  document.getElementById("m4Total").textContent = m4.length;
+
+  let m4i=0, m4Score=0;
+  const m4Tool=document.getElementById("m4Tool");
+  const m4Opt=document.getElementById("m4Options");
+  const m4Msg=document.getElementById("m4Msg");
+
+  function m4Render(){
+    m4Msg.textContent="";
+    m4Tool.textContent = "Tool: " + m4[m4i].tool;
+    m4Opt.innerHTML="";
+    m4[m4i].options.forEach(opt=>{
+      const b=document.createElement("button");
+      b.className="btn btn-outline-primary";
+      b.textContent=opt;
+      b.onclick=()=>m4Answer(opt);
+      m4Opt.appendChild(b);
+    });
+  }
+  function m4Answer(choice){
+    if(choice===m4[m4i].answer){
+      m4Score++;
+      document.getElementById("m4Score").textContent=m4Score;
+      m4Msg.textContent="✅ Yes!";
+      m4Msg.className="text-center fw-bold mt-3 text-success";
+      setTimeout(()=>{
+        m4i++;
+        if(m4i>=m4.length){
+          document.getElementById("m4DoneBtn").classList.remove("d-none");
+          m4Tool.textContent="🎉 Done!";
+          m4Opt.innerHTML="";
+          return;
+        }
+        m4Render();
+      },350);
+    } else {
+      m4Msg.textContent="❌ Not that one. Try again!";
+      m4Msg.className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  m4Render();
+
+  // -------------------- MISSION 5: MATCH TASK -> JOB (DRAG) --------------------
+  const m5Pairs = activity.mission5?.pairs || [
+    {task:"Write and print a report", job:"Teacher"},
+    {task:"Check patient temperature", job:"Nurse"},
+    {task:"Protect a network from hackers", job:"Cybersecurity"},
+    {task:"Organise data into tables", job:"Data Engineer"},
+  ];
+  document.getElementById("m5Total").textContent = m5Pairs.length;
+
+  let m5Dragged=null, m5Score=0;
+  const m5Cards=document.getElementById("m5Cards");
+  const m5Jobs=document.getElementById("m5Jobs");
+
+  const m5JobNames = shuffle(Array.from(new Set(m5Pairs.map(x=>x.job))));
+  m5JobNames.forEach(j=>{
+    const col=document.createElement("div");
+    col.className="col-md-6";
+    col.innerHTML=`<div class="dropbox" data-job="${j}">👤 ${j}</div>`;
+    m5Jobs.appendChild(col);
+  });
+
+  shuffle(m5Pairs).forEach(p=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.job=p.job;
+    el.dataset.done="0";
+    el.textContent="🧩 "+p.task;
+    el.addEventListener("dragstart",()=>m5Dragged=el);
+    el.addEventListener("dragend",()=>m5Dragged=null);
+    m5Cards.appendChild(el);
+  });
+
+  document.querySelectorAll("#m5Jobs .dropbox").forEach(box=>{
+    box.addEventListener("dragover",(e)=>{e.preventDefault(); box.classList.add("drag-over");});
+    box.addEventListener("dragleave",()=>box.classList.remove("drag-over"));
+    box.addEventListener("drop",(e)=>{
+      e.preventDefault(); box.classList.remove("drag-over");
+      if(!m5Dragged || m5Dragged.dataset.done==="1") return;
+      const want=m5Dragged.dataset.job;
+      const got=box.dataset.job;
+      if(want===got){
+        m5Dragged.dataset.done="1";
+        box.appendChild(m5Dragged);
+        m5Score++;
+        document.getElementById("m5Score").textContent=m5Score;
+        document.getElementById("m5Msg").textContent="✅ Correct!";
+        document.getElementById("m5Msg").className="text-center fw-bold mt-3 text-success";
+        if(m5Score===m5Pairs.length){
+          document.getElementById("m5DoneBtn").classList.remove("d-none");
+        }
+      } else {
+        document.getElementById("m5Msg").textContent="❌ Try another job!";
+        document.getElementById("m5Msg").className="text-center fw-bold mt-3 text-danger";
+      }
+    });
+  });
+
+  // -------------------- MISSION 6: TRUE/FALSE --------------------
+  const m6 = activity.mission6?.items || [
+    {t:"A farmer can use a tablet to check the weather.", a:true},
+    {t:"Only computer programmers use computers.", a:false},
+    {t:"Teachers can use computers to make quizzes.", a:true},
+    {t:"Computers can do jobs without instructions.", a:false},
+  ];
+  document.getElementById("m6Total").textContent = m6.length;
+
+  let m6i=0, m6Score=0;
+  const m6Stmt=document.getElementById("m6Stmt");
+  const m6Msg=document.getElementById("m6Msg");
+
+  function m6Render(){
+    m6Msg.textContent="";
+    m6Stmt.textContent = "🧠 " + m6[m6i].t;
+  }
+  function m6Answer(choice){
+    if(choice===m6[m6i].a){
+      m6Score++;
+      document.getElementById("m6Score").textContent=m6Score;
+      m6Msg.textContent="✅ Correct!";
+      m6Msg.className="text-center fw-bold mt-3 text-success";
+      setTimeout(()=>{
+        m6i++;
+        if(m6i>=m6.length){
+          document.getElementById("m6DoneBtn").classList.remove("d-none");
+          m6Stmt.textContent="🎉 Done!";
+          return;
+        }
+        m6Render();
+      },350);
+    } else {
+      m6Msg.textContent="❌ Try again!";
+      m6Msg.className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  window.m6Answer = m6Answer;
+  m6Render();
+
+  // -------------------- MISSION 7: ORDER STEPS --------------------
+  const m7Steps = activity.mission7?.steps || [
+    {id:"open", text:"Open the computer"},
+    {id:"plan", text:"Plan the lesson"},
+    {id:"teach", text:"Teach the students"},
+    {id:"mark", text:"Mark the work"},
+  ];
+  const m7Correct = activity.mission7?.correct_order || ["open","plan","teach","mark"];
+
+  document.getElementById("m7Total").textContent = m7Correct.length;
+
+  let m7Dragged=null;
+  const m7Pool=document.getElementById("m7Pool");
+  const m7Zone=document.getElementById("m7Zone");
+  const m7Msg=document.getElementById("m7Msg");
+
+  shuffle(m7Steps).forEach(s=>{
+    const el=document.createElement("div");
+    el.className="card-item";
+    el.draggable=true;
+    el.dataset.id=s.id;
+    el.textContent="🧩 "+s.text;
+    el.addEventListener("dragstart",()=>m7Dragged=el);
+    el.addEventListener("dragend",()=>m7Dragged=null);
+    m7Pool.appendChild(el);
+  });
+
+  function m7Count(){
+    const count = document.querySelectorAll("#m7Zone .card-item").length;
+    document.getElementById("m7Placed").textContent = count;
+  }
+  m7Count();
+
+  m7Zone.addEventListener("dragover",(e)=>e.preventDefault());
+  m7Zone.addEventListener("drop",(e)=>{
+    e.preventDefault();
+    if(!m7Dragged) return;
+    const hint=m7Zone.querySelector(".hint"); if(hint) hint.remove();
+    m7Zone.appendChild(m7Dragged);
+    m7Count();
+  });
+
+  function m7Check(){
+    const now = Array.from(document.querySelectorAll("#m7Zone .card-item")).map(x=>x.dataset.id);
+    if(now.length !== m7Correct.length){
+      m7Msg.textContent="👀 Drop all steps first!";
+      m7Msg.className="text-center fw-bold mt-3 text-warning";
+      return;
+    }
+    const ok = JSON.stringify(now) === JSON.stringify(m7Correct);
+    if(ok){
+      m7Msg.textContent="🎉 Perfect order!";
+      m7Msg.className="text-center fw-bold mt-3 text-success";
+      document.getElementById("m7DoneBtn").classList.remove("d-none");
+    } else {
+      m7Msg.textContent="🤔 Almost! Try moving the steps.";
+      m7Msg.className="text-center fw-bold mt-3 text-danger";
+    }
+  }
+  window.m7Check = m7Check;
+
+  // -------------------- MISSION 8: PICK YOUR PATH --------------------
+  const m8 = activity.mission8?.interests || [
+    {k:"Helping people", careers:["Doctor","Nurse","Teacher"]},
+    {k:"Building things", careers:["Engineer","Architect","Game Builder"]},
+    {k:"Solving puzzles", careers:["Data Engineer","Programmer","Detective"]},
+    {k:"Staying safe", careers:["Police","Cybersecurity","Firefighter"]},
+    {k:"Drawing & design", careers:["Artist","Designer","Animator"]},
+    {k:"Flying & travel", careers:["Pilot","Driver","Train Operator"]},
+    {k:"Money & business", careers:["Banker","Shop Owner","Accountant"]},
+    {k:"Computers & internet", careers:["Network Engineer","Cloud Engineer","Cybersecurity"]},
+  ];
+
+  const picked = new Set();
+  const m8Interests=document.getElementById("m8Interests");
+  const m8Suggest=document.getElementById("m8Suggest");
+
+  m8.forEach(item=>{
+    const b=document.createElement("button");
+    b.className="pill-btn";
+    b.textContent="❤️ "+item.k;
+    b.onclick=()=>{
+      if(picked.has(item.k)){
+        picked.delete(item.k);
+        b.classList.remove("selected");
+      } else {
+        if(picked.size >= 3) return;
+        picked.add(item.k);
+        b.classList.add("selected");
+      }
+      document.getElementById("m8Picked").textContent = picked.size;
+      renderSuggest();
+      if(picked.size === 3){
+        document.getElementById("m8DoneBtn").classList.remove("d-none");
+      } else {
+        document.getElementById("m8DoneBtn").classList.add("d-none");
+      }
+    };
+    m8Interests.appendChild(b);
+  });
+
+  function renderSuggest(){
+    if(picked.size === 0){
+      m8Suggest.textContent = "Pick interests to see suggestions.";
+      return;
+    }
+    const careers = [];
+    m8.forEach(x=>{
+      if(picked.has(x.k)) careers.push(...x.careers);
+    });
+    const uniq = Array.from(new Set(careers)).slice(0,6);
+    m8Suggest.textContent = "🌟 You might like: " + uniq.join(", ");
+  }
+
+  // -------------------- FINAL: MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>

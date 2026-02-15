@@ -1,0 +1,650 @@
+{{ lesson.activity_json|json_script:"activity-data" }}
+
+<div class="container my-4">
+
+  <!-- HEADER -->
+  <div class="text-center mb-3">
+    <h2 class="fw-bold">🛡️ Level 1 Challenge: Safety + Computer Power</h2>
+    <p class="text-muted mb-0">Complete all 12 missions to unlock the next lesson.</p>
+  </div>
+
+  <!-- PROGRESS + BADGES -->
+  <div class="p-3 bg-light rounded-4 shadow-sm mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="fw-bold">Progress</div>
+      <div class="fw-bold"><span id="doneCount">0</span>/12 missions complete</div>
+    </div>
+
+    <div class="progress mt-2" style="height:14px;">
+      <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%"></div>
+    </div>
+
+    <div id="badgeRow" class="d-flex justify-content-center gap-2 mt-3 flex-wrap"></div>
+  </div>
+
+  <!-- TABS -->
+  <ul id="tabRow" class="nav nav-pills justify-content-center gap-2 mb-4 flex-wrap"></ul>
+
+  <!-- PANELS (filled by JS) -->
+  <div id="panelHost"></div>
+
+  <!-- FINAL -->
+  <div id="finalBox" class="text-center mt-4 d-none">
+    <div class="fw-bold fs-4 text-success">🎉 Amazing! You completed all 12 missions!</div>
+    <div class="text-muted">XP will be awarded and the next mission will unlock.</div>
+    <div class="mt-3">
+      <a id="nextBtn" class="btn btn-success d-none" href="#">Next mission →</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .d-none{display:none!important;}
+  .panel{animation:fadeIn .18s ease-in-out;}
+  @keyframes fadeIn{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .mission-card{
+    background:#fff;border:1px solid #eee;border-radius:18px;padding:14px;
+    box-shadow:0 6px 18px rgba(0,0,0,.04);
+  }
+
+  .pill{
+    border:1px solid #eee;border-radius:999px;padding:6px 10px;background:#fff;
+    font-weight:900;font-size:13px;
+  }
+
+  .choice-btn{font-weight:900;border-radius:14px;padding:10px 12px;}
+  .msg{font-weight:900;margin-top:10px;text-align:center;}
+  .msg.ok{color:#198754;}
+  .msg.bad{color:#dc3545;}
+  .msg.warn{color:#fd7e14;}
+
+  /* Drag zones */
+  .zone{
+    min-height:150px;border:2px dashed #dee2e6;border-radius:16px;padding:10px;background:#f8f9fa;
+    display:flex;gap:10px;flex-wrap:wrap;align-content:flex-start;
+  }
+  .chip{
+    background:#fff;border:1px solid #eee;border-radius:14px;padding:9px 11px;
+    font-weight:900;cursor:grab;user-select:none;
+  }
+  .dropbox{
+    min-height:160px;border:3px dashed #6c757d;border-radius:16px;padding:10px;background:#f8f9fa;
+    font-weight:900;
+  }
+  .dropbox.drag-over{border-color:#0d6efd;background:#e7f1ff;}
+
+  /* Sort columns */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:768px){.cols{grid-template-columns:1fr}}
+
+  /* Password meter */
+  .meter{height:12px;background:#e9ecef;border-radius:999px;overflow:hidden;}
+  .meter > div{height:100%;width:0%;}
+
+  /* Tiny “steps” */
+  .step{background:#fff;border:1px solid #eee;border-radius:14px;padding:10px 12px;font-weight:900;cursor:grab;user-select:none;margin-bottom:10px;}
+</style>
+
+<script>
+  const activity = JSON.parse(document.getElementById("activity-data").textContent || "{}");
+
+  // -------------------- DEFAULT DATA --------------------
+  const cfg = {
+    title: activity.title || "Safety + Computer Power",
+    missions: activity.missions || [
+      // 1
+      { id:"m1", label:"🔑 Password Builder", type:"password_meter",
+        prompt:"Make a strong password: include letters + numbers + symbol (don’t use your name).",
+        min_score:3
+      },
+      // 2
+      { id:"m2", label:"🤫 Keep It Secret", type:"mcq",
+        q:"Should you share your password with a friend?",
+        options:[{t:"Yes", ok:false},{t:"No", ok:true}],
+      },
+      // 3
+      { id:"m3", label:"🧑‍🤝‍🧑 Ask an Adult", type:"mcq",
+        q:"If you forget your password, what should you do?",
+        options:[{t:"Ask a parent/teacher", ok:true},{t:"Post it online", ok:false}],
+      },
+      // 4
+      { id:"m4", label:"🙂 Kind Words", type:"sort_drag",
+        prompt:"Drag messages into KIND or MEAN.",
+        left_title:"🙂 KIND", right_title:"😡 MEAN",
+        items:[
+          {t:"Good job!", side:"left"},
+          {t:"You are silly!", side:"right"},
+          {t:"Can I help you?", side:"left"},
+          {t:"I hate you!", side:"right"},
+        ]
+      },
+      // 5
+      { id:"m5", label:"🕵️ Strangers", type:"mcq",
+        q:"A stranger asks for your address. What do you do?",
+        options:[{t:"Tell them", ok:false},{t:"Don’t reply, tell an adult", ok:true}],
+      },
+      // 6
+      { id:"m6", label:"🚨 What To Do", type:"order_steps",
+        prompt:"Put the safety steps in the right order:",
+        order:["Stop","Don’t reply","Tell an adult"],
+      },
+
+      // 7
+      { id:"m7", label:"⚡ Computers Are Good At", type:"drag_two_boxes",
+        prompt:"Drag each card to GOOD AT or NOT GOOD AT.",
+        boxes:[
+          {id:"good", title:"✅ GOOD AT", accept:["good"]},
+          {id:"bad", title:"❌ NOT GOOD AT", accept:["bad"]},
+        ],
+        items:[
+          {t:"Counting fast", kind:"good"},
+          {t:"Remembering lots of files", kind:"good"},
+          {t:"Feeling happy", kind:"bad"},
+          {t:"Understanding jokes", kind:"bad"},
+        ]
+      },
+      // 8
+      { id:"m8", label:"📥 Input-Process-Output", type:"match_three",
+        prompt:"Match the examples to the right box.",
+        groups:[
+          {id:"in", title:"📥 INPUT", wants:["Keyboard","Mouse click","Microphone"]},
+          {id:"pr", title:"⚙️ PROCESS", wants:["Thinking steps","Sorting","Calculating"]},
+          {id:"out", title:"📤 OUTPUT", wants:["Screen shows text","Sound plays","Printer prints"]},
+        ]
+      },
+      // 9
+      { id:"m9", label:"🔁 Repeat (Loops)", type:"mcq",
+        q:"If you want a computer to do the same thing 10 times, what do you use?",
+        options:[{t:"A loop (repeat)", ok:true},{t:"A guess", ok:false}],
+      },
+      // 10
+      { id:"m10", label:"🧠 Computers Need Instructions", type:"mcq",
+        q:"Can a computer decide what to do with no instructions?",
+        options:[{t:"Yes, always", ok:false},{t:"No, it needs steps", ok:true}],
+      },
+      // 11
+      { id:"m11", label:"💾 Memory vs Storage", type:"mcq",
+        q:"Which one is like a long-term cupboard for files?",
+        options:[{t:"Storage (hard drive/cloud)", ok:true},{t:"Memory (RAM)", ok:false}],
+      },
+      // 12
+      { id:"m12", label:"🏁 Final Mixed Quiz", type:"quick_quiz",
+        prompt:"Answer 3 quick questions!",
+        quiz:[
+          {q:"Share passwords?", a:"No"},
+          {q:"Computers good at counting?", a:"Yes"},
+          {q:"If scared online, tell an adult?", a:"Yes"},
+        ]
+      },
+    ]
+  };
+
+  // -------------------- UI BUILD --------------------
+  const state = {}; // missionId => true/false
+  cfg.missions.forEach(m => state[m.id] = false);
+
+  const badgeRow = document.getElementById("badgeRow");
+  const tabRow = document.getElementById("tabRow");
+  const panelHost = document.getElementById("panelHost");
+
+  // badges + tabs + panels
+  cfg.missions.forEach((m, idx) => {
+    const b = document.createElement("span");
+    b.id = "badge_" + m.id;
+    b.className = "badge bg-secondary";
+    b.textContent = m.label;
+    badgeRow.appendChild(b);
+
+    const li = document.createElement("li");
+    li.className = "nav-item";
+    li.innerHTML = `<button class="nav-link ${idx===0?"active":""}" id="tab_${m.id}">${m.label}</button>`;
+    tabRow.appendChild(li);
+
+    const panel = document.createElement("div");
+    panel.className = "panel " + (idx===0 ? "" : "d-none");
+    panel.id = "panel_" + m.id;
+    panel.innerHTML = renderMissionHTML(m);
+    panelHost.appendChild(panel);
+
+    document.getElementById("tab_" + m.id).onclick = () => showPanel(m.id);
+  });
+
+  function showPanel(id){
+    cfg.missions.forEach(m => {
+      document.getElementById("panel_" + m.id).classList.add("d-none");
+      document.getElementById("tab_" + m.id).classList.remove("active");
+    });
+    document.getElementById("panel_" + id).classList.remove("d-none");
+    document.getElementById("tab_" + id).classList.add("active");
+    document.getElementById("panel_" + id).scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  function badgeOn(mid){
+    const el = document.getElementById("badge_" + mid);
+    if (el) el.className = "badge bg-success";
+  }
+
+  function updateProgress(){
+    const done = Object.values(state).filter(Boolean).length;
+    document.getElementById("doneCount").textContent = done;
+    document.getElementById("progressBar").style.width = Math.round((done/12)*100) + "%";
+
+    if (done === 12){
+      document.getElementById("finalBox").classList.remove("d-none");
+      document.getElementById("finalBox").scrollIntoView({behavior:"smooth", block:"center"});
+      finishLesson();
+    }
+  }
+
+  function completeMission(mid){
+    if (state[mid]) return;
+    state[mid] = true;
+    badgeOn(mid);
+    updateProgress();
+
+    // auto move to next
+    const idx = cfg.missions.findIndex(x => x.id === mid);
+    const next = cfg.missions[idx+1];
+    if (next) showPanel(next.id);
+  }
+
+  // -------------------- RENDER HTML --------------------
+  function renderMissionHTML(m){
+    return `
+      <div class="mission-card mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div>
+            <div class="pill">Mission</div>
+            <h4 class="fw-bold mb-1">${m.label}</h4>
+            <div class="text-muted">${escapeHtml(m.prompt || m.q || "")}</div>
+          </div>
+          <button class="btn btn-outline-secondary btn-sm" onclick="showPanel('${m.id}')">🔄 Stay here</button>
+        </div>
+
+        <div class="mt-3">
+          ${missionBodyHTML(m)}
+        </div>
+
+        <div id="msg_${m.id}" class="msg"></div>
+      </div>
+    `;
+  }
+
+  function missionBodyHTML(m){
+    if (m.type === "mcq"){
+      const buttons = m.options.map((o,i)=>`
+        <button class="btn btn-${i===0?"primary":"outline-primary"} choice-btn" onclick="answerMCQ('${m.id}', ${o.ok})">${escapeHtml(o.t)}</button>
+      `).join(" ");
+      return `
+        <div class="mb-2 fw-bold">${escapeHtml(m.q)}</div>
+        <div class="d-flex gap-2 flex-wrap">${buttons}</div>
+      `;
+    }
+
+    if (m.type === "password_meter"){
+      return `
+        <div class="fw-bold mb-2">Type a password here:</div>
+        <input id="pw_${m.id}" class="form-control" placeholder="Try: Blue7!Star" oninput="scorePassword('${m.id}', ${m.min_score||3})">
+        <div class="mt-2 meter"><div id="meter_${m.id}"></div></div>
+        <div class="text-muted small mt-2">Tip: use letters + numbers + symbols. Don’t use your name.</div>
+      `;
+    }
+
+    if (m.type === "sort_drag"){
+      return `
+        <div class="cols">
+          <div>
+            <div class="fw-bold mb-2">Cards</div>
+            <div id="pile_${m.id}" class="zone"></div>
+          </div>
+          <div>
+            <div class="fw-bold mb-2">Drop zones</div>
+            <div class="cols">
+              <div id="left_${m.id}" class="dropbox">${escapeHtml(m.left_title)}</div>
+              <div id="right_${m.id}" class="dropbox">${escapeHtml(m.right_title)}</div>
+            </div>
+          </div>
+        </div>
+        <div class="text-muted small mt-2">Drag each card into the correct side.</div>
+      `;
+    }
+
+    if (m.type === "order_steps"){
+      return `
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="fw-bold mb-2">Steps (drag into the box below)</div>
+            <div id="steps_${m.id}"></div>
+          </div>
+          <div class="col-md-6">
+            <div class="fw-bold mb-2">Your order</div>
+            <div id="drop_${m.id}" class="zone"><div class="text-muted fw-bold">Drop steps here 👇</div></div>
+            <button class="btn btn-primary mt-3" onclick="checkOrder('${m.id}')">✅ Check order</button>
+          </div>
+        </div>
+      `;
+    }
+
+    if (m.type === "drag_two_boxes"){
+      return `
+        <div class="row g-3">
+          <div class="col-md-5">
+            <div class="fw-bold mb-2">Cards</div>
+            <div id="pile_${m.id}" class="zone"></div>
+          </div>
+          <div class="col-md-7">
+            <div class="cols">
+              ${m.boxes.map(b => `<div id="box_${m.id}_${b.id}" class="dropbox">${escapeHtml(b.title)}</div>`).join("")}
+            </div>
+            <div class="text-muted small mt-2">Drag each card into the correct box.</div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (m.type === "match_three"){
+      return `
+        <div class="row g-3">
+          <div class="col-md-5">
+            <div class="fw-bold mb-2">Cards</div>
+            <div id="pile_${m.id}" class="zone"></div>
+          </div>
+          <div class="col-md-7">
+            <div class="row g-3">
+              ${m.groups.map(g => `
+                <div class="col-md-12">
+                  <div id="box_${m.id}_${g.id}" class="dropbox">${escapeHtml(g.title)}</div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="text-muted small mt-2">Drop each card into the correct box.</div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (m.type === "quick_quiz"){
+      return `
+        <div class="fw-bold mb-2">${escapeHtml(m.prompt)}</div>
+        <div id="quiz_${m.id}"></div>
+        <button class="btn btn-primary mt-3" onclick="checkQuickQuiz('${m.id}')">✅ Check answers</button>
+      `;
+    }
+
+    return `<div class="text-muted">Mission type not supported.</div>`;
+  }
+
+  function escapeHtml(s){
+    return String(s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
+  }
+
+  // -------------------- MISSION LOGIC --------------------
+  window.answerMCQ = function(mid, ok){
+    const msg = document.getElementById("msg_" + mid);
+    if (ok){
+      msg.textContent = "✅ Correct!";
+      msg.className = "msg ok";
+      completeMission(mid);
+    } else {
+      msg.textContent = "❌ Try again!";
+      msg.className = "msg bad";
+    }
+  }
+
+  window.scorePassword = function(mid, minScore){
+    const val = (document.getElementById("pw_" + mid).value || "");
+    const msg = document.getElementById("msg_" + mid);
+    const meter = document.getElementById("meter_" + mid);
+
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val) || /[a-z]/.test(val)) score++;
+    if (/\d/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const pct = Math.min(100, Math.round((score/4)*100));
+    meter.style.width = pct + "%";
+
+    // colorless rule: just use different widths; we’ll communicate via text
+    if (score >= minScore){
+      msg.textContent = "✅ Strong password!";
+      msg.className = "msg ok";
+      completeMission(mid);
+    } else {
+      msg.textContent = "Keep going… add numbers and symbols!";
+      msg.className = "msg warn";
+    }
+  }
+
+  // Drag helpers
+  function makeDraggable(el, onStart){
+    el.draggable = true;
+    el.addEventListener("dragstart", () => onStart(el));
+    el.addEventListener("dragend", () => {});
+  }
+  function setupDrop(box, onDrop){
+    box.addEventListener("dragover", (e)=>{ e.preventDefault(); box.classList.add("drag-over"); });
+    box.addEventListener("dragleave", ()=> box.classList.remove("drag-over"));
+    box.addEventListener("drop", (e)=>{ e.preventDefault(); box.classList.remove("drag-over"); onDrop(); });
+  }
+
+  // init drag missions
+  let currentDrag = null;
+
+  cfg.missions.forEach(m => {
+    if (m.type === "sort_drag"){
+      const pile = document.getElementById("pile_" + m.id);
+      const left = document.getElementById("left_" + m.id);
+      const right = document.getElementById("right_" + m.id);
+      let doneCount = 0;
+
+      m.items.forEach(item => {
+        const el = document.createElement("div");
+        el.className = "chip";
+        el.textContent = item.t;
+        el.dataset.side = item.side;
+        el.dataset.done = "0";
+        makeDraggable(el, (x)=> currentDrag = x);
+        pile.appendChild(el);
+      });
+
+      setupDrop(left, () => handle("left", left));
+      setupDrop(right, () => handle("right", right));
+
+      function handle(side, box){
+        if (!currentDrag) return;
+        if (currentDrag.dataset.done === "1") return;
+
+        if (currentDrag.dataset.side === side){
+          currentDrag.dataset.done = "1";
+          box.appendChild(currentDrag);
+          doneCount++;
+          setMsg(m.id, "✅ Correct!", true);
+          if (doneCount === m.items.length) completeMission(m.id);
+        } else {
+          setMsg(m.id, "❌ Wrong side — try again!", false);
+        }
+      }
+    }
+
+    if (m.type === "drag_two_boxes"){
+      const pile = document.getElementById("pile_" + m.id);
+      let done = 0;
+
+      m.items.slice().sort(()=>Math.random()-0.5).forEach(item => {
+        const el = document.createElement("div");
+        el.className = "chip";
+        el.textContent = item.t;
+        el.dataset.kind = item.kind;
+        el.dataset.done = "0";
+        makeDraggable(el, (x)=> currentDrag = x);
+        pile.appendChild(el);
+      });
+
+      m.boxes.forEach(b => {
+        const box = document.getElementById("box_" + m.id + "_" + b.id);
+        setupDrop(box, ()=> {
+          if (!currentDrag) return;
+          if (currentDrag.dataset.done === "1") return;
+
+          // accept list contains "good" or "bad"
+          const ok = b.accept.includes(currentDrag.dataset.kind);
+          if (ok){
+            currentDrag.dataset.done = "1";
+            box.appendChild(currentDrag);
+            done++;
+            setMsg(m.id, "✅ Nice!", true);
+            if (done === m.items.length) completeMission(m.id);
+          } else {
+            setMsg(m.id, "❌ Not there — try the other box!", false);
+          }
+        });
+      });
+    }
+
+    if (m.type === "match_three"){
+      const pile = document.getElementById("pile_" + m.id);
+      const allCards = [];
+      m.groups.forEach(g => g.wants.forEach(w => allCards.push({t:w, group:g.id})));
+      allCards.sort(()=>Math.random()-0.5);
+
+      let done = 0;
+
+      allCards.forEach(c => {
+        const el = document.createElement("div");
+        el.className = "chip";
+        el.textContent = c.t;
+        el.dataset.group = c.group;
+        el.dataset.done = "0";
+        makeDraggable(el, (x)=> currentDrag = x);
+        pile.appendChild(el);
+      });
+
+      m.groups.forEach(g => {
+        const box = document.getElementById("box_" + m.id + "_" + g.id);
+        setupDrop(box, ()=> {
+          if (!currentDrag) return;
+          if (currentDrag.dataset.done === "1") return;
+
+          if (currentDrag.dataset.group === g.id){
+            currentDrag.dataset.done = "1";
+            box.appendChild(currentDrag);
+            done++;
+            setMsg(m.id, "✅ Correct match!", true);
+            if (done === allCards.length) completeMission(m.id);
+          } else {
+            setMsg(m.id, "❌ Wrong box — try another!", false);
+          }
+        });
+      });
+    }
+
+    if (m.type === "order_steps"){
+      const stepsEl = document.getElementById("steps_" + m.id);
+      const drop = document.getElementById("drop_" + m.id);
+
+      const shuffled = m.order.slice().sort(()=>Math.random()-0.5);
+      shuffled.forEach(s => {
+        const el = document.createElement("div");
+        el.className = "step";
+        el.textContent = s;
+        el.dataset.value = s;
+        makeDraggable(el, (x)=> currentDrag = x);
+        stepsEl.appendChild(el);
+      });
+
+      setupDrop(drop, ()=> {
+        if (!currentDrag) return;
+        drop.appendChild(currentDrag);
+      });
+
+      window.checkOrder = function(mid){
+        if (mid !== m.id) return;
+        const current = Array.from(drop.querySelectorAll(".step")).map(x=>x.dataset.value);
+        if (current.length !== m.order.length){
+          setMsg(m.id, "👀 Drag all the steps first!", false, true);
+          return;
+        }
+        const ok = JSON.stringify(current) === JSON.stringify(m.order);
+        if (ok){
+          setMsg(m.id, "✅ Perfect order!", true);
+          completeMission(m.id);
+        } else {
+          setMsg(m.id, "❌ Not quite — try again!", false);
+        }
+      }
+    }
+
+    if (m.type === "quick_quiz"){
+      const host = document.getElementById("quiz_" + m.id);
+      m.quiz.forEach((q, i) => {
+        const row = document.createElement("div");
+        row.className = "mb-2";
+        row.innerHTML = `
+          <div class="fw-bold">${i+1}) ${escapeHtml(q.q)}</div>
+          <div class="d-flex gap-2 flex-wrap mt-1">
+            <button class="btn btn-outline-primary choice-btn" data-mid="${m.id}" data-i="${i}" data-val="Yes">Yes</button>
+            <button class="btn btn-outline-primary choice-btn" data-mid="${m.id}" data-i="${i}" data-val="No">No</button>
+          </div>
+        `;
+        host.appendChild(row);
+      });
+
+      const answers = {}; // i -> "Yes/No"
+      host.querySelectorAll("button").forEach(btn => {
+        btn.onclick = () => {
+          const i = btn.dataset.i;
+          answers[i] = btn.dataset.val;
+
+          // visual select
+          host.querySelectorAll(`button[data-i="${i}"]`).forEach(b => b.classList.remove("btn-primary"));
+          btn.classList.add("btn-primary");
+        }
+      });
+
+      window.checkQuickQuiz = function(mid){
+        if (mid !== m.id) return;
+        let ok = true;
+        for (let i=0;i<m.quiz.length;i++){
+          const want = m.quiz[i].a;
+          const got = answers[i];
+          if (!got || got !== want) ok = false;
+        }
+        if (ok){
+          setMsg(m.id, "✅ Great job!", true);
+          completeMission(m.id);
+        } else {
+          setMsg(m.id, "❌ One or more answers are wrong — try again!", false);
+        }
+      }
+    }
+  });
+
+  function setMsg(mid, text, good, warn){
+    const msg = document.getElementById("msg_" + mid);
+    msg.textContent = text;
+    msg.className = "msg " + (warn ? "warn" : (good ? "ok" : "bad"));
+  }
+
+  // -------------------- FINAL: MARK COMPLETE --------------------
+  async function finishLesson(){
+    const res = await fetch("/lessons/{{ child.id }}/{{ lesson.id }}/complete/", {
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const nextBtn = document.getElementById("nextBtn");
+      if (nextBtn && data.next_url) {
+        nextBtn.href = data.next_url;
+        nextBtn.classList.remove("d-none");
+        nextBtn.scrollIntoView({behavior:"smooth", block:"center"});
+      }
+    }
+  }
+
+  // init
+  updateProgress();
+</script>
